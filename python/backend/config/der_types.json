@@ -1,0 +1,3 @@
+{
+    "der_types" : ["none", "load", "bess", "pv", "genset", "pcc"]
+}

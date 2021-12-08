@@ -1,0 +1,23 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+    <div fxFlex="50">
+        <app-widget-bars label="BESS DISPATCH" [data]="dispatchData_BESS"></app-widget-bars>
+    </div>
+    <div fxFlex="50">
+        <app-widget-bars label="LOAD CURTAILMENT" [data]="dispatchData_load"></app-widget-bars>
+    </div>
+</div>
+
+<br>
+
+<mat-divider></mat-divider>
+
+<br>
+
+<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+    <div fxFlex="50">
+        <app-widget-bars label="PV CURTAILMENT" [data]="dispatchData_PV"></app-widget-bars>
+    </div>
+    <div fxFlex="50">
+        
+    </div>
+</div>

@@ -1,0 +1,68 @@
+version: "3"
+
+services:
+  python:
+    container_name: python-docker-container
+    restart: always
+    build: ./python
+    expose:
+      - 5000 
+    #ports: 
+    #  - "5000:5000"
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    expose:
+      - 8081
+    environment: 
+      DB_USER: flask
+      DB_PASSWORD: password
+      DB_HOST: mysql
+      DB_NAME: flask
+  
+  mysql:
+    container_name: mysql-docker-container
+    restart: always
+    build: ./mysql
+    expose:
+      - 3306
+    # ports:
+    #   - "3306:3306"
+    volumes:
+      # pass volume named mysql-data to mysql container
+      - mysql-data:/var/lib/mysql
+    environment:
+      #  credentials
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: flask
+      MYSQL_USER: flask
+      MYSQL_PASSWORD: password
+  
+  nginx:
+    build: ./nginx
+    container_name: nginx-docker-container
+    restart: always
+    ports:
+      - "8051:80"
+    depends_on:
+      - python
+
+  angular:
+    build: ./angular
+    container_name: angular-docker-container
+    restart: always
+    ports:
+      - "4202:4200"
+    volumes:
+      # pass volume named angular to angular docker container
+      - ./angular/Frontend:/Frontend
+    depends_on:
+      - nginx
+    
+
+# volumes definition here
+volumes:
+    # just a persistance data
+    mysql-data:
+      driver: local

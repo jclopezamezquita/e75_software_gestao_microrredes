@@ -1,0 +1,308 @@
+<form novalidate #form="ngForm" (ngSubmit)="submitForm(form)">
+    <div class="bg-danger text-white p-2 mb-2"
+        *ngIf="formSubmitted && form.invalid">
+        There are problemas with the form!
+    </div>
+    <div class="bg-success text-white p-2 mb-2"
+        *ngIf="validSubmission && form.valid">
+        Succesful submission!
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+        <div fxFlex="45">
+            <mat-card class="card-demo mat-card">
+                <h2 class="text-center">Hourly Energy Price ($/kWh)</h2>
+                <div class="form-group row justify-content-center">
+                    <div class="col-2 text-center">
+                        <label>00h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t24"
+                                [(ngModel)]="newParameters.pcc_cost_t24"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>01h</label>
+                        <input  class="form-control" 
+                                type="text"
+                                name="pcc_cost_t06"
+                                [(ngModel)]="newParameters.pcc_cost_t01"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>02h</label>
+                        <input  class="form-control" 
+                                type="text"
+                                name="pcc_cost_t12"
+                                [(ngModel)]="newParameters.pcc_cost_t02"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>03h</label>
+                        <input  class="form-control" 
+                                type="text"
+                                name="pcc_cost_t18"
+                                [(ngModel)]="newParameters.pcc_cost_t03"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    <div class="col-2 text-center">
+                        <label>04h</label>
+                        <input  class="form-control" 
+                                type="text"
+                                name="pcc_cost_t01"
+                                [(ngModel)]="newParameters.pcc_cost_t04"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>05h</label>
+                        <input  class="form-control" 
+                                type="text"
+                                name="pcc_cost_t07"
+                                [(ngModel)]="newParameters.pcc_cost_t05"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>06h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t13"
+                                [(ngModel)]="newParameters.pcc_cost_t06"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>07h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t19"
+                                [(ngModel)]="newParameters.pcc_cost_t07"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    <div class="col-2 text-center">
+                        <label>08h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t02"
+                                [(ngModel)]="newParameters.pcc_cost_t08"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>09h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t08"
+                                [(ngModel)]="newParameters.pcc_cost_t09"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>10h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t14"
+                                [(ngModel)]="newParameters.pcc_cost_t10"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>11h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t20"
+                                [(ngModel)]="newParameters.pcc_cost_t11"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    <div class="col-2 text-center">
+                        <label>12h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t03"
+                                [(ngModel)]="newParameters.pcc_cost_t12"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>13h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t09"
+                                [(ngModel)]="newParameters.pcc_cost_t13"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>14h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t15"
+                                [(ngModel)]="newParameters.pcc_cost_t14"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>15h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t21"
+                                [(ngModel)]="newParameters.pcc_cost_t15"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    <div class="col-2 text-center">
+                        <label>16h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t04"
+                                [(ngModel)]="newParameters.pcc_cost_t16"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>17h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t10"
+                                [(ngModel)]="newParameters.pcc_cost_t17"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>18h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t16"
+                                [(ngModel)]="newParameters.pcc_cost_t18"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>19h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t22"
+                                [(ngModel)]="newParameters.pcc_cost_t19"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    <div class="col-2 text-center">
+                        <label>20h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t05"
+                                [(ngModel)]="newParameters.pcc_cost_t20"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>21h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t11"
+                                [(ngModel)]="newParameters.pcc_cost_t21"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>22h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t17"
+                                [(ngModel)]="newParameters.pcc_cost_t22"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>23h</label>
+                        <input  class="form-control" 
+                                type="text" 
+                                name="pcc_cost_t23"
+                                [(ngModel)]="newParameters.pcc_cost_t23"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+        <div fxFlex="30">
+            <mat-card class="card-demo mat-card">
+                <h2 class="text-center">Thermal Generation Cost ($/kWh)</h2>
+                <div class="form-group row justify-content-center">
+                    <div class="col-4 text-center">
+                        <input  class="form-control" 
+                                type="text" 
+                                name="genset_cost"
+                                [(ngModel)]="newParameters.genset_cost"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                </div>
+            </mat-card>
+            <br>
+            <mat-card class="card-demo mat-card">
+                <h2 class="text-center">Load Shedding Cost ($/kWh)</h2>
+                <div class="form-group row justify-content-center">
+                    <div class="col-4 text-center">
+                        <input  class="form-control" 
+                                type="text" 
+                                name="load_curt_cost"
+                                [(ngModel)]="newParameters.load_curt_cost"
+                                required
+                                pattern="^[0-9\.]+$">
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+        <div fxFlex="20">
+            <mat-card class="card-demo mat-card">
+                <div class="form-group row justify-content-center">
+                    <button class="btn btn-primary btn-lg" type="submit">Update</button>
+                </div>
+                <div class="form-group row justify-content-center">
+                    <p class="text-center">These data will be used for the next day-ahead dispatch, triggered at 00h.</p>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</form>
+
+<br>
+
+<mat-divider></mat-divider>
+
+<br>
+
+<div>
+    <!--- app-widget-costs [data]="costsChart"></app-widget-costs> -->
+    <app-widget-costs [data]="costsChart"></app-widget-costs>
+</div>
+
+<br>
+
+<mat-divider></mat-divider>
+
+<br>
+
+<!---
+    <div class="bg-info p-2 text-white mb-2" *ngIf="getParameter(1)">
+        Model Data: {{getParameter(1).id}}.
+    </div>
+-->
