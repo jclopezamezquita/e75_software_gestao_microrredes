@@ -40,30 +40,54 @@ economic_dispatch_namespace = Namespace('v1/api/economic_dispatch', description=
 
 # Parser for post
 economic_dispatch_parser = economic_dispatch_namespace.parser()
-economic_dispatch_parser.add_argument('bat_power_t00', type=bat_power_rule, required=True, help='BESS dispach at 00h.')
-economic_dispatch_parser.add_argument('bat_power_t01', type=bat_power_rule, required=True, help='BESS dispach at 01h.')
-economic_dispatch_parser.add_argument('bat_power_t02', type=bat_power_rule, required=True, help='BESS dispach at 02h.')
-economic_dispatch_parser.add_argument('bat_power_t03', type=bat_power_rule, required=True, help='BESS dispach at 03h.')
-economic_dispatch_parser.add_argument('bat_power_t04', type=bat_power_rule, required=True, help='BESS dispach at 04h.')
-economic_dispatch_parser.add_argument('bat_power_t05', type=bat_power_rule, required=True, help='BESS dispach at 05h.')
-economic_dispatch_parser.add_argument('bat_power_t06', type=bat_power_rule, required=True, help='BESS dispach at 06h.')
-economic_dispatch_parser.add_argument('bat_power_t07', type=bat_power_rule, required=True, help='BESS dispach at 07h.')
-economic_dispatch_parser.add_argument('bat_power_t08', type=bat_power_rule, required=True, help='BESS dispach at 08h.')
-economic_dispatch_parser.add_argument('bat_power_t09', type=bat_power_rule, required=True, help='BESS dispach at 09h.')
-economic_dispatch_parser.add_argument('bat_power_t10', type=bat_power_rule, required=True, help='BESS dispach at 10h.')
-economic_dispatch_parser.add_argument('bat_power_t11', type=bat_power_rule, required=True, help='BESS dispach at 11h.')
-economic_dispatch_parser.add_argument('bat_power_t12', type=bat_power_rule, required=True, help='BESS dispach at 12h.')
-economic_dispatch_parser.add_argument('bat_power_t13', type=bat_power_rule, required=True, help='BESS dispach at 13h.')
-economic_dispatch_parser.add_argument('bat_power_t14', type=bat_power_rule, required=True, help='BESS dispach at 14h.')
-economic_dispatch_parser.add_argument('bat_power_t15', type=bat_power_rule, required=True, help='BESS dispach at 15h.')
-economic_dispatch_parser.add_argument('bat_power_t16', type=bat_power_rule, required=True, help='BESS dispach at 16h.')
-economic_dispatch_parser.add_argument('bat_power_t17', type=bat_power_rule, required=True, help='BESS dispach at 17h.')
-economic_dispatch_parser.add_argument('bat_power_t18', type=bat_power_rule, required=True, help='BESS dispach at 18h.')
-economic_dispatch_parser.add_argument('bat_power_t19', type=bat_power_rule, required=True, help='BESS dispach at 19h.')
-economic_dispatch_parser.add_argument('bat_power_t20', type=bat_power_rule, required=True, help='BESS dispach at 20h.')
-economic_dispatch_parser.add_argument('bat_power_t21', type=bat_power_rule, required=True, help='BESS dispach at 21h.')
-economic_dispatch_parser.add_argument('bat_power_t22', type=bat_power_rule, required=True, help='BESS dispach at 22h.')
-economic_dispatch_parser.add_argument('bat_power_t23', type=bat_power_rule, required=True, help='BESS dispach at 23h.')
+economic_dispatch_parser.add_argument('bat_power_t00', type=bat_power_rule, required=True, help='BESS dispatch at 00h.')
+economic_dispatch_parser.add_argument('bat_power_t01', type=bat_power_rule, required=True, help='BESS dispatch at 01h.')
+economic_dispatch_parser.add_argument('bat_power_t02', type=bat_power_rule, required=True, help='BESS dispatch at 02h.')
+economic_dispatch_parser.add_argument('bat_power_t03', type=bat_power_rule, required=True, help='BESS dispatch at 03h.')
+economic_dispatch_parser.add_argument('bat_power_t04', type=bat_power_rule, required=True, help='BESS dispatch at 04h.')
+economic_dispatch_parser.add_argument('bat_power_t05', type=bat_power_rule, required=True, help='BESS dispatch at 05h.')
+economic_dispatch_parser.add_argument('bat_power_t06', type=bat_power_rule, required=True, help='BESS dispatch at 06h.')
+economic_dispatch_parser.add_argument('bat_power_t07', type=bat_power_rule, required=True, help='BESS dispatch at 07h.')
+economic_dispatch_parser.add_argument('bat_power_t08', type=bat_power_rule, required=True, help='BESS dispatch at 08h.')
+economic_dispatch_parser.add_argument('bat_power_t09', type=bat_power_rule, required=True, help='BESS dispatch at 09h.')
+economic_dispatch_parser.add_argument('bat_power_t10', type=bat_power_rule, required=True, help='BESS dispatch at 10h.')
+economic_dispatch_parser.add_argument('bat_power_t11', type=bat_power_rule, required=True, help='BESS dispatch at 11h.')
+economic_dispatch_parser.add_argument('bat_power_t12', type=bat_power_rule, required=True, help='BESS dispatch at 12h.')
+economic_dispatch_parser.add_argument('bat_power_t13', type=bat_power_rule, required=True, help='BESS dispatch at 13h.')
+economic_dispatch_parser.add_argument('bat_power_t14', type=bat_power_rule, required=True, help='BESS dispatch at 14h.')
+economic_dispatch_parser.add_argument('bat_power_t15', type=bat_power_rule, required=True, help='BESS dispatch at 15h.')
+economic_dispatch_parser.add_argument('bat_power_t16', type=bat_power_rule, required=True, help='BESS dispatch at 16h.')
+economic_dispatch_parser.add_argument('bat_power_t17', type=bat_power_rule, required=True, help='BESS dispatch at 17h.')
+economic_dispatch_parser.add_argument('bat_power_t18', type=bat_power_rule, required=True, help='BESS dispatch at 18h.')
+economic_dispatch_parser.add_argument('bat_power_t19', type=bat_power_rule, required=True, help='BESS dispatch at 19h.')
+economic_dispatch_parser.add_argument('bat_power_t20', type=bat_power_rule, required=True, help='BESS dispatch at 20h.')
+economic_dispatch_parser.add_argument('bat_power_t21', type=bat_power_rule, required=True, help='BESS dispatch at 21h.')
+economic_dispatch_parser.add_argument('bat_power_t22', type=bat_power_rule, required=True, help='BESS dispatch at 22h.')
+economic_dispatch_parser.add_argument('bat_power_t23', type=bat_power_rule, required=True, help='BESS dispatch at 23h.')
+economic_dispatch_parser.add_argument('genset_power_t00', type=curt_rule, required=True, help='Genset dispatch at 00h.')
+economic_dispatch_parser.add_argument('genset_power_t01', type=curt_rule, required=True, help='Genset dispatch at 01h.')
+economic_dispatch_parser.add_argument('genset_power_t02', type=curt_rule, required=True, help='Genset dispatch at 02h.')
+economic_dispatch_parser.add_argument('genset_power_t03', type=curt_rule, required=True, help='Genset dispatch at 03h.')
+economic_dispatch_parser.add_argument('genset_power_t04', type=curt_rule, required=True, help='Genset dispatch at 04h.')
+economic_dispatch_parser.add_argument('genset_power_t05', type=curt_rule, required=True, help='Genset dispatch at 05h.')
+economic_dispatch_parser.add_argument('genset_power_t06', type=curt_rule, required=True, help='Genset dispatch at 06h.')
+economic_dispatch_parser.add_argument('genset_power_t07', type=curt_rule, required=True, help='Genset dispatch at 07h.')
+economic_dispatch_parser.add_argument('genset_power_t08', type=curt_rule, required=True, help='Genset dispatch at 08h.')
+economic_dispatch_parser.add_argument('genset_power_t09', type=curt_rule, required=True, help='Genset dispatch at 09h.')
+economic_dispatch_parser.add_argument('genset_power_t10', type=curt_rule, required=True, help='Genset dispatch at 10h.')
+economic_dispatch_parser.add_argument('genset_power_t11', type=curt_rule, required=True, help='Genset dispatch at 11h.')
+economic_dispatch_parser.add_argument('genset_power_t12', type=curt_rule, required=True, help='Genset dispatch at 12h.')
+economic_dispatch_parser.add_argument('genset_power_t13', type=curt_rule, required=True, help='Genset dispatch at 13h.')
+economic_dispatch_parser.add_argument('genset_power_t14', type=curt_rule, required=True, help='Genset dispatch at 14h.')
+economic_dispatch_parser.add_argument('genset_power_t15', type=curt_rule, required=True, help='Genset dispatch at 15h.')
+economic_dispatch_parser.add_argument('genset_power_t16', type=curt_rule, required=True, help='Genset dispatch at 16h.')
+economic_dispatch_parser.add_argument('genset_power_t17', type=curt_rule, required=True, help='Genset dispatch at 17h.')
+economic_dispatch_parser.add_argument('genset_power_t18', type=curt_rule, required=True, help='Genset dispatch at 18h.')
+economic_dispatch_parser.add_argument('genset_power_t19', type=curt_rule, required=True, help='Genset dispatch at 19h.')
+economic_dispatch_parser.add_argument('genset_power_t20', type=curt_rule, required=True, help='Genset dispatch at 20h.')
+economic_dispatch_parser.add_argument('genset_power_t21', type=curt_rule, required=True, help='Genset dispatch at 21h.')
+economic_dispatch_parser.add_argument('genset_power_t22', type=curt_rule, required=True, help='Genset dispatch at 22h.')
+economic_dispatch_parser.add_argument('genset_power_t23', type=curt_rule, required=True, help='Genset dispatch at 23h.')
 economic_dispatch_parser.add_argument('load_curt_t00', type=curt_rule, required=True, help='Load curtailment dispatch at 00h.')
 economic_dispatch_parser.add_argument('load_curt_t01', type=curt_rule, required=True, help='Load curtailment dispatch at 01h.')
 economic_dispatch_parser.add_argument('load_curt_t02', type=curt_rule, required=True, help='Load curtailment dispatch at 02h.')
@@ -115,30 +139,54 @@ economic_dispatch_parser.add_argument('pv_curt_t23', type=curt_rule, required=Tr
 
 # Parser for put
 economic_dispatch_update_parser = economic_dispatch_namespace.parser()
-economic_dispatch_update_parser.add_argument('bat_power_t00', type=bat_power_rule, required=False, help='BESS dispach at 00h.')
-economic_dispatch_update_parser.add_argument('bat_power_t01', type=bat_power_rule, required=False, help='BESS dispach at 01h.')
-economic_dispatch_update_parser.add_argument('bat_power_t02', type=bat_power_rule, required=False, help='BESS dispach at 02h.')
-economic_dispatch_update_parser.add_argument('bat_power_t03', type=bat_power_rule, required=False, help='BESS dispach at 03h.')
-economic_dispatch_update_parser.add_argument('bat_power_t04', type=bat_power_rule, required=False, help='BESS dispach at 04h.')
-economic_dispatch_update_parser.add_argument('bat_power_t05', type=bat_power_rule, required=False, help='BESS dispach at 05h.')
-economic_dispatch_update_parser.add_argument('bat_power_t06', type=bat_power_rule, required=False, help='BESS dispach at 06h.')
-economic_dispatch_update_parser.add_argument('bat_power_t07', type=bat_power_rule, required=False, help='BESS dispach at 07h.')
-economic_dispatch_update_parser.add_argument('bat_power_t08', type=bat_power_rule, required=False, help='BESS dispach at 08h.')
-economic_dispatch_update_parser.add_argument('bat_power_t09', type=bat_power_rule, required=False, help='BESS dispach at 09h.')
-economic_dispatch_update_parser.add_argument('bat_power_t10', type=bat_power_rule, required=False, help='BESS dispach at 10h.')
-economic_dispatch_update_parser.add_argument('bat_power_t11', type=bat_power_rule, required=False, help='BESS dispach at 11h.')
-economic_dispatch_update_parser.add_argument('bat_power_t12', type=bat_power_rule, required=False, help='BESS dispach at 12h.')
-economic_dispatch_update_parser.add_argument('bat_power_t13', type=bat_power_rule, required=False, help='BESS dispach at 13h.')
-economic_dispatch_update_parser.add_argument('bat_power_t14', type=bat_power_rule, required=False, help='BESS dispach at 14h.')
-economic_dispatch_update_parser.add_argument('bat_power_t15', type=bat_power_rule, required=False, help='BESS dispach at 15h.')
-economic_dispatch_update_parser.add_argument('bat_power_t16', type=bat_power_rule, required=False, help='BESS dispach at 16h.')
-economic_dispatch_update_parser.add_argument('bat_power_t17', type=bat_power_rule, required=False, help='BESS dispach at 17h.')
-economic_dispatch_update_parser.add_argument('bat_power_t18', type=bat_power_rule, required=False, help='BESS dispach at 18h.')
-economic_dispatch_update_parser.add_argument('bat_power_t19', type=bat_power_rule, required=False, help='BESS dispach at 19h.')
-economic_dispatch_update_parser.add_argument('bat_power_t20', type=bat_power_rule, required=False, help='BESS dispach at 20h.')
-economic_dispatch_update_parser.add_argument('bat_power_t21', type=bat_power_rule, required=False, help='BESS dispach at 21h.')
-economic_dispatch_update_parser.add_argument('bat_power_t22', type=bat_power_rule, required=False, help='BESS dispach at 22h.')
-economic_dispatch_update_parser.add_argument('bat_power_t23', type=bat_power_rule, required=False, help='BESS dispach at 23h.')
+economic_dispatch_update_parser.add_argument('bat_power_t00', type=bat_power_rule, required=False, help='BESS dispatch at 00h.')
+economic_dispatch_update_parser.add_argument('bat_power_t01', type=bat_power_rule, required=False, help='BESS dispatch at 01h.')
+economic_dispatch_update_parser.add_argument('bat_power_t02', type=bat_power_rule, required=False, help='BESS dispatch at 02h.')
+economic_dispatch_update_parser.add_argument('bat_power_t03', type=bat_power_rule, required=False, help='BESS dispatch at 03h.')
+economic_dispatch_update_parser.add_argument('bat_power_t04', type=bat_power_rule, required=False, help='BESS dispatch at 04h.')
+economic_dispatch_update_parser.add_argument('bat_power_t05', type=bat_power_rule, required=False, help='BESS dispatch at 05h.')
+economic_dispatch_update_parser.add_argument('bat_power_t06', type=bat_power_rule, required=False, help='BESS dispatch at 06h.')
+economic_dispatch_update_parser.add_argument('bat_power_t07', type=bat_power_rule, required=False, help='BESS dispatch at 07h.')
+economic_dispatch_update_parser.add_argument('bat_power_t08', type=bat_power_rule, required=False, help='BESS dispatch at 08h.')
+economic_dispatch_update_parser.add_argument('bat_power_t09', type=bat_power_rule, required=False, help='BESS dispatch at 09h.')
+economic_dispatch_update_parser.add_argument('bat_power_t10', type=bat_power_rule, required=False, help='BESS dispatch at 10h.')
+economic_dispatch_update_parser.add_argument('bat_power_t11', type=bat_power_rule, required=False, help='BESS dispatch at 11h.')
+economic_dispatch_update_parser.add_argument('bat_power_t12', type=bat_power_rule, required=False, help='BESS dispatch at 12h.')
+economic_dispatch_update_parser.add_argument('bat_power_t13', type=bat_power_rule, required=False, help='BESS dispatch at 13h.')
+economic_dispatch_update_parser.add_argument('bat_power_t14', type=bat_power_rule, required=False, help='BESS dispatch at 14h.')
+economic_dispatch_update_parser.add_argument('bat_power_t15', type=bat_power_rule, required=False, help='BESS dispatch at 15h.')
+economic_dispatch_update_parser.add_argument('bat_power_t16', type=bat_power_rule, required=False, help='BESS dispatch at 16h.')
+economic_dispatch_update_parser.add_argument('bat_power_t17', type=bat_power_rule, required=False, help='BESS dispatch at 17h.')
+economic_dispatch_update_parser.add_argument('bat_power_t18', type=bat_power_rule, required=False, help='BESS dispatch at 18h.')
+economic_dispatch_update_parser.add_argument('bat_power_t19', type=bat_power_rule, required=False, help='BESS dispatch at 19h.')
+economic_dispatch_update_parser.add_argument('bat_power_t20', type=bat_power_rule, required=False, help='BESS dispatch at 20h.')
+economic_dispatch_update_parser.add_argument('bat_power_t21', type=bat_power_rule, required=False, help='BESS dispatch at 21h.')
+economic_dispatch_update_parser.add_argument('bat_power_t22', type=bat_power_rule, required=False, help='BESS dispatch at 22h.')
+economic_dispatch_update_parser.add_argument('bat_power_t23', type=bat_power_rule, required=False, help='BESS dispatch at 23h.')
+economic_dispatch_update_parser.add_argument('genset_power_t00', type=curt_rule, required=False, help='Genset dispatch at 00h.')
+economic_dispatch_update_parser.add_argument('genset_power_t01', type=curt_rule, required=False, help='Genset dispatch at 01h.')
+economic_dispatch_update_parser.add_argument('genset_power_t02', type=curt_rule, required=False, help='Genset dispatch at 02h.')
+economic_dispatch_update_parser.add_argument('genset_power_t03', type=curt_rule, required=False, help='Genset dispatch at 03h.')
+economic_dispatch_update_parser.add_argument('genset_power_t04', type=curt_rule, required=False, help='Genset dispatch at 04h.')
+economic_dispatch_update_parser.add_argument('genset_power_t05', type=curt_rule, required=False, help='Genset dispatch at 05h.')
+economic_dispatch_update_parser.add_argument('genset_power_t06', type=curt_rule, required=False, help='Genset dispatch at 06h.')
+economic_dispatch_update_parser.add_argument('genset_power_t07', type=curt_rule, required=False, help='Genset dispatch at 07h.')
+economic_dispatch_update_parser.add_argument('genset_power_t08', type=curt_rule, required=False, help='Genset dispatch at 08h.')
+economic_dispatch_update_parser.add_argument('genset_power_t09', type=curt_rule, required=False, help='Genset dispatch at 09h.')
+economic_dispatch_update_parser.add_argument('genset_power_t10', type=curt_rule, required=False, help='Genset dispatch at 10h.')
+economic_dispatch_update_parser.add_argument('genset_power_t11', type=curt_rule, required=False, help='Genset dispatch at 11h.')
+economic_dispatch_update_parser.add_argument('genset_power_t12', type=curt_rule, required=False, help='Genset dispatch at 12h.')
+economic_dispatch_update_parser.add_argument('genset_power_t13', type=curt_rule, required=False, help='Genset dispatch at 13h.')
+economic_dispatch_update_parser.add_argument('genset_power_t14', type=curt_rule, required=False, help='Genset dispatch at 14h.')
+economic_dispatch_update_parser.add_argument('genset_power_t15', type=curt_rule, required=False, help='Genset dispatch at 15h.')
+economic_dispatch_update_parser.add_argument('genset_power_t16', type=curt_rule, required=False, help='Genset dispatch at 16h.')
+economic_dispatch_update_parser.add_argument('genset_power_t17', type=curt_rule, required=False, help='Genset dispatch at 17h.')
+economic_dispatch_update_parser.add_argument('genset_power_t18', type=curt_rule, required=False, help='Genset dispatch at 18h.')
+economic_dispatch_update_parser.add_argument('genset_power_t19', type=curt_rule, required=False, help='Genset dispatch at 19h.')
+economic_dispatch_update_parser.add_argument('genset_power_t20', type=curt_rule, required=False, help='Genset dispatch at 20h.')
+economic_dispatch_update_parser.add_argument('genset_power_t21', type=curt_rule, required=False, help='Genset dispatch at 21h.')
+economic_dispatch_update_parser.add_argument('genset_power_t22', type=curt_rule, required=False, help='Genset dispatch at 22h.')
+economic_dispatch_update_parser.add_argument('genset_power_t23', type=curt_rule, required=False, help='Genset dispatch at 23h.')
 economic_dispatch_update_parser.add_argument('load_curt_t00', type=curt_rule, required=False, help='Load curtailment dispatch at 00h.')
 economic_dispatch_update_parser.add_argument('load_curt_t01', type=curt_rule, required=False, help='Load curtailment dispatch at 01h.')
 economic_dispatch_update_parser.add_argument('load_curt_t02', type=curt_rule, required=False, help='Load curtailment dispatch at 02h.')
@@ -215,6 +263,30 @@ model = {
     'bat_power_t21': fields.Float(),
     'bat_power_t22': fields.Float(),
     'bat_power_t23': fields.Float(),
+    'genset_power_t00': fields.Float(),
+    'genset_power_t01': fields.Float(),
+    'genset_power_t02': fields.Float(),
+    'genset_power_t03': fields.Float(),
+    'genset_power_t04': fields.Float(),
+    'genset_power_t05': fields.Float(),
+    'genset_power_t06': fields.Float(),
+    'genset_power_t07': fields.Float(),
+    'genset_power_t08': fields.Float(),
+    'genset_power_t09': fields.Float(),
+    'genset_power_t10': fields.Float(),
+    'genset_power_t11': fields.Float(),
+    'genset_power_t12': fields.Float(),
+    'genset_power_t13': fields.Float(),
+    'genset_power_t14': fields.Float(),
+    'genset_power_t15': fields.Float(),
+    'genset_power_t16': fields.Float(),
+    'genset_power_t17': fields.Float(),
+    'genset_power_t18': fields.Float(),
+    'genset_power_t19': fields.Float(),
+    'genset_power_t20': fields.Float(),
+    'genset_power_t21': fields.Float(),
+    'genset_power_t22': fields.Float(),
+    'genset_power_t23': fields.Float(),
     'load_curt_t00': fields.Float(),
     'load_curt_t01': fields.Float(),
     'load_curt_t02': fields.Float(),
@@ -316,6 +388,30 @@ class economic_dispatch_ListCreate(Resource):
                             bat_power_t21=args['bat_power_t21'],
                             bat_power_t22=args['bat_power_t22'],
                             bat_power_t23=args['bat_power_t23'],
+                            genset_power_t00=args['genset_power_t00'],
+                            genset_power_t01=args['genset_power_t01'],
+                            genset_power_t02=args['genset_power_t02'],
+                            genset_power_t03=args['genset_power_t03'],
+                            genset_power_t04=args['genset_power_t04'],
+                            genset_power_t05=args['genset_power_t05'],
+                            genset_power_t06=args['genset_power_t06'],
+                            genset_power_t07=args['genset_power_t07'],
+                            genset_power_t08=args['genset_power_t08'],
+                            genset_power_t09=args['genset_power_t09'],
+                            genset_power_t10=args['genset_power_t10'],
+                            genset_power_t11=args['genset_power_t11'],
+                            genset_power_t12=args['genset_power_t12'],
+                            genset_power_t13=args['genset_power_t13'],
+                            genset_power_t14=args['genset_power_t14'],
+                            genset_power_t15=args['genset_power_t15'],
+                            genset_power_t16=args['genset_power_t16'],
+                            genset_power_t17=args['genset_power_t17'],
+                            genset_power_t18=args['genset_power_t18'],
+                            genset_power_t19=args['genset_power_t19'],
+                            genset_power_t20=args['genset_power_t20'],
+                            genset_power_t21=args['genset_power_t21'],
+                            genset_power_t22=args['genset_power_t22'],
+                            genset_power_t23=args['genset_power_t23'],
                             load_curt_t00=args['load_curt_t00'],
                             load_curt_t01=args['load_curt_t01'],
                             load_curt_t02=args['load_curt_t02'],
@@ -449,6 +545,30 @@ class economic_dispatch_Retrieve(Resource):
             'bat_power_t21': args['bat_power_t21'],
             'bat_power_t22': args['bat_power_t22'],
             'bat_power_t23': args['bat_power_t23'],
+            'genset_power_t00': args['genset_power_t00'],
+            'genset_power_t01': args['genset_power_t01'],
+            'genset_power_t02': args['genset_power_t02'],
+            'genset_power_t03': args['genset_power_t03'],
+            'genset_power_t04': args['genset_power_t04'],
+            'genset_power_t05': args['genset_power_t05'],
+            'genset_power_t06': args['genset_power_t06'],
+            'genset_power_t07': args['genset_power_t07'],
+            'genset_power_t08': args['genset_power_t08'],
+            'genset_power_t09': args['genset_power_t09'],
+            'genset_power_t10': args['genset_power_t10'],
+            'genset_power_t11': args['genset_power_t11'],
+            'genset_power_t12': args['genset_power_t12'],
+            'genset_power_t13': args['genset_power_t13'],
+            'genset_power_t14': args['genset_power_t14'],
+            'genset_power_t15': args['genset_power_t15'],
+            'genset_power_t16': args['genset_power_t16'],
+            'genset_power_t17': args['genset_power_t17'],
+            'genset_power_t18': args['genset_power_t18'],
+            'genset_power_t19': args['genset_power_t19'],
+            'genset_power_t20': args['genset_power_t20'],
+            'genset_power_t21': args['genset_power_t21'],
+            'genset_power_t22': args['genset_power_t22'],
+            'genset_power_t23': args['genset_power_t23'],
             'load_curt_t00': args['load_curt_t00'],
             'load_curt_t01': args['load_curt_t01'],
             'load_curt_t02': args['load_curt_t02'],

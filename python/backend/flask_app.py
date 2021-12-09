@@ -22,6 +22,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 @app.before_first_request
 def create_DB():
     db.create_all()
+    print("qualquer coisa 2")
 
 # uwsgidecorators.timer(interval, func)
 @timer(300)
@@ -33,7 +34,7 @@ def leitura_medidas_laboratoriais(num):
     print ("%s/%s/%s %s:%s:%s" % (now.month,now.day,now.year,now.hour,now.minute,now.second))
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(-5, -1, -1, -1, -1)
+@cron(0, 0, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the end of the day
