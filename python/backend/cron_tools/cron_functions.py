@@ -13,7 +13,6 @@ def microgrid_dayahead_optimizer():
 
     
     data_nodes = requests.get(url=URL + "v1/api/node_information", headers={"accept" : "application/json"})
-    print(data_nodes.status_code)
     data_nodes = json.loads(data_nodes.text)
     # print(data_nodes)
     data_branches = requests.get(url=URL + "v1/api/branch_information", headers={"accept" : "application/json"})
