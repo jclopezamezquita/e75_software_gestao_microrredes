@@ -49,8 +49,8 @@ class SummaryResults:
 		
 
 		
-		with open('output_file.json', 'w') as outfile:
-		    json.dump(output_file, outfile, indent=1)
+		#with open('output_file.json', 'w') as outfile:
+		#    json.dump(output_file, outfile, indent=1)
 		
 		return output_file
 
@@ -122,10 +122,8 @@ class SummaryResults:
 
 
 		# save results
-		with open('output_file.json', 'w') as outfile:
-		    json.dump(output_file, outfile, indent=3)
+		#with open('output_file.json', 'w') as outfile:
+		#    json.dump(output_file, outfile, indent=3)
 
-		#output_json.close()
-		
 		return output_file
 	

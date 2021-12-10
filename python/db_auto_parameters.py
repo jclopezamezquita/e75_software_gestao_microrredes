@@ -166,19 +166,21 @@ data = requests.post(url=URL + "v1/api/milp_parameters", data=model_parameters, 
 print(data.status_code)
 print(data.text)
 
-'''
+
 # Dados da tabela economic_dispatch
 dispatch = {"bat_power_t00": 0.0, "bat_power_t01": 0.0, "bat_power_t02": 0.0, "bat_power_t03": 0.0, "bat_power_t04": 0.0, "bat_power_t05": 0.0, "bat_power_t06": 0.0,
 "bat_power_t07": 0.0714, "bat_power_t08": 0.4049, "bat_power_t09": 2.5961, "bat_power_t10": 0.0, "bat_power_t11": 1.0394, "bat_power_t12": 3.4019, "bat_power_t13": 0.0,
 "bat_power_t14": 0.4859, "bat_power_t15": 0.0, "bat_power_t16": 0.0, "bat_power_t17": 0.0, "bat_power_t18": -1.7334, "bat_power_t19": -3.1997, "bat_power_t20": -3.0668,
-"bat_power_t21": 0.0, "bat_power_t22": 0.0, "bat_power_t23": 0.0, "load_curt_t00": 0.0, "load_curt_t01": 0.0, "load_curt_t02": 0.0, "load_curt_t03": 0.0, "load_curt_t04": 0.0,
-"load_curt_t05": 0.0, "load_curt_t06": 0.0, "load_curt_t07": 0.0, "load_curt_t08": 0.0, "load_curt_t09": 0.0, "load_curt_t10": 0.0, "load_curt_t11": 0.0, "load_curt_t12": 0.0,
-"load_curt_t13": 0.0, "load_curt_t14": 0.0, "load_curt_t15": 0.0, "load_curt_t16": 0.0, "load_curt_t17": 0.0, "load_curt_t18": 0.0, "load_curt_t19": 0.0, "load_curt_t20": 0.0,
-"load_curt_t21": 0.0, "load_curt_t22": 0.0, "load_curt_t23": 0.0, "pv_curt_t00": 0.0, "pv_curt_t01": 0.0, "pv_curt_t02": 0.0, "pv_curt_t03": 0.0, "pv_curt_t04": 0.0,
-"pv_curt_t05": 0.0, "pv_curt_t06": 0.0, "pv_curt_t07": 0.0, "pv_curt_t08": 0.0, "pv_curt_t09": 0.0, "pv_curt_t10": 0.0, "pv_curt_t11": 0.0, "pv_curt_t12": 0.0, "pv_curt_t13": 0.0,
-"pv_curt_t14": 0.0, "pv_curt_t15": 0.0, "pv_curt_t16": 0.0, "pv_curt_t17": 0.0, "pv_curt_t18": 0.0, "pv_curt_t19": 0.0, "pv_curt_t20": 0.0, "pv_curt_t21": 0.0, "pv_curt_t22": 0.0,
-"pv_curt_t23": 0.0}
+"bat_power_t21": 0.0, "bat_power_t22": 0.0, "bat_power_t23": 0.0, "genset_power_t00": 0.0, "genset_power_t01": 0.0, "genset_power_t02": 0.0, "genset_power_t03": 0.0,
+"genset_power_t04": 0.0, "genset_power_t05": 0.0, "genset_power_t06": 2.10,"genset_power_t07": 1.35, "genset_power_t08": 0.0, "genset_power_t09": 0.0, "genset_power_t10": 0.0,
+"genset_power_t11": 0.0, "genset_power_t12": 0.0, "genset_power_t13": 0.0, "genset_power_t14": 0.0, "genset_power_t15": 0.0, "genset_power_t16": 0.0, "genset_power_t17": 0.0,
+"genset_power_t18": 0.0, "genset_power_t19": 0.0, "genset_power_t20": 0.0, "genset_power_t21": 0.0, "genset_power_t22": 0.0, "genset_power_t23": 0.0, "load_curt_t00": 0.0, 
+"load_curt_t01": 0.0, "load_curt_t02": 0.0, "load_curt_t03": 0.0, "load_curt_t04": 0.0, "load_curt_t05": 0.0, "load_curt_t06": 0.0, "load_curt_t07": 0.0, "load_curt_t08": 0.0, 
+"load_curt_t09": 0.0, "load_curt_t10": 0.0, "load_curt_t11": 0.0, "load_curt_t12": 0.0, "load_curt_t13": 0.0, "load_curt_t14": 0.0, "load_curt_t15": 0.0, "load_curt_t16": 0.0,
+"load_curt_t17": 0.0, "load_curt_t18": 0.0, "load_curt_t19": 0.0, "load_curt_t20": 0.0, "load_curt_t21": 0.0, "load_curt_t22": 0.0, "load_curt_t23": 0.0, "pv_curt_t00": 0.0, 
+"pv_curt_t01": 0.0, "pv_curt_t02": 0.0, "pv_curt_t03": 0.0, "pv_curt_t04": 0.0, "pv_curt_t05": 0.0, "pv_curt_t06": 0.0, "pv_curt_t07": 0.0, "pv_curt_t08": 0.0, "pv_curt_t09": 0.0, 
+"pv_curt_t10": 0.0, "pv_curt_t11": 0.0, "pv_curt_t12": 0.0, "pv_curt_t13": 0.0, "pv_curt_t14": 0.0, "pv_curt_t15": 0.0, "pv_curt_t16": 0.0, "pv_curt_t17": 0.0, "pv_curt_t18": 0.0, 
+"pv_curt_t19": 0.0, "pv_curt_t20": 0.0, "pv_curt_t21": 0.0, "pv_curt_t22": 0.0, "pv_curt_t23": 0.0}
 data = requests.post(url=URL + "/v1/api/economic_dispatch/", data=dispatch, headers={"accept" : "application/json"})
 print(data.status_code)
 print(data.text)
-'''

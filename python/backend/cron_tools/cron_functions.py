@@ -14,13 +14,10 @@ def microgrid_dayahead_optimizer():
     
     data_nodes = requests.get(url=URL + "v1/api/node_information", headers={"accept" : "application/json"})
     data_nodes = json.loads(data_nodes.text)
-    # print(data_nodes)
     data_branches = requests.get(url=URL + "v1/api/branch_information", headers={"accept" : "application/json"})
     data_branches = json.loads(data_branches.text)
-    # print(data_branches)
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
     data_milp = json.loads(data_milp.text)
-    # print(data_milp)
 
     if not data_nodes:
         optimizer_milp_function(print("Data nodes is empty!"))
@@ -54,7 +51,7 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'genset':
                 cont5 += 1
                 input_data['set_of_thermal_generator'] = [str(cont5)]
-        input_data['set_of_outage'] = ['6']
+        input_data['set_of_outage'] = ['8']
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
         input_data['coefficient_demand_scen'] = [1.0]
@@ -207,12 +204,6 @@ def microgrid_dayahead_optimizer():
         input_data['number_discrete_blocks_piecewise_linearization'] = []
         for x in range(data_milp[0]['num_blocks_linearization']):
             input_data['number_discrete_blocks_piecewise_linearization'].append(str(x+1))
-        
-        
-        
-
-        #with open('./cron_tools/optimizer/input_data.json') as json_file:
-        #    input_data = json.load(json_file)
 
 
         return optimizer_milp_function(input_data)
@@ -226,7 +217,7 @@ def write_results_database(resultado):
 
 
     dispatch = requests.get(url=URL + "v1/api/economic_dispatch", headers={"accept" : "application/json"})
-    print(dispatch.status_code)
+    print("fiz um get")
     dispatch = json.loads(dispatch.text)
     
     if not dispatch:
@@ -238,6 +229,14 @@ def write_results_database(resultado):
         "bat_power_t15": resultado['power_of_the_ess'][15], "bat_power_t16": resultado['power_of_the_ess'][16], "bat_power_t17": resultado['power_of_the_ess'][17],
         "bat_power_t18": resultado['power_of_the_ess'][18], "bat_power_t19": resultado['power_of_the_ess'][19], "bat_power_t20": resultado['power_of_the_ess'][20],
         "bat_power_t21": resultado['power_of_the_ess'][21], "bat_power_t22": resultado['power_of_the_ess'][22], "bat_power_t23": resultado['power_of_the_ess'][23],
+        "genset_power_t00": resultado['active_power_genset_w_outage']['scen_1'][0], "genset_power_t01": resultado['active_power_genset_w_outage']['scen_1'][1], "genset_power_t02": resultado['active_power_genset_w_outage']['scen_1'][2], 
+        "genset_power_t03": resultado['active_power_genset_w_outage']['scen_1'][3], "genset_power_t04": resultado['active_power_genset_w_outage']['scen_1'][4], "genset_power_t05": resultado['active_power_genset_w_outage']['scen_1'][5],
+        "genset_power_t06": resultado['active_power_genset_w_outage']['scen_1'][6], "genset_power_t07": resultado['active_power_genset_w_outage']['scen_1'][7], "genset_power_t08": resultado['active_power_genset_w_outage']['scen_1'][8],
+        "genset_power_t09": resultado['active_power_genset_w_outage']['scen_1'][9], "genset_power_t10": resultado['active_power_genset_w_outage']['scen_1'][10], "genset_power_t11": resultado['active_power_genset_w_outage']['scen_1'][11], 
+        "genset_power_t12": resultado['active_power_genset_w_outage']['scen_1'][12], "genset_power_t13": resultado['active_power_genset_w_outage']['scen_1'][13], "genset_power_t14": resultado['active_power_genset_w_outage']['scen_1'][14],
+        "genset_power_t15": resultado['active_power_genset_w_outage']['scen_1'][15], "genset_power_t16": resultado['active_power_genset_w_outage']['scen_1'][16], "genset_power_t17": resultado['active_power_genset_w_outage']['scen_1'][17],
+        "genset_power_t18": resultado['active_power_genset_w_outage']['scen_1'][18], "genset_power_t19": resultado['active_power_genset_w_outage']['scen_1'][19], "genset_power_t20": resultado['active_power_genset_w_outage']['scen_1'][20],
+        "genset_power_t21": resultado['active_power_genset_w_outage']['scen_1'][21], "genset_power_t22": resultado['active_power_genset_w_outage']['scen_1'][22], "genset_power_t23": resultado['active_power_genset_w_outage']['scen_1'][23],
         "load_curt_t00": resultado['total_load_curtailment']['scen_1'][0], "load_curt_t01": resultado['total_load_curtailment']['scen_1'][1], "load_curt_t02": resultado['total_load_curtailment']['scen_1'][2],
         "load_curt_t03": resultado['total_load_curtailment']['scen_1'][3], "load_curt_t04": resultado['total_load_curtailment']['scen_1'][4], "load_curt_t05": resultado['total_load_curtailment']['scen_1'][5],
         "load_curt_t06": resultado['total_load_curtailment']['scen_1'][6], "load_curt_t07": resultado['total_load_curtailment']['scen_1'][7], "load_curt_t08": resultado['total_load_curtailment']['scen_1'][8],
@@ -268,6 +267,14 @@ def write_results_database(resultado):
         "bat_power_t15": resultado['power_of_the_ess'][15], "bat_power_t16": resultado['power_of_the_ess'][16], "bat_power_t17": resultado['power_of_the_ess'][17],
         "bat_power_t18": resultado['power_of_the_ess'][18], "bat_power_t19": resultado['power_of_the_ess'][19], "bat_power_t20": resultado['power_of_the_ess'][20],
         "bat_power_t21": resultado['power_of_the_ess'][21], "bat_power_t22": resultado['power_of_the_ess'][22], "bat_power_t23": resultado['power_of_the_ess'][23],
+        "genset_power_t00": resultado['active_power_genset_w_outage']['scen_1'][0], "genset_power_t01": resultado['active_power_genset_w_outage']['scen_1'][1], "genset_power_t02": resultado['active_power_genset_w_outage']['scen_1'][2], 
+        "genset_power_t03": resultado['active_power_genset_w_outage']['scen_1'][3], "genset_power_t04": resultado['active_power_genset_w_outage']['scen_1'][4], "genset_power_t05": resultado['active_power_genset_w_outage']['scen_1'][5],
+        "genset_power_t06": resultado['active_power_genset_w_outage']['scen_1'][6], "genset_power_t07": resultado['active_power_genset_w_outage']['scen_1'][7], "genset_power_t08": resultado['active_power_genset_w_outage']['scen_1'][8],
+        "genset_power_t09": resultado['active_power_genset_w_outage']['scen_1'][9], "genset_power_t10": resultado['active_power_genset_w_outage']['scen_1'][10], "genset_power_t11": resultado['active_power_genset_w_outage']['scen_1'][11], 
+        "genset_power_t12": resultado['active_power_genset_w_outage']['scen_1'][12], "genset_power_t13": resultado['active_power_genset_w_outage']['scen_1'][13], "genset_power_t14": resultado['active_power_genset_w_outage']['scen_1'][14],
+        "genset_power_t15": resultado['active_power_genset_w_outage']['scen_1'][15], "genset_power_t16": resultado['active_power_genset_w_outage']['scen_1'][16], "genset_power_t17": resultado['active_power_genset_w_outage']['scen_1'][17],
+        "genset_power_t18": resultado['active_power_genset_w_outage']['scen_1'][18], "genset_power_t19": resultado['active_power_genset_w_outage']['scen_1'][19], "genset_power_t20": resultado['active_power_genset_w_outage']['scen_1'][20],
+        "genset_power_t21": resultado['active_power_genset_w_outage']['scen_1'][21], "genset_power_t22": resultado['active_power_genset_w_outage']['scen_1'][22], "genset_power_t23": resultado['active_power_genset_w_outage']['scen_1'][23],
         "load_curt_t00": resultado['total_load_curtailment']['scen_1'][0], "load_curt_t01": resultado['total_load_curtailment']['scen_1'][1], "load_curt_t02": resultado['total_load_curtailment']['scen_1'][2],
         "load_curt_t03": resultado['total_load_curtailment']['scen_1'][3], "load_curt_t04": resultado['total_load_curtailment']['scen_1'][4], "load_curt_t05": resultado['total_load_curtailment']['scen_1'][5],
         "load_curt_t06": resultado['total_load_curtailment']['scen_1'][6], "load_curt_t07": resultado['total_load_curtailment']['scen_1'][7], "load_curt_t08": resultado['total_load_curtailment']['scen_1'][8],
@@ -285,11 +292,11 @@ def write_results_database(resultado):
         "pv_curt_t18": resultado['total_pv_curtailment']['scen_1'][18], "pv_curt_t19": resultado['total_pv_curtailment']['scen_1'][19], "pv_curt_t20": resultado['total_pv_curtailment']['scen_1'][20],
         "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][22], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][23]}
 
-        data = requests.put(url=URL + "/v1/api/economic_dispatch/1", data=dispatch, headers={"accept" : "application/json"})
+        data = requests.put(url=URL + "/v1/api/economic_dispatch/1/", data=dispatch, headers={"accept" : "application/json"})
+        print("fiz um put")
         print(data.status_code)
         print(data.text)
     
-
 
 
 def nominal_active_load_phase_a(node_name, nominal_kva, power_factor):
