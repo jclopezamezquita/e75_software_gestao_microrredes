@@ -4,12 +4,12 @@
 A program that uses tools like Python, MySQL, Docker and Angular in its development.
 
 EMS will provide the following services:
-    - Optimal day-ahead dispatch of the available distributed energy resources (DER);
-    - Monitoring and management of CampusGrid microgrid, modeled and simulated in the Typhoon HIL (Hardware in the Loop);
-    - Microgrid operation data is stored in a MySQL database;
-    - Real-time visualization of microgrid operation;
-    - Visualization of dispatchs defined by the economic dispatch optimizer;
-    - Configuration of hourly energy prices from the main network, thermal generation costs and load curtailment costs.
+* Optimal day-ahead dispatch of the available distributed energy resources (DER);
+* Monitoring and management of CampusGrid microgrid, modeled and simulated in the Typhoon HIL (Hardware in the Loop);
+* Microgrid operation data is stored in a MySQL database;
+* Real-time visualization of microgrid operation;
+* Visualization of dispatchs defined by the economic dispatch optimizer;
+* Configuration of hourly energy prices from the main network, thermal generation costs and load curtailment costs.
     
 ## Architecture
 
@@ -43,6 +43,9 @@ Email: j262748@dac.unicamp.br
 
 Juan Camilo López
 Email: jclopeza@unicamp.br
+
+Cindy Paola
+Email: cindy19gl@gmail.com 
 
 
 
