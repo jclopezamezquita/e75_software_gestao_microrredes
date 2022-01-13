@@ -15,6 +15,7 @@ def optimizer_milp_function(input_data):
 
         data = InputData(input_data)
 
+        
         # Calculating necessaries parameters for the model construction
         data.CalculateParameters()
 

@@ -585,7 +585,7 @@ class MathematicalModel:
 				(1/(data.Va_0_con[(i,t,s)] * data.Vb_0_con[(i,t,s)])) * (data.Rab_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Pa_con[i,j][t][s] + data.Rab_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Qa_con[i,j][t][s] - \
 					data.Xab_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Qa_con[i,j][t][s] +  data.Xab_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Pa_con[i,j][t][s]) + \
 				(1/(data.Va_0_con[(i,t,s)] * data.Vc_0_con[(i,t,s)])) * (data.Rac_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Pa_con[i,j][t][s] + data.Rac_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Qa_con[i,j][t][s] - \
-					data.Xac_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qa_con[i,j][t][s] +  data.Xac_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pa_con[i,j][t][s]) == Plss_a_con[i,j][t][s], "Active_Power_Losses_a_con_%s" %str((i,t,s))
+					data.Xac_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qa_con[i,j][t][s] +  data.Xac_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pa_con[i,j][t][s]) == Plss_a_con[i,j][t][s], "Active_Power_Losses_a_con_%s" %str((i,j,t,s)) 
 		
 		for (i,j,t,s) in self.List_LTS:
 			prob += (1/(data.Vb_0_con[(i,t,s)] * data.Va_0_con[(i,t,s)])) * (data.Rba_p[(i,j)] * data.Pa_0_con[(i,j,t,s)] * Pb_con[i,j][t][s] + data.Rba_p[(i,j)] * data.Qa_0_con[(i,j,t,s)] * Qb_con[i,j][t][s] - \
@@ -593,7 +593,7 @@ class MathematicalModel:
 				(1/(data.Vb_0_con[(i,t,s)] * data.Vb_0_con[(i,t,s)])) * (data.Rbb_p[(i,j)] * Pb_sqr_con[i,j][t][s] + data.Rbb_p[(i,j)] * Qb_sqr_con[i,j][t][s] - \
 					data.Xbb_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Qb_con[i,j][t][s] +  data.Xbb_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Pb_con[i,j][t][s]) + \
 				(1/(data.Vb_0_con[(i,t,s)] * data.Vc_0_con[(i,t,s)])) * (data.Rbc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Pb_con[i,j][t][s] + data.Rbc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Qb_con[i,j][t][s] - \
-					data.Xbc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qb_con[i,j][t][s] +  data.Xbc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pb_con[i,j][t][s]) == Plss_b_con[i,j][t][s], "Active_Power_Losses_b_con_%s" %str((i,t,s))
+					data.Xbc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qb_con[i,j][t][s] +  data.Xbc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pb_con[i,j][t][s]) == Plss_b_con[i,j][t][s], "Active_Power_Losses_b_con_%s" %str((i,j,t,s)) 
 
 		for (i,j,t,s) in self.List_LTS:
 			prob += (1/(data.Vc_0_con[(i,t,s)] * data.Va_0_con[(i,t,s)])) * (data.Rca_p[(i,j)] * data.Pa_0_con[(i,j,t,s)] * Pc_con[i,j][t][s] + data.Rca_p[(i,j)] * data.Qa_0_con[(i,j,t,s)] * Qc_con[i,j][t][s] - \
@@ -601,7 +601,7 @@ class MathematicalModel:
 				(1/(data.Vc_0_con[(i,t,s)] * data.Vb_0_con[(i,t,s)])) * (data.Rcb_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Pc_con[i,j][t][s] + data.Rcb_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Qc_con[i,j][t][s] - \
 					data.Xcb_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Qc_con[i,j][t][s] +  data.Xcb_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Pc_con[i,j][t][s]) + \
 				(1/(data.Vc_0_con[(i,t,s)] * data.Vc_0_con[(i,t,s)])) * (data.Rcc_p[(i,j)] * Pc_sqr_con[i,j][t][s] + data.Rcc_p[(i,j)] * Qc_sqr_con[i,j][t][s] - \
-					data.Xcc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qc_con[i,j][t][s] +  data.Xcc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pc_con[i,j][t][s]) == Plss_c_con[i,j][t][s], "Active_Power_Losses_c_con_%s" %str((i,t,s))
+					data.Xcc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qc_con[i,j][t][s] +  data.Xcc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pc_con[i,j][t][s]) == Plss_c_con[i,j][t][s], "Active_Power_Losses_c_con_%s" %str((i,j,t,s)) 
 
 		# Reactive losses ----------------------------------------------------------------
 		for (i,j,t,s) in self.List_LTS:
@@ -610,7 +610,7 @@ class MathematicalModel:
 				(1/(data.Va_0_con[(i,t,s)] * data.Vb_0_con[(i,t,s)])) * (data.Rab_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Qa_con[i,j][t][s] - data.Rab_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Pa_con[i,j][t][s] + \
 					data.Xab_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Pa_con[i,j][t][s] +  data.Xab_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Qa_con[i,j][t][s]) + \
 				(1/(data.Va_0_con[(i,t,s)] * data.Vc_0_con[(i,t,s)])) * (data.Rac_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qa_con[i,j][t][s] - data.Rac_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pa_con[i,j][t][s] + \
-					data.Xac_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Pa_con[i,j][t][s] +  data.Xac_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Qa_con[i,j][t][s]) == Qlss_a_con[i,j][t][s], "Reactive_Power_Losses_a_con_%s" %str((i,t,s))
+					data.Xac_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Pa_con[i,j][t][s] +  data.Xac_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Qa_con[i,j][t][s]) == Qlss_a_con[i,j][t][s], "Reactive_Power_Losses_a_con_%s" %str((i,j,t,s)) 
 		
 		for (i,j,t,s) in self.List_LTS:
 			prob += (1/(data.Vb_0_con[(i,t,s)] * data.Va_0_con[(i,t,s)])) * (data.Rba_p[(i,j)] * data.Pa_0_con[(i,j,t,s)] * Qb_con[i,j][t][s] - data.Rba_p[(i,j)] * data.Qa_0_con[(i,j,t,s)] * Pb_con[i,j][t][s] + \
@@ -618,7 +618,7 @@ class MathematicalModel:
 				(1/(data.Vb_0_con[(i,t,s)] * data.Vb_0_con[(i,t,s)])) * (data.Rbb_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Qb_con[i,j][t][s] - data.Rbb_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Pb_con[i,j][t][s] + \
 					data.Xbb_p[(i,j)] * Pb_sqr_con[i,j][t][s] +  data.Xbb_p[(i,j)] * Qb_sqr_con[i,j][t][s]) + \
 				(1/(data.Vb_0_con[(i,t,s)] * data.Vc_0_con[(i,t,s)])) * (data.Rbc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qb_con[i,j][t][s] - data.Rbc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pb_con[i,j][t][s] + \
-					data.Xbc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Pb_con[i,j][t][s] +  data.Xbc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Qb_con[i,j][t][s]) == Qlss_b_con[i,j][t][s], "Reactive_Power_Losses_b_con_%s" %str((i,t,s))
+					data.Xbc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Pb_con[i,j][t][s] +  data.Xbc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Qb_con[i,j][t][s]) == Qlss_b_con[i,j][t][s], "Reactive_Power_Losses_b_con_%s" %str((i,j,t,s)) 
 
 		for (i,j,t,s) in self.List_LTS:
 			prob += (1/(data.Vc_0_con[(i,t,s)] * data.Va_0_con[(i,t,s)])) * (data.Rca_p[(i,j)] * data.Pa_0_con[(i,j,t,s)] * Qc_con[i,j][t][s] - data.Rca_p[(i,j)] * data.Qa_0_con[(i,j,t,s)] * Pc_con[i,j][t][s] + \
@@ -626,7 +626,7 @@ class MathematicalModel:
 				(1/(data.Vc_0_con[(i,t,s)] * data.Vb_0_con[(i,t,s)])) * (data.Rcb_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Qc_con[i,j][t][s] - data.Rcb_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Pc_con[i,j][t][s] + \
 					data.Xcb_p[(i,j)] * data.Pb_0_con[(i,j,t,s)] * Pc_con[i,j][t][s] +  data.Xcb_p[(i,j)] * data.Qb_0_con[(i,j,t,s)] * Qc_con[i,j][t][s]) + \
 				(1/(data.Vc_0_con[(i,t,s)] * data.Vc_0_con[(i,t,s)])) * (data.Rcc_p[(i,j)] * data.Pc_0_con[(i,j,t,s)] * Qc_con[i,j][t][s] - data.Rcc_p[(i,j)] * data.Qc_0_con[(i,j,t,s)] * Pc_con[i,j][t][s] + \
-					data.Xcc_p[(i,j)] * Pc_sqr_con[i,j][t][s] +  data.Xcc_p[(i,j)] * Qc_sqr_con[i,j][t][s]) == Qlss_c_con[i,j][t][s], "Reactive_Power_Losses_c_con_%s" %str((i,t,s))
+					data.Xcc_p[(i,j)] * Pc_sqr_con[i,j][t][s] +  data.Xcc_p[(i,j)] * Qc_sqr_con[i,j][t][s]) == Qlss_c_con[i,j][t][s], "Reactive_Power_Losses_c_con_%s" %str((i,j,t,s))
 
 		# Active Power Flow ----------------------------------------------------------------
 		for (i,t,s) in self.List_NTS:
@@ -848,7 +848,7 @@ class MathematicalModel:
 				(1/(data.Va_0[(i,t,c,s)] * data.Vb_0[(i,t,c,s)])) * (data.Rab_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Pa[i,j][t][c][s] + data.Rab_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Qa[i,j][t][c][s] - \
 					data.Xab_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Qa[i,j][t][c][s] +  data.Xab_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Pa[i,j][t][c][s]) + \
 				(1/(data.Va_0[(i,t,c,s)] * data.Vc_0[(i,t,c,s)])) * (data.Rac_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Pa[i,j][t][c][s] + data.Rac_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Qa[i,j][t][c][s] - \
-					data.Xac_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qa[i,j][t][c][s] +  data.Xac_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pa[i,j][t][c][s]) == Plss_a[i,j][t][c][s], "Active_Power_Losses_a_%s" %str((i,t,c,s))
+					data.Xac_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qa[i,j][t][c][s] +  data.Xac_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pa[i,j][t][c][s]) == Plss_a[i,j][t][c][s], "Active_Power_Losses_a_%s" %str((i,j,t,c,s))
 		
 		for (i,j,t,c,s) in self.List_LTOS:
 			prob += (1/(data.Vb_0[(i,t,c,s)] * data.Va_0[(i,t,c,s)])) * (data.Rba_p[(i,j)] * data.Pa_0[(i,j,t,c,s)] * Pb[i,j][t][c][s] + data.Rba_p[(i,j)] * data.Qa_0[(i,j,t,c,s)] * Qb[i,j][t][c][s] - \
@@ -856,7 +856,7 @@ class MathematicalModel:
 				(1/(data.Vb_0[(i,t,c,s)] * data.Vb_0[(i,t,c,s)])) * (data.Rbb_p[(i,j)] * Pb_sqr[i,j][t][c][s] + data.Rbb_p[(i,j)] * Qb_sqr[i,j][t][c][s] - \
 					data.Xbb_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Qb[i,j][t][c][s] +  data.Xbb_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Pb[i,j][t][c][s]) + \
 				(1/(data.Vb_0[(i,t,c,s)] * data.Vc_0[(i,t,c,s)])) * (data.Rbc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Pb[i,j][t][c][s] + data.Rbc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Qb[i,j][t][c][s] - \
-					data.Xbc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qb[i,j][t][c][s] +  data.Xbc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pb[i,j][t][c][s]) == Plss_b[i,j][t][c][s], "Active_Power_Losses_b_%s" %str((i,t,c,s))
+					data.Xbc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qb[i,j][t][c][s] +  data.Xbc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pb[i,j][t][c][s]) == Plss_b[i,j][t][c][s], "Active_Power_Losses_b_%s" %str((i,j,t,c,s))
 
 		for (i,j,t,c,s) in self.List_LTOS:
 			prob += (1/(data.Vc_0[(i,t,c,s)] * data.Va_0[(i,t,c,s)])) * (data.Rca_p[(i,j)] * data.Pa_0[(i,j,t,c,s)] * Pc[i,j][t][c][s] + data.Rca_p[(i,j)] * data.Qa_0[(i,j,t,c,s)] * Qc[i,j][t][c][s] - \
@@ -864,7 +864,7 @@ class MathematicalModel:
 				(1/(data.Vc_0[(i,t,c,s)] * data.Vb_0[(i,t,c,s)])) * (data.Rcb_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Pc[i,j][t][c][s] + data.Rcb_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Qc[i,j][t][c][s] - \
 					data.Xcb_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Qc[i,j][t][c][s] +  data.Xcb_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Pc[i,j][t][c][s]) + \
 				(1/(data.Vc_0[(i,t,c,s)] * data.Vc_0[(i,t,c,s)])) * (data.Rcc_p[(i,j)] * Pc_sqr[i,j][t][c][s] + data.Rcc_p[(i,j)] * Qc_sqr[i,j][t][c][s] - \
-					data.Xcc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qc[i,j][t][c][s] +  data.Xcc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pc[i,j][t][c][s]) == Plss_c[i,j][t][c][s], "Active_Power_Losses_c_%s" %str((i,t,c,s))
+					data.Xcc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qc[i,j][t][c][s] +  data.Xcc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pc[i,j][t][c][s]) == Plss_c[i,j][t][c][s], "Active_Power_Losses_c_%s" %str((i,j,t,c,s))
 
 		# Reactive losses ----------------------------------------------------------------
 		for (i,j,t,c,s) in self.List_LTOS:
@@ -873,7 +873,7 @@ class MathematicalModel:
 				(1/(data.Va_0[(i,t,c,s)] * data.Vb_0[(i,t,c,s)])) * (data.Rab_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Qa[i,j][t][c][s] - data.Rab_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Pa[i,j][t][c][s] + \
 					data.Xab_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Pa[i,j][t][c][s] +  data.Xab_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Qa[i,j][t][c][s]) + \
 				(1/(data.Va_0[(i,t,c,s)] * data.Vc_0[(i,t,c,s)])) * (data.Rac_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qa[i,j][t][c][s] - data.Rac_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pa[i,j][t][c][s] + \
-					data.Xac_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Pa[i,j][t][c][s] +  data.Xac_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Qa[i,j][t][c][s]) == Qlss_a[i,j][t][c][s], "Reactive_Power_Losses_a_%s" %str((i,t,c,s))
+					data.Xac_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Pa[i,j][t][c][s] +  data.Xac_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Qa[i,j][t][c][s]) == Qlss_a[i,j][t][c][s], "Reactive_Power_Losses_a_%s" %str((i,j,t,c,s))
 		
 		for (i,j,t,c,s) in self.List_LTOS:
 			prob += (1/(data.Vb_0[(i,t,c,s)] * data.Va_0[(i,t,c,s)])) * (data.Rba_p[(i,j)] * data.Pa_0[(i,j,t,c,s)] * Qb[i,j][t][c][s] - data.Rba_p[(i,j)] * data.Qa_0[(i,j,t,c,s)] * Pb[i,j][t][c][s] + \
@@ -881,7 +881,7 @@ class MathematicalModel:
 				(1/(data.Vb_0[(i,t,c,s)] * data.Vb_0[(i,t,c,s)])) * (data.Rbb_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Qb[i,j][t][c][s] - data.Rbb_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Pb[i,j][t][c][s] + \
 					data.Xbb_p[(i,j)] * Pb_sqr[i,j][t][c][s] +  data.Xbb_p[(i,j)] * Qb_sqr[i,j][t][c][s]) + \
 				(1/(data.Vb_0[(i,t,c,s)] * data.Vc_0[(i,t,c,s)])) * (data.Rbc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qb[i,j][t][c][s] - data.Rbc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pb[i,j][t][c][s] + \
-					data.Xbc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Pb[i,j][t][c][s] +  data.Xbc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Qb[i,j][t][c][s]) == Qlss_b[i,j][t][c][s], "Reactive_Power_Losses_b_%s" %str((i,t,c,s))
+					data.Xbc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Pb[i,j][t][c][s] +  data.Xbc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Qb[i,j][t][c][s]) == Qlss_b[i,j][t][c][s], "Reactive_Power_Losses_b_%s" %str((i,j,t,c,s))
 
 		for (i,j,t,c,s) in self.List_LTOS:
 			prob += (1/(data.Vc_0[(i,t,c,s)] * data.Va_0[(i,t,c,s)])) * (data.Rca_p[(i,j)] * data.Pa_0[(i,j,t,c,s)] * Qc[i,j][t][c][s] - data.Rca_p[(i,j)] * data.Qa_0[(i,j,t,c,s)] * Pc[i,j][t][c][s] + \
@@ -889,7 +889,7 @@ class MathematicalModel:
 				(1/(data.Vc_0[(i,t,c,s)] * data.Vb_0[(i,t,c,s)])) * (data.Rcb_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Qc[i,j][t][c][s] - data.Rcb_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Pc[i,j][t][c][s] + \
 					data.Xcb_p[(i,j)] * data.Pb_0[(i,j,t,c,s)] * Pc[i,j][t][c][s] +  data.Xcb_p[(i,j)] * data.Qb_0[(i,j,t,c,s)] * Qc[i,j][t][c][s]) + \
 				(1/(data.Vc_0[(i,t,c,s)] * data.Vc_0[(i,t,c,s)])) * (data.Rcc_p[(i,j)] * data.Pc_0[(i,j,t,c,s)] * Qc[i,j][t][c][s] - data.Rcc_p[(i,j)] * data.Qc_0[(i,j,t,c,s)] * Pc[i,j][t][c][s] + \
-					data.Xcc_p[(i,j)] * Pc_sqr[i,j][t][c][s] +  data.Xcc_p[(i,j)] * Qc_sqr[i,j][t][c][s]) == Qlss_c[i,j][t][c][s], "Reactive_Power_Losses_c_%s" %str((i,t,c,s))
+					data.Xcc_p[(i,j)] * Pc_sqr[i,j][t][c][s] +  data.Xcc_p[(i,j)] * Qc_sqr[i,j][t][c][s]) == Qlss_c[i,j][t][c][s], "Reactive_Power_Losses_c_%s" %str((i,j,t,c,s))
 
 
 		# Active Power Flow ----------------------------------------------------------------

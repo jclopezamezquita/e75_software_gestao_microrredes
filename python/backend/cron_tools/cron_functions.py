@@ -14,6 +14,7 @@ def microgrid_dayahead_optimizer():
     
     data_nodes = requests.get(url=URL + "v1/api/node_information", headers={"accept" : "application/json"})
     data_nodes = json.loads(data_nodes.text)
+    print(data_nodes)
     data_branches = requests.get(url=URL + "v1/api/branch_information", headers={"accept" : "application/json"})
     data_branches = json.loads(data_branches.text)
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
@@ -138,12 +139,12 @@ def microgrid_dayahead_optimizer():
         input_data['nominal_reactive_load_phase_b'] = []
         input_data['nominal_reactive_load_phase_c'] = []
         for cont6 in range(len(data_nodes)):
-            input_data['nominal_active_load_phase_a'].append(nominal_active_load_phase_a(data_nodes[cont6]['name'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
-            input_data['nominal_active_load_phase_b'].append(nominal_active_load_phase_b(data_nodes[cont6]['name'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
-            input_data['nominal_active_load_phase_c'].append(nominal_active_load_phase_c(data_nodes[cont6]['name'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
-            input_data['nominal_reactive_load_phase_a'].append(nominal_reactive_load_phase_a(data_nodes[cont6]['name'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
-            input_data['nominal_reactive_load_phase_b'].append(nominal_reactive_load_phase_b(data_nodes[cont6]['name'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
-            input_data['nominal_reactive_load_phase_c'].append(nominal_reactive_load_phase_c(data_nodes[cont6]['name'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
+            input_data['nominal_active_load_phase_a'].append(nominal_active_load_phase_a(data_nodes[cont6]['name'],data_nodes[cont6]['der'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
+            input_data['nominal_active_load_phase_b'].append(nominal_active_load_phase_b(data_nodes[cont6]['name'],data_nodes[cont6]['der'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
+            input_data['nominal_active_load_phase_c'].append(nominal_active_load_phase_c(data_nodes[cont6]['name'],data_nodes[cont6]['der'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
+            input_data['nominal_reactive_load_phase_a'].append(nominal_reactive_load_phase_a(data_nodes[cont6]['name'],data_nodes[cont6]['der'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
+            input_data['nominal_reactive_load_phase_b'].append(nominal_reactive_load_phase_b(data_nodes[cont6]['name'],data_nodes[cont6]['der'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
+            input_data['nominal_reactive_load_phase_c'].append(nominal_reactive_load_phase_c(data_nodes[cont6]['name'],data_nodes[cont6]['der'],data_nodes[cont6]['nominal_kva'], data_nodes[cont6]['power_factor']))
         input_data['profile_active_load_phase_a'] = []
         input_data['profile_active_load_phase_b'] = []
         input_data['profile_active_load_phase_c'] = []
@@ -151,32 +152,35 @@ def microgrid_dayahead_optimizer():
         input_data['profile_reactive_load_phase_b'] = []
         input_data['profile_reactive_load_phase_c'] = []
         for x in range(len(data_nodes)):
-            input_data['profile_active_load_phase_a'].append(profile_active_load_phase_a(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
-            input_data['profile_active_load_phase_b'].append(profile_active_load_phase_b(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
-            input_data['profile_active_load_phase_c'].append(profile_active_load_phase_c(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
-            input_data['profile_reactive_load_phase_a'].append(profile_reactive_load_phase_a(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
-            input_data['profile_reactive_load_phase_b'].append(profile_reactive_load_phase_b(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
-            input_data['profile_reactive_load_phase_c'].append(profile_reactive_load_phase_c(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
+            input_data['profile_active_load_phase_a'].append(profile_active_load_phase_a(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
+            input_data['profile_active_load_phase_b'].append(profile_active_load_phase_b(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
+            input_data['profile_active_load_phase_c'].append(profile_active_load_phase_c(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
+            input_data['profile_reactive_load_phase_a'].append(profile_reactive_load_phase_a(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
+            input_data['profile_reactive_load_phase_b'].append(profile_reactive_load_phase_b(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
+            input_data['profile_reactive_load_phase_c'].append(profile_reactive_load_phase_c(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'], len('set_of_time')))
         input_data['photovoltaic_generation_phase_a'] = []
         input_data['photovoltaic_generation_phase_b'] = []
         input_data['photovoltaic_generation_phase_c'] = []
         for x in range(len(data_nodes)):
-            input_data['photovoltaic_generation_phase_a'].append(photovoltaic_generation_phase_a(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor']))
-            input_data['photovoltaic_generation_phase_b'].append(photovoltaic_generation_phase_b(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor']))
-            input_data['photovoltaic_generation_phase_c'].append(photovoltaic_generation_phase_c(data_nodes[x]['name'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor']))
-        input_data['profile_photovoltaic_generation'] = [0.00, 0.00, 0.00, 0.00, 0.00, 0.10, 0.15, 0.30, 0.70, 0.90, 0.95, 1.00, 0.95, 0.90, 0.70, 0.40, 0.25, 0.10, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+            input_data['photovoltaic_generation_phase_a'].append(photovoltaic_generation_phase_a(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor']))
+            input_data['photovoltaic_generation_phase_b'].append(photovoltaic_generation_phase_b(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor']))
+            input_data['photovoltaic_generation_phase_c'].append(photovoltaic_generation_phase_c(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor']))
+        input_data['profile_photovoltaic_generation'] = []
+        input_data['profile_photovoltaic_generation'].append(profile_photovoltaic_generation(data_nodes[x]['name'],data_nodes[x]['der'],data_nodes[x]['nominal_kva'], data_nodes[x]['power_factor'],len('set_of_time')))
         input_data['location_of_thermal_generation'] = {}
         input_data['minimum_active_power_thermal_generation'] = []
         input_data['maximum_active_power_thermal_generation'] = []
         input_data['minimum_reactive_power_thermal_generation'] = []
         input_data['maximum_reactive_power_thermal_generation'] = []
-        for x in range(1,len('set_of_nodes')+2):
+        for x in range(1,len(input_data['set_of_nodes'])+1):
             input_data['location_of_thermal_generation'][str(x)] = []
         cont3 = 0
+        cont3_1 = 0
         for index in data_nodes:
+            cont3_1 += 1
             if index['der'] == 'genset':
                 cont3 += 1
-                input_data['location_of_thermal_generation'][str(index['id'])] = [str(cont3)]
+                input_data['location_of_thermal_generation'][str(cont3_1)] = [str(cont3)]
                 input_data['minimum_active_power_thermal_generation'].append(index['minimum_kva'])
                 input_data['maximum_active_power_thermal_generation'].append(index['maximum_kva']*index['power_factor'])
                 input_data['minimum_reactive_power_thermal_generation'].append(-math.sqrt(math.pow(index['maximum_kva'],2)-math.pow((index['maximum_kva']*index['power_factor']),2)))
@@ -189,14 +193,16 @@ def microgrid_dayahead_optimizer():
         input_data['maximum_energy_capacity_ess'] = []
         input_data['maximum_power_ess'] = []
         input_data['ess_efficiency'] = []
-        for x in range(1,len('set_of_nodes')+2):
+        for x in range(1,len(input_data['set_of_nodes'])+1):
             input_data['location_of_energy_storage_system'][str(x)] = []
         cont4 = 0
+        cont4_1 = 0
         for index in data_nodes:
+            cont4_1 += 1
             if index['der'] == 'bess':
                 cont4 += 1
-                input_data['location_of_energy_storage_system'][str(index['id'])] = [str(cont4)]
-                input_data['initial_energy_of_the_ess'].append(2)
+                input_data['location_of_energy_storage_system'][str(cont4_1)] = [str(cont4)]
+                input_data['initial_energy_of_the_ess'].append(index['soc_min_bat'] * index['bat_nom_energy'])
                 input_data['minimum_energy_capacity_ess'].append(index['soc_min_bat'] * index['bat_nom_energy'])
                 input_data['maximum_energy_capacity_ess'].append(index['soc_max_bat'] * index['bat_nom_energy'])
                 input_data['maximum_power_ess'].append(index['maximum_kva'])
@@ -217,201 +223,182 @@ def write_results_database(resultado):
 
 
     dispatch = requests.get(url=URL + "v1/api/economic_dispatch", headers={"accept" : "application/json"})
-    print("fiz um get")
+    print("get request")
     dispatch = json.loads(dispatch.text)
     
     if not dispatch:
-        dispatch = {"bat_power_t00": resultado['power_of_the_ess'][0], "bat_power_t01": resultado['power_of_the_ess'][1], "bat_power_t02": resultado['power_of_the_ess'][2], 
-        "bat_power_t03": resultado['power_of_the_ess'][3], "bat_power_t04": resultado['power_of_the_ess'][4], "bat_power_t05": resultado['power_of_the_ess'][5],
-        "bat_power_t06": resultado['power_of_the_ess'][6], "bat_power_t07": resultado['power_of_the_ess'][7], "bat_power_t08": resultado['power_of_the_ess'][8],
-        "bat_power_t09": resultado['power_of_the_ess'][9], "bat_power_t10": resultado['power_of_the_ess'][10], "bat_power_t11": resultado['power_of_the_ess'][11], 
-        "bat_power_t12": resultado['power_of_the_ess'][12], "bat_power_t13": resultado['power_of_the_ess'][13], "bat_power_t14": resultado['power_of_the_ess'][14],
-        "bat_power_t15": resultado['power_of_the_ess'][15], "bat_power_t16": resultado['power_of_the_ess'][16], "bat_power_t17": resultado['power_of_the_ess'][17],
-        "bat_power_t18": resultado['power_of_the_ess'][18], "bat_power_t19": resultado['power_of_the_ess'][19], "bat_power_t20": resultado['power_of_the_ess'][20],
-        "bat_power_t21": resultado['power_of_the_ess'][21], "bat_power_t22": resultado['power_of_the_ess'][22], "bat_power_t23": resultado['power_of_the_ess'][23],
-        "genset_power_t00": resultado['active_power_genset_w_outage']['scen_1'][0], "genset_power_t01": resultado['active_power_genset_w_outage']['scen_1'][1], "genset_power_t02": resultado['active_power_genset_w_outage']['scen_1'][2], 
-        "genset_power_t03": resultado['active_power_genset_w_outage']['scen_1'][3], "genset_power_t04": resultado['active_power_genset_w_outage']['scen_1'][4], "genset_power_t05": resultado['active_power_genset_w_outage']['scen_1'][5],
-        "genset_power_t06": resultado['active_power_genset_w_outage']['scen_1'][6], "genset_power_t07": resultado['active_power_genset_w_outage']['scen_1'][7], "genset_power_t08": resultado['active_power_genset_w_outage']['scen_1'][8],
-        "genset_power_t09": resultado['active_power_genset_w_outage']['scen_1'][9], "genset_power_t10": resultado['active_power_genset_w_outage']['scen_1'][10], "genset_power_t11": resultado['active_power_genset_w_outage']['scen_1'][11], 
-        "genset_power_t12": resultado['active_power_genset_w_outage']['scen_1'][12], "genset_power_t13": resultado['active_power_genset_w_outage']['scen_1'][13], "genset_power_t14": resultado['active_power_genset_w_outage']['scen_1'][14],
-        "genset_power_t15": resultado['active_power_genset_w_outage']['scen_1'][15], "genset_power_t16": resultado['active_power_genset_w_outage']['scen_1'][16], "genset_power_t17": resultado['active_power_genset_w_outage']['scen_1'][17],
-        "genset_power_t18": resultado['active_power_genset_w_outage']['scen_1'][18], "genset_power_t19": resultado['active_power_genset_w_outage']['scen_1'][19], "genset_power_t20": resultado['active_power_genset_w_outage']['scen_1'][20],
-        "genset_power_t21": resultado['active_power_genset_w_outage']['scen_1'][21], "genset_power_t22": resultado['active_power_genset_w_outage']['scen_1'][22], "genset_power_t23": resultado['active_power_genset_w_outage']['scen_1'][23],
-        "load_curt_t00": resultado['total_load_curtailment']['scen_1'][0], "load_curt_t01": resultado['total_load_curtailment']['scen_1'][1], "load_curt_t02": resultado['total_load_curtailment']['scen_1'][2],
-        "load_curt_t03": resultado['total_load_curtailment']['scen_1'][3], "load_curt_t04": resultado['total_load_curtailment']['scen_1'][4], "load_curt_t05": resultado['total_load_curtailment']['scen_1'][5],
-        "load_curt_t06": resultado['total_load_curtailment']['scen_1'][6], "load_curt_t07": resultado['total_load_curtailment']['scen_1'][7], "load_curt_t08": resultado['total_load_curtailment']['scen_1'][8],
-        "load_curt_t09": resultado['total_load_curtailment']['scen_1'][9], "load_curt_t10": resultado['total_load_curtailment']['scen_1'][10], "load_curt_t11": resultado['total_load_curtailment']['scen_1'][11],
-        "load_curt_t12": resultado['total_load_curtailment']['scen_1'][12], "load_curt_t13": resultado['total_load_curtailment']['scen_1'][13], "load_curt_t14": resultado['total_load_curtailment']['scen_1'][14],
-        "load_curt_t15": resultado['total_load_curtailment']['scen_1'][15], "load_curt_t16": resultado['total_load_curtailment']['scen_1'][16], "load_curt_t17": resultado['total_load_curtailment']['scen_1'][17],
-        "load_curt_t18": resultado['total_load_curtailment']['scen_1'][18], "load_curt_t19": resultado['total_load_curtailment']['scen_1'][19], "load_curt_t20": resultado['total_load_curtailment']['scen_1'][20],
-        "load_curt_t21": resultado['total_load_curtailment']['scen_1'][21], "load_curt_t22": resultado['total_load_curtailment']['scen_1'][22], "load_curt_t23": resultado['total_load_curtailment']['scen_1'][23],
-        "pv_curt_t00": resultado['total_pv_curtailment']['scen_1'][0], "pv_curt_t01": resultado['total_pv_curtailment']['scen_1'][1], "pv_curt_t02": resultado['total_pv_curtailment']['scen_1'][2],
-        "pv_curt_t03": resultado['total_pv_curtailment']['scen_1'][3], "pv_curt_t04": resultado['total_pv_curtailment']['scen_1'][4], "pv_curt_t05": resultado['total_pv_curtailment']['scen_1'][5],
-        "pv_curt_t06": resultado['total_pv_curtailment']['scen_1'][6], "pv_curt_t07": resultado['total_pv_curtailment']['scen_1'][7], "pv_curt_t08": resultado['total_pv_curtailment']['scen_1'][8],
-        "pv_curt_t09": resultado['total_pv_curtailment']['scen_1'][9], "pv_curt_t10": resultado['total_pv_curtailment']['scen_1'][10], "pv_curt_t11": resultado['total_pv_curtailment']['scen_1'][11],
-        "pv_curt_t12": resultado['total_pv_curtailment']['scen_1'][12], "pv_curt_t13": resultado['total_pv_curtailment']['scen_1'][13], "pv_curt_t14": resultado['total_pv_curtailment']['scen_1'][14],
-        "pv_curt_t15": resultado['total_pv_curtailment']['scen_1'][15], "pv_curt_t16": resultado['total_pv_curtailment']['scen_1'][16], "pv_curt_t17": resultado['total_pv_curtailment']['scen_1'][17],
-        "pv_curt_t18": resultado['total_pv_curtailment']['scen_1'][18], "pv_curt_t19": resultado['total_pv_curtailment']['scen_1'][19], "pv_curt_t20": resultado['total_pv_curtailment']['scen_1'][20],
-        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][22], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][23]}
+        dispatch = {"bat_power_t00": resultado['power_of_the_ess'][23], "bat_power_t01": resultado['power_of_the_ess'][0], "bat_power_t02": resultado['power_of_the_ess'][1], 
+        "bat_power_t03": resultado['power_of_the_ess'][2], "bat_power_t04": resultado['power_of_the_ess'][3], "bat_power_t05": resultado['power_of_the_ess'][4],
+        "bat_power_t06": resultado['power_of_the_ess'][5], "bat_power_t07": resultado['power_of_the_ess'][6], "bat_power_t08": resultado['power_of_the_ess'][7],
+        "bat_power_t09": resultado['power_of_the_ess'][8], "bat_power_t10": resultado['power_of_the_ess'][9], "bat_power_t11": resultado['power_of_the_ess'][10], 
+        "bat_power_t12": resultado['power_of_the_ess'][11], "bat_power_t13": resultado['power_of_the_ess'][12], "bat_power_t14": resultado['power_of_the_ess'][13],
+        "bat_power_t15": resultado['power_of_the_ess'][14], "bat_power_t16": resultado['power_of_the_ess'][15], "bat_power_t17": 0.0,
+        "bat_power_t18": resultado['power_of_the_ess'][17], "bat_power_t19": resultado['power_of_the_ess'][18], "bat_power_t20": resultado['power_of_the_ess'][19],
+        "bat_power_t21": resultado['power_of_the_ess'][20], "bat_power_t22": resultado['power_of_the_ess'][21], "bat_power_t23": resultado['power_of_the_ess'][22],
+        "genset_power_t00": resultado['active_power_genset_w_outage']['scen_1'][23], "genset_power_t01": resultado['active_power_genset_w_outage']['scen_1'][0], "genset_power_t02": resultado['active_power_genset_w_outage']['scen_1'][1], 
+        "genset_power_t03": resultado['active_power_genset_w_outage']['scen_1'][2], "genset_power_t04": resultado['active_power_genset_w_outage']['scen_1'][3], "genset_power_t05": resultado['active_power_genset_w_outage']['scen_1'][4],
+        "genset_power_t06": resultado['active_power_genset_w_outage']['scen_1'][5], "genset_power_t07": resultado['active_power_genset_w_outage']['scen_1'][6], "genset_power_t08": resultado['active_power_genset_w_outage']['scen_1'][7],
+        "genset_power_t09": resultado['active_power_genset_w_outage']['scen_1'][8], "genset_power_t10": resultado['active_power_genset_w_outage']['scen_1'][9], "genset_power_t11": resultado['active_power_genset_w_outage']['scen_1'][10], 
+        "genset_power_t12": resultado['active_power_genset_w_outage']['scen_1'][11], "genset_power_t13": resultado['active_power_genset_w_outage']['scen_1'][12], "genset_power_t14": resultado['active_power_genset_w_outage']['scen_1'][13],
+        "genset_power_t15": resultado['active_power_genset_w_outage']['scen_1'][14], "genset_power_t16": resultado['active_power_genset_w_outage']['scen_1'][15], "genset_power_t17": resultado['active_power_genset_w_outage']['scen_1'][16],
+        "genset_power_t18": resultado['active_power_genset_w_outage']['scen_1'][17], "genset_power_t19": resultado['active_power_genset_w_outage']['scen_1'][18], "genset_power_t20": resultado['active_power_genset_w_outage']['scen_1'][19],
+        "genset_power_t21": resultado['active_power_genset_w_outage']['scen_1'][20], "genset_power_t22": resultado['active_power_genset_w_outage']['scen_1'][21], "genset_power_t23": resultado['active_power_genset_w_outage']['scen_1'][22],
+        "load_curt_t00": resultado['total_load_curtailment']['scen_1'][23], "load_curt_t01": resultado['total_load_curtailment']['scen_1'][0], "load_curt_t02": resultado['total_load_curtailment']['scen_1'][1],
+        "load_curt_t03": resultado['total_load_curtailment']['scen_1'][2], "load_curt_t04": resultado['total_load_curtailment']['scen_1'][3], "load_curt_t05": resultado['total_load_curtailment']['scen_1'][4],
+        "load_curt_t06": resultado['total_load_curtailment']['scen_1'][5], "load_curt_t07": resultado['total_load_curtailment']['scen_1'][6], "load_curt_t08": resultado['total_load_curtailment']['scen_1'][7],
+        "load_curt_t09": resultado['total_load_curtailment']['scen_1'][8], "load_curt_t10": resultado['total_load_curtailment']['scen_1'][9], "load_curt_t11": resultado['total_load_curtailment']['scen_1'][10],
+        "load_curt_t12": resultado['total_load_curtailment']['scen_1'][11], "load_curt_t13": resultado['total_load_curtailment']['scen_1'][12], "load_curt_t14": resultado['total_load_curtailment']['scen_1'][13],
+        "load_curt_t15": resultado['total_load_curtailment']['scen_1'][14], "load_curt_t16": resultado['total_load_curtailment']['scen_1'][15], "load_curt_t17": resultado['total_load_curtailment']['scen_1'][16],
+        "load_curt_t18": resultado['total_load_curtailment']['scen_1'][17], "load_curt_t19": resultado['total_load_curtailment']['scen_1'][18], "load_curt_t20": resultado['total_load_curtailment']['scen_1'][19],
+        "load_curt_t21": resultado['total_load_curtailment']['scen_1'][20], "load_curt_t22": resultado['total_load_curtailment']['scen_1'][21], "load_curt_t23": resultado['total_load_curtailment']['scen_1'][22],
+        "pv_curt_t00": resultado['total_pv_curtailment']['scen_1'][23], "pv_curt_t01": resultado['total_pv_curtailment']['scen_1'][0], "pv_curt_t02": resultado['total_pv_curtailment']['scen_1'][1],
+        "pv_curt_t03": resultado['total_pv_curtailment']['scen_1'][2], "pv_curt_t04": resultado['total_pv_curtailment']['scen_1'][3], "pv_curt_t05": resultado['total_pv_curtailment']['scen_1'][4],
+        "pv_curt_t06": resultado['total_pv_curtailment']['scen_1'][5], "pv_curt_t07": resultado['total_pv_curtailment']['scen_1'][6], "pv_curt_t08": resultado['total_pv_curtailment']['scen_1'][7],
+        "pv_curt_t09": resultado['total_pv_curtailment']['scen_1'][8], "pv_curt_t10": resultado['total_pv_curtailment']['scen_1'][9], "pv_curt_t11": resultado['total_pv_curtailment']['scen_1'][10],
+        "pv_curt_t12": resultado['total_pv_curtailment']['scen_1'][11], "pv_curt_t13": resultado['total_pv_curtailment']['scen_1'][12], "pv_curt_t14": resultado['total_pv_curtailment']['scen_1'][13],
+        "pv_curt_t15": resultado['total_pv_curtailment']['scen_1'][14], "pv_curt_t16": resultado['total_pv_curtailment']['scen_1'][15], "pv_curt_t17": resultado['total_pv_curtailment']['scen_1'][16],
+        "pv_curt_t18": resultado['total_pv_curtailment']['scen_1'][17], "pv_curt_t19": resultado['total_pv_curtailment']['scen_1'][18], "pv_curt_t20": resultado['total_pv_curtailment']['scen_1'][19],
+        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][22]}
         
         data = requests.post(url=URL + "/v1/api/economic_dispatch/", data=dispatch, headers={"accept" : "application/json"})
+        print("post request")
         print(data.status_code)
         print(data.text)
 
     else:
-        dispatch = {"bat_power_t00": resultado['power_of_the_ess'][0], "bat_power_t01": resultado['power_of_the_ess'][1], "bat_power_t02": resultado['power_of_the_ess'][2], 
-        "bat_power_t03": resultado['power_of_the_ess'][3], "bat_power_t04": resultado['power_of_the_ess'][4], "bat_power_t05": resultado['power_of_the_ess'][5],
-        "bat_power_t06": resultado['power_of_the_ess'][6], "bat_power_t07": resultado['power_of_the_ess'][7], "bat_power_t08": resultado['power_of_the_ess'][8],
-        "bat_power_t09": resultado['power_of_the_ess'][9], "bat_power_t10": resultado['power_of_the_ess'][10], "bat_power_t11": resultado['power_of_the_ess'][11], 
-        "bat_power_t12": resultado['power_of_the_ess'][12], "bat_power_t13": resultado['power_of_the_ess'][13], "bat_power_t14": resultado['power_of_the_ess'][14],
-        "bat_power_t15": resultado['power_of_the_ess'][15], "bat_power_t16": resultado['power_of_the_ess'][16], "bat_power_t17": resultado['power_of_the_ess'][17],
-        "bat_power_t18": resultado['power_of_the_ess'][18], "bat_power_t19": resultado['power_of_the_ess'][19], "bat_power_t20": resultado['power_of_the_ess'][20],
-        "bat_power_t21": resultado['power_of_the_ess'][21], "bat_power_t22": resultado['power_of_the_ess'][22], "bat_power_t23": resultado['power_of_the_ess'][23],
-        "genset_power_t00": resultado['active_power_genset_w_outage']['scen_1'][0], "genset_power_t01": resultado['active_power_genset_w_outage']['scen_1'][1], "genset_power_t02": resultado['active_power_genset_w_outage']['scen_1'][2], 
-        "genset_power_t03": resultado['active_power_genset_w_outage']['scen_1'][3], "genset_power_t04": resultado['active_power_genset_w_outage']['scen_1'][4], "genset_power_t05": resultado['active_power_genset_w_outage']['scen_1'][5],
-        "genset_power_t06": resultado['active_power_genset_w_outage']['scen_1'][6], "genset_power_t07": resultado['active_power_genset_w_outage']['scen_1'][7], "genset_power_t08": resultado['active_power_genset_w_outage']['scen_1'][8],
-        "genset_power_t09": resultado['active_power_genset_w_outage']['scen_1'][9], "genset_power_t10": resultado['active_power_genset_w_outage']['scen_1'][10], "genset_power_t11": resultado['active_power_genset_w_outage']['scen_1'][11], 
-        "genset_power_t12": resultado['active_power_genset_w_outage']['scen_1'][12], "genset_power_t13": resultado['active_power_genset_w_outage']['scen_1'][13], "genset_power_t14": resultado['active_power_genset_w_outage']['scen_1'][14],
-        "genset_power_t15": resultado['active_power_genset_w_outage']['scen_1'][15], "genset_power_t16": resultado['active_power_genset_w_outage']['scen_1'][16], "genset_power_t17": resultado['active_power_genset_w_outage']['scen_1'][17],
-        "genset_power_t18": resultado['active_power_genset_w_outage']['scen_1'][18], "genset_power_t19": resultado['active_power_genset_w_outage']['scen_1'][19], "genset_power_t20": resultado['active_power_genset_w_outage']['scen_1'][20],
-        "genset_power_t21": resultado['active_power_genset_w_outage']['scen_1'][21], "genset_power_t22": resultado['active_power_genset_w_outage']['scen_1'][22], "genset_power_t23": resultado['active_power_genset_w_outage']['scen_1'][23],
-        "load_curt_t00": resultado['total_load_curtailment']['scen_1'][0], "load_curt_t01": resultado['total_load_curtailment']['scen_1'][1], "load_curt_t02": resultado['total_load_curtailment']['scen_1'][2],
-        "load_curt_t03": resultado['total_load_curtailment']['scen_1'][3], "load_curt_t04": resultado['total_load_curtailment']['scen_1'][4], "load_curt_t05": resultado['total_load_curtailment']['scen_1'][5],
-        "load_curt_t06": resultado['total_load_curtailment']['scen_1'][6], "load_curt_t07": resultado['total_load_curtailment']['scen_1'][7], "load_curt_t08": resultado['total_load_curtailment']['scen_1'][8],
-        "load_curt_t09": resultado['total_load_curtailment']['scen_1'][9], "load_curt_t10": resultado['total_load_curtailment']['scen_1'][10], "load_curt_t11": resultado['total_load_curtailment']['scen_1'][11],
-        "load_curt_t12": resultado['total_load_curtailment']['scen_1'][12], "load_curt_t13": resultado['total_load_curtailment']['scen_1'][13], "load_curt_t14": resultado['total_load_curtailment']['scen_1'][14],
-        "load_curt_t15": resultado['total_load_curtailment']['scen_1'][15], "load_curt_t16": resultado['total_load_curtailment']['scen_1'][16], "load_curt_t17": resultado['total_load_curtailment']['scen_1'][17],
-        "load_curt_t18": resultado['total_load_curtailment']['scen_1'][18], "load_curt_t19": resultado['total_load_curtailment']['scen_1'][19], "load_curt_t20": resultado['total_load_curtailment']['scen_1'][20],
-        "load_curt_t21": resultado['total_load_curtailment']['scen_1'][21], "load_curt_t22": resultado['total_load_curtailment']['scen_1'][22], "load_curt_t23": resultado['total_load_curtailment']['scen_1'][23],
-        "pv_curt_t00": resultado['total_pv_curtailment']['scen_1'][0], "pv_curt_t01": resultado['total_pv_curtailment']['scen_1'][1], "pv_curt_t02": resultado['total_pv_curtailment']['scen_1'][2],
-        "pv_curt_t03": resultado['total_pv_curtailment']['scen_1'][3], "pv_curt_t04": resultado['total_pv_curtailment']['scen_1'][4], "pv_curt_t05": resultado['total_pv_curtailment']['scen_1'][5],
-        "pv_curt_t06": resultado['total_pv_curtailment']['scen_1'][6], "pv_curt_t07": resultado['total_pv_curtailment']['scen_1'][7], "pv_curt_t08": resultado['total_pv_curtailment']['scen_1'][8],
-        "pv_curt_t09": resultado['total_pv_curtailment']['scen_1'][9], "pv_curt_t10": resultado['total_pv_curtailment']['scen_1'][10], "pv_curt_t11": resultado['total_pv_curtailment']['scen_1'][11],
-        "pv_curt_t12": resultado['total_pv_curtailment']['scen_1'][12], "pv_curt_t13": resultado['total_pv_curtailment']['scen_1'][13], "pv_curt_t14": resultado['total_pv_curtailment']['scen_1'][14],
-        "pv_curt_t15": resultado['total_pv_curtailment']['scen_1'][15], "pv_curt_t16": resultado['total_pv_curtailment']['scen_1'][16], "pv_curt_t17": resultado['total_pv_curtailment']['scen_1'][17],
-        "pv_curt_t18": resultado['total_pv_curtailment']['scen_1'][18], "pv_curt_t19": resultado['total_pv_curtailment']['scen_1'][19], "pv_curt_t20": resultado['total_pv_curtailment']['scen_1'][20],
-        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][22], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][23]}
+        print("entrou no else")
+        dispatch = {"bat_power_t00": resultado['power_of_the_ess'][23], "bat_power_t01": resultado['power_of_the_ess'][0], "bat_power_t02": resultado['power_of_the_ess'][1], 
+        "bat_power_t03": resultado['power_of_the_ess'][2], "bat_power_t04": resultado['power_of_the_ess'][3], "bat_power_t05": resultado['power_of_the_ess'][4],
+        "bat_power_t06": resultado['power_of_the_ess'][5], "bat_power_t07": resultado['power_of_the_ess'][6], "bat_power_t08": resultado['power_of_the_ess'][7],
+        "bat_power_t09": resultado['power_of_the_ess'][8], "bat_power_t10": resultado['power_of_the_ess'][9], "bat_power_t11": resultado['power_of_the_ess'][10], 
+        "bat_power_t12": resultado['power_of_the_ess'][11], "bat_power_t13": resultado['power_of_the_ess'][12], "bat_power_t14": resultado['power_of_the_ess'][13],
+        "bat_power_t15": resultado['power_of_the_ess'][14], "bat_power_t16": resultado['power_of_the_ess'][15], "bat_power_t17": resultado['power_of_the_ess'][16],
+        "bat_power_t18": resultado['power_of_the_ess'][17], "bat_power_t19": resultado['power_of_the_ess'][18], "bat_power_t20": resultado['power_of_the_ess'][19],
+        "bat_power_t21": resultado['power_of_the_ess'][20], "bat_power_t22": resultado['power_of_the_ess'][21], "bat_power_t23": resultado['power_of_the_ess'][22],
+        "genset_power_t00": resultado['active_power_genset_w_outage']['scen_1'][23], "genset_power_t01": resultado['active_power_genset_w_outage']['scen_1'][0], "genset_power_t02": resultado['active_power_genset_w_outage']['scen_1'][1], 
+        "genset_power_t03": resultado['active_power_genset_w_outage']['scen_1'][2], "genset_power_t04": resultado['active_power_genset_w_outage']['scen_1'][3], "genset_power_t05": resultado['active_power_genset_w_outage']['scen_1'][4],
+        "genset_power_t06": resultado['active_power_genset_w_outage']['scen_1'][5], "genset_power_t07": resultado['active_power_genset_w_outage']['scen_1'][6], "genset_power_t08": resultado['active_power_genset_w_outage']['scen_1'][7],
+        "genset_power_t09": resultado['active_power_genset_w_outage']['scen_1'][8], "genset_power_t10": resultado['active_power_genset_w_outage']['scen_1'][9], "genset_power_t11": resultado['active_power_genset_w_outage']['scen_1'][10], 
+        "genset_power_t12": resultado['active_power_genset_w_outage']['scen_1'][11], "genset_power_t13": resultado['active_power_genset_w_outage']['scen_1'][12], "genset_power_t14": resultado['active_power_genset_w_outage']['scen_1'][13],
+        "genset_power_t15": resultado['active_power_genset_w_outage']['scen_1'][14], "genset_power_t16": resultado['active_power_genset_w_outage']['scen_1'][15], "genset_power_t17": resultado['active_power_genset_w_outage']['scen_1'][16],
+        "genset_power_t18": resultado['active_power_genset_w_outage']['scen_1'][17], "genset_power_t19": resultado['active_power_genset_w_outage']['scen_1'][18], "genset_power_t20": resultado['active_power_genset_w_outage']['scen_1'][19],
+        "genset_power_t21": resultado['active_power_genset_w_outage']['scen_1'][20], "genset_power_t22": resultado['active_power_genset_w_outage']['scen_1'][21], "genset_power_t23": resultado['active_power_genset_w_outage']['scen_1'][22],
+        "load_curt_t00": resultado['total_load_curtailment']['scen_1'][23], "load_curt_t01": resultado['total_load_curtailment']['scen_1'][0], "load_curt_t02": resultado['total_load_curtailment']['scen_1'][1],
+        "load_curt_t03": resultado['total_load_curtailment']['scen_1'][2], "load_curt_t04": resultado['total_load_curtailment']['scen_1'][3], "load_curt_t05": resultado['total_load_curtailment']['scen_1'][4],
+        "load_curt_t06": resultado['total_load_curtailment']['scen_1'][5], "load_curt_t07": resultado['total_load_curtailment']['scen_1'][6], "load_curt_t08": resultado['total_load_curtailment']['scen_1'][7],
+        "load_curt_t09": resultado['total_load_curtailment']['scen_1'][8], "load_curt_t10": resultado['total_load_curtailment']['scen_1'][9], "load_curt_t11": resultado['total_load_curtailment']['scen_1'][10],
+        "load_curt_t12": resultado['total_load_curtailment']['scen_1'][11], "load_curt_t13": resultado['total_load_curtailment']['scen_1'][12], "load_curt_t14": resultado['total_load_curtailment']['scen_1'][13],
+        "load_curt_t15": resultado['total_load_curtailment']['scen_1'][14], "load_curt_t16": resultado['total_load_curtailment']['scen_1'][15], "load_curt_t17": resultado['total_load_curtailment']['scen_1'][16],
+        "load_curt_t18": resultado['total_load_curtailment']['scen_1'][17], "load_curt_t19": resultado['total_load_curtailment']['scen_1'][18], "load_curt_t20": resultado['total_load_curtailment']['scen_1'][19],
+        "load_curt_t21": resultado['total_load_curtailment']['scen_1'][20], "load_curt_t22": resultado['total_load_curtailment']['scen_1'][21], "load_curt_t23": resultado['total_load_curtailment']['scen_1'][22],
+        "pv_curt_t00": resultado['total_pv_curtailment']['scen_1'][23], "pv_curt_t01": resultado['total_pv_curtailment']['scen_1'][0], "pv_curt_t02": resultado['total_pv_curtailment']['scen_1'][1],
+        "pv_curt_t03": resultado['total_pv_curtailment']['scen_1'][2], "pv_curt_t04": resultado['total_pv_curtailment']['scen_1'][3], "pv_curt_t05": resultado['total_pv_curtailment']['scen_1'][4],
+        "pv_curt_t06": resultado['total_pv_curtailment']['scen_1'][5], "pv_curt_t07": resultado['total_pv_curtailment']['scen_1'][6], "pv_curt_t08": resultado['total_pv_curtailment']['scen_1'][7],
+        "pv_curt_t09": resultado['total_pv_curtailment']['scen_1'][8], "pv_curt_t10": resultado['total_pv_curtailment']['scen_1'][9], "pv_curt_t11": resultado['total_pv_curtailment']['scen_1'][10],
+        "pv_curt_t12": resultado['total_pv_curtailment']['scen_1'][11], "pv_curt_t13": resultado['total_pv_curtailment']['scen_1'][12], "pv_curt_t14": resultado['total_pv_curtailment']['scen_1'][13],
+        "pv_curt_t15": resultado['total_pv_curtailment']['scen_1'][14], "pv_curt_t16": resultado['total_pv_curtailment']['scen_1'][15], "pv_curt_t17": resultado['total_pv_curtailment']['scen_1'][16],
+        "pv_curt_t18": resultado['total_pv_curtailment']['scen_1'][17], "pv_curt_t19": resultado['total_pv_curtailment']['scen_1'][18], "pv_curt_t20": resultado['total_pv_curtailment']['scen_1'][19],
+        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][22]}
 
         data = requests.put(url=URL + "/v1/api/economic_dispatch/1/", data=dispatch, headers={"accept" : "application/json"})
-        print("fiz um put")
+        print(dispatch)
+        print('Put request')
         print(data.status_code)
         print(data.text)
+        print(resultado)
+        print(resultado['power_of_the_ess'][16])
     
 
 
-def nominal_active_load_phase_a(node_name, nominal_kva, power_factor):
-    if node_name == '4':
-        return 3.65
-    elif node_name == '13':
-        return 3.65
+def nominal_active_load_phase_a(node_name, type, nominal_kva, power_factor):
+    if type == 'load':
+        return nominal_kva/3
     else:
         return 0
 
-def nominal_active_load_phase_b(node_name, nominal_kva, power_factor):
-    if node_name == '4':
-        return 2.50
-    elif node_name == '13':
-        return 2.50
+def nominal_active_load_phase_b(node_name, type, nominal_kva, power_factor):
+    if type == 'load':
+        return nominal_kva/3
     else:
         return 0
 
-def nominal_active_load_phase_c(node_name, nominal_kva, power_factor):
-    if node_name == '4':
-        return 2.85
-    elif node_name == '13':
-        return 2.85
+def nominal_active_load_phase_c(node_name, type, nominal_kva, power_factor):
+    if type == 'load':
+        return nominal_kva/3
     else:
         return 0
 
-def nominal_reactive_load_phase_a(node_name, nominal_kva, power_factor):
-    if node_name == '4':
-        return 3.00
-    elif node_name == '13':
-        return 3.00
+def nominal_reactive_load_phase_a(node_name, type, nominal_kva, power_factor):
+    if type == 'load':
+        return nominal_kva/3
     else:
         return 0
 
-def nominal_reactive_load_phase_b(node_name, nominal_kva, power_factor):
-    if node_name == '4':
-        return 2.75
-    elif node_name == '13':
-        return 2.75
+def nominal_reactive_load_phase_b(node_name, type, nominal_kva, power_factor):
+    if type == 'load':
+        return nominal_kva/3
     else:
         return 0
 
-def nominal_reactive_load_phase_c(node_name, nominal_kva, power_factor):
-    if node_name == '4':
-        return 1.75
-    elif node_name == '13':
-        return 1.75
+def nominal_reactive_load_phase_c(node_name, type, nominal_kva, power_factor):
+    if type == 'load':
+        return nominal_kva/3
     else:
         return 0
 
-def photovoltaic_generation_phase_a(node_name, nominal_kva, power_factor):
-    if node_name == '12':
-        return 5.0
+def photovoltaic_generation_phase_a(node_name, type, nominal_kva, power_factor):
+    if type == 'pv':
+        return nominal_kva/3
     else:
         return 0
 
-def photovoltaic_generation_phase_b(node_name, nominal_kva, power_factor):
-    if node_name == '12':
-        return 5.0
+def photovoltaic_generation_phase_b(node_name, type, nominal_kva, power_factor):
+    if type == 'pv':
+        return nominal_kva/3
     else:
         return 0
 
-def photovoltaic_generation_phase_c(node_name, nominal_kva, power_factor):
-    if node_name == '12':
-        return 5.0
+def photovoltaic_generation_phase_c(node_name, type, nominal_kva, power_factor):
+    if type == 'pv':
+        return nominal_kva/3
     else:
         return 0
 
-def profile_active_load_phase_a(node_name, nominal_kva, power_factor, timesteps):
-    if node_name == '4':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
-    elif node_name == '13':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
+def profile_active_load_phase_a(node_name, type, nominal_kva, power_factor, timesteps):
+    if type == 'load':
+        return [0.36, 0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-def profile_active_load_phase_b(node_name, nominal_kva, power_factor, timesteps):
-    if node_name == '4':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
-    elif node_name == '13':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
+def profile_active_load_phase_b(node_name, type, nominal_kva, power_factor, timesteps):
+    if type == 'load':
+        return [0.36, 0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-def profile_active_load_phase_c(node_name, nominal_kva, power_factor, timesteps):
-    if node_name == '4':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
-    elif node_name == '13':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
+def profile_active_load_phase_c(node_name, type, nominal_kva, power_factor, timesteps):
+    if type == 'load':
+        return [0.36, 0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-def profile_reactive_load_phase_a(node_name, nominal_kva, power_factor, timesteps):
-    if node_name == '4':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
-    elif node_name == '13':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
+def profile_reactive_load_phase_a(node_name, type, nominal_kva, power_factor, timesteps):
+    if type == 'load':
+        return [0.143767036, 0.131238173, 0.139046789, 0.139400255, 0.140096392, 0.13386353, 0.116681337, 0.133439912, 0.192811296, 0.286951798, 0.292067601, 0.325390479, 0.337211331, 0.327249545, 0.365205247, 0.343805753, 0.325727755, 0.29122576, 0.410127723, 0.443, 0.413794589, 0.330989262, 0.200393262, 0.155557128]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-def profile_reactive_load_phase_b(node_name, nominal_kva, power_factor, timesteps):
-    if node_name == '4':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
-    elif node_name == '13':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
+def profile_reactive_load_phase_b(node_name, type, nominal_kva, power_factor, timesteps):
+    if type == 'load':
+        return [0.143767036, 0.131238173, 0.139046789, 0.139400255, 0.140096392, 0.13386353, 0.116681337, 0.133439912, 0.192811296, 0.286951798, 0.292067601, 0.325390479, 0.337211331, 0.327249545, 0.365205247, 0.343805753, 0.325727755, 0.29122576, 0.410127723, 0.443, 0.413794589, 0.330989262, 0.200393262, 0.155557128]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-def profile_reactive_load_phase_c(node_name, nominal_kva, power_factor, timesteps):
-    if node_name == '4':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
-    elif node_name == '13':
-        return [0.10, 0.10, 0.10, 0.10, 0.10, 0.20, 0.20, 0.25, 0.40, 0.80, 0.75, 0.60, 0.90, 0.75, 0.80, 0.85, 0.90, 1.00, 1.00, 1.00, 0.90, 0.55, 0.20, 0.10]
+def profile_reactive_load_phase_c(node_name, type, nominal_kva, power_factor, timesteps):
+    if type == 'load':
+        return [0.143767036, 0.131238173, 0.139046789, 0.139400255, 0.140096392, 0.13386353, 0.116681337, 0.133439912, 0.192811296, 0.286951798, 0.292067601, 0.325390479, 0.337211331, 0.327249545, 0.365205247, 0.343805753, 0.325727755, 0.29122576, 0.410127723, 0.443, 0.413794589, 0.330989262, 0.200393262, 0.155557128]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-def profile_photovoltaic_generation(node_name, nominal_kva, power_factor, timesteps):
-    return [0.00, 0.00, 0.00, 0.00, 0.00, 0.10, 0.15, 0.30, 0.70, 0.90, 0.95, 1.00, 0.95, 0.90, 0.70, 0.40, 0.25, 0.10, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+def profile_photovoltaic_generation(node_name, type, nominal_kva, power_factor, timesteps):
+    return [0, 0, 0, 0, 0, 0.011589674, 0.090665761, 0.288016304, 0.535353261, 0.740774457, 0.88669837, 0.959524457, 0.965475543, 0.911154891, 0.795298913, 0.62298913, 0.401345109, 0.170475543, 0.029660326, 0.000163043, 0, 0, 0, 0]

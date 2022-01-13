@@ -135,8 +135,8 @@ class InputData:
 		for index in range(len(data["photovoltaic_generation_phase_c"])):
 			self.PVc_0[self.N[index]] = data["photovoltaic_generation_phase_c"][index]
 		self.fpv ={}
-		for index in range(len(data["profile_photovoltaic_generation"])):
-			self.fpv[self.T[index]] = data["profile_photovoltaic_generation"][index]
+		for index in range(len(data["profile_photovoltaic_generation"][0])):
+			self.fpv[self.T[index]] = data["profile_photovoltaic_generation"][0][index]
 		self.dict_nos_gd = data["location_of_thermal_generation"]
 		self.PG_min = {}
 		self.PG_max = {}

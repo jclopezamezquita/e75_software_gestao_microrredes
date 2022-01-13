@@ -33,7 +33,7 @@ def leitura_medidas_laboratoriais(num):
     print ("%s/%s/%s %s:%s:%s" % (now.month,now.day,now.year,now.hour,now.minute,now.second))
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(-20, -1, -1, -1, -1)
+@cron(-5, -1, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the end of the day
