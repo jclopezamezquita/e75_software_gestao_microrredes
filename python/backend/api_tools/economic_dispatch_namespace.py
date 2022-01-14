@@ -11,6 +11,8 @@ import json
 def bat_power_rule(value):
     try:
         value = float(value)
+        if abs(value) < 0.1:
+            value = 0.0
     except:
         raise ValueError(' Invalid format!')
     return value
@@ -626,6 +628,8 @@ class economic_dispatch_Retrieve(Resource):
         else:
             for key in data:
                 if data[key]:
+                    setattr(query, key, data[key])
+                elif data[key] == 0.0:
                     setattr(query, key, data[key])
             db.session.commit()
             return query

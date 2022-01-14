@@ -39,7 +39,8 @@ def cron_everyday(num):
     This cron is executed every day at the end of the day
     '''
     resultado = cron_functions.microgrid_dayahead_optimizer()
-    cron_functions.write_results_database(resultado)
+    if resultado:
+        cron_functions.write_results_database(resultado)
     print(resultado)
 
 @app.route('/random')
