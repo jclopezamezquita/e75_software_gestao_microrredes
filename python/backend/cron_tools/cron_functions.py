@@ -1,4 +1,5 @@
 from json.encoder import py_encode_basestring
+from platform import node
 from cron_tools.optimizer.optimizer import optimizer_milp_function
 import json
 import requests
@@ -307,7 +308,45 @@ def write_results_database(resultado):
         print(data.text)
         print(resultado)
         print(resultado['power_of_the_ess'][16])
+
+
+def microgrid_measurements(URL):
     
+    measurements = requests.get(url=URL + "last_item", headers={"accept" : "application/json"})
+    measurements = json.loads(measurements.text)
+    print(measurements)    
+
+    URL2 = "http://nginx:80/"
+
+    node_information = requests.get(url=URL2 + "v1/api/node_information", headers={"accept" : "application/json"})
+    node_information = json.loads(node_information.text)
+    print(node_information)
+
+    #for x in node_information:
+    #    if x['type'] == 'PCC':
+    #        print("PCC")
+    
+    for index1 in node_information:
+        for index2 in measurements:
+            for x in range(0,len(measurements[index2]['node'])):
+                if measurements[index2]['node'][x]['name'] == index1['name']:
+                    if measurements[index2]['node'][x]['der'] == index1['der']:
+                        if measurements[index2]['node'][x]['der'] == 'bess':
+                            node_measurement = {"time_iso": index2, "active_power_a_kw": measurements[index2]['node'][x]['Pmag_phase_A_rms'], "active_power_b_kw": measurements[index2]['node'][x]['Pmag_phase_B_rms'],
+                            "active_power_c_kw": measurements[index2]['node'][x]['Pmag_phase_C_rms'], "reactive_power_a_kvar": measurements[index2]['node'][x]['Qmag_phase_A_rms'], "reactive_power_b_kvar": measurements[index2]['node'][x]['Qmag_phase_B_rms'],
+                            "reactive_power_c_kvar": measurements[index2]['node'][x]['Qmag_phase_C_rms'], "voltage_a_kv": measurements[index2]['node'][x]['Vmag_phase_A_rms'], "voltage_b_kv": measurements[index2]['node'][x]['Vmag_phase_B_rms'],
+                            "voltage_c_kv": measurements[index2]['node'][x]['Vmag_phase_C_rms'], "soc_kwh": measurements[index2]['node'][x]['SOC'], "id_info_no": int(measurements[index2]['node'][x]['name'])}
+                        else:
+                            node_measurement = {"time_iso": index2, "active_power_a_kw": measurements[index2]['node'][x]['Pmag_phase_A_rms'], "active_power_b_kw": measurements[index2]['node'][x]['Pmag_phase_B_rms'],
+                            "active_power_c_kw": measurements[index2]['node'][x]['Pmag_phase_C_rms'], "reactive_power_a_kvar": measurements[index2]['node'][x]['Qmag_phase_A_rms'], "reactive_power_b_kvar": measurements[index2]['node'][x]['Qmag_phase_B_rms'],
+                            "reactive_power_c_kvar": measurements[index2]['node'][x]['Qmag_phase_C_rms'], "voltage_a_kv": measurements[index2]['node'][x]['Vmag_phase_A_rms'], "voltage_b_kv": measurements[index2]['node'][x]['Vmag_phase_B_rms'],
+                            "voltage_c_kv": measurements[index2]['node'][x]['Vmag_phase_C_rms'], "id_info_no": int(measurements[index2]['node'][x]['name'])}
+                        
+                        print(node_measurement)
+
+
+    return measurements
+
 
 
 def nominal_active_load_phase_a(node_name, type, nominal_kva, power_factor):

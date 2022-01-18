@@ -24,7 +24,7 @@ def create_DB():
     db.create_all()
 
 # uwsgidecorators.timer(interval, func)
-@timer(300)
+@timer(120)
 def leitura_medidas_laboratoriais(num):
     '''
     This cron is executed every five minutes
@@ -32,8 +32,10 @@ def leitura_medidas_laboratoriais(num):
     now = datetime.now()
     print ("%s/%s/%s %s:%s:%s" % (now.month,now.day,now.year,now.hour,now.minute,now.second))
 
+    resultado = cron_functions.microgrid_measurements(URL='http://192.168.0.137:5000/')
+
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(-5, -1, -1, -1, -1)
+@cron(-0, -0, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the end of the day
