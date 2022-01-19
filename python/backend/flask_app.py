@@ -24,7 +24,7 @@ def create_DB():
     db.create_all()
 
 # uwsgidecorators.timer(interval, func)
-@timer(120)
+@timer(300)
 def leitura_medidas_laboratoriais(num):
     '''
     This cron is executed every five minutes
