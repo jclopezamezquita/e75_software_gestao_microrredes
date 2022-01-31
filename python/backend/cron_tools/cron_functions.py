@@ -21,6 +21,19 @@ def microgrid_dayahead_optimizer():
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
     data_milp = json.loads(data_milp.text)
 
+    URL2='http://192.168.0.137:5000/'
+
+    measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
+    measurements = json.loads(measurements.text)
+    print("medidas para pegar o SOC atual da bateria!")
+    print(measurements)
+
+    for index2 in measurements:
+        for x in measurements[index2]['node']:
+            if x['der'] == 'bess':
+                initial_SOC = x['SOC']
+
+
     if not data_nodes:
         optimizer_milp_function(print("Data nodes is empty!"))
     elif not data_branches:
@@ -203,7 +216,7 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'bess':
                 cont4 += 1
                 input_data['location_of_energy_storage_system'][str(cont4_1)] = [str(cont4)]
-                input_data['initial_energy_of_the_ess'].append(index['soc_min_bat'] * index['bat_nom_energy'])
+                input_data['initial_energy_of_the_ess'].append((initial_SOC/100) * index['bat_nom_energy'])
                 input_data['minimum_energy_capacity_ess'].append(index['soc_min_bat'] * index['bat_nom_energy'])
                 input_data['maximum_energy_capacity_ess'].append(index['soc_max_bat'] * index['bat_nom_energy'])
                 input_data['maximum_power_ess'].append(index['maximum_kva'])
@@ -330,7 +343,7 @@ def microgrid_measurements(URL):
                     if x['der'] == 'bess':
                         node_measurement = {"time_iso": index2, "active_power_a_kw": x['Pmag_phase_A_rms']/1000, "active_power_b_kw": x['Pmag_phase_B_rms']/1000,"active_power_c_kw": x['Pmag_phase_C_rms']/1000, 
                         "reactive_power_a_kvar": x['Qmag_phase_A_rms']/1000, "reactive_power_b_kvar": x['Qmag_phase_B_rms']/1000, "reactive_power_c_kvar": x['Qmag_phase_C_rms']/1000, 
-                        "voltage_a_kv": x['Vmag_phase_A_rms']/1000, "voltage_b_kv": x['Vmag_phase_B_rms']/1000, "voltage_c_kv": x['Vmag_phase_C_rms']/1000, "soc_kwh": x['SOC']*810, "id_info_no": index1['id']}
+                        "voltage_a_kv": x['Vmag_phase_A_rms']/1000, "voltage_b_kv": x['Vmag_phase_B_rms']/1000, "voltage_c_kv": x['Vmag_phase_C_rms']/1000, "soc_kwh": x['SOC']*(index1['bat_nom_energy']/100), "id_info_no": index1['id']}
                         id_info_no = str(index1['id'])
                         data = requests.post(url=URL2 + "/v1/api/node_measurement/no/" + id_info_no + "/", data=node_measurement, headers={"accept" : "application/json"})
                         print(data.status_code)
