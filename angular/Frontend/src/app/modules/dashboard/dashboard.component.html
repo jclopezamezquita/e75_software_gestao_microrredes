@@ -1,4 +1,4 @@
-<div>
+<!--- <div>
     <app-widget-realtime></app-widget-realtime>
 </div>
 
@@ -6,11 +6,12 @@
 
 <mat-divider></mat-divider>
 
-<br>
+<br> -->
 
 <div>
     <!--- <app-widget-area [data]="bigChart"></app-widget-area> -->
-    <app-widget-area></app-widget-area>
+    <app-widget-area label="MICROGRID OPERATION" [data_pcc]="measurements_pcc" [data_pv]="measurements_pv"
+        [data_genset]="measurements_genset" [data_bess]="measurements_bess"></app-widget-area>
 </div>
 
 <br>

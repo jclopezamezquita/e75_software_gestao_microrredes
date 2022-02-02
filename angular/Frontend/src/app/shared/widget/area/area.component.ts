@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import * as Highcharts from 'highcharts'
 import HC_exporting from 'highcharts/modules/exporting';
-import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -9,55 +8,84 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './area.component.html',
   styleUrls: ['./area.component.scss']
 })
-export class AreaComponent implements OnInit {
+export class AreaComponent {
 
-  public chartOptions: any = {};
+  Highcharts: typeof Highcharts = Highcharts;
+  updateFlag = false;
+  updateData = false;
 
-  HighCharts = Highcharts;
+  @Input() label: string;
+  @Input() data_pcc = [];
+  @Input() data_pv = [];
+  @Input() data_genset = [];
+  @Input() data_bess = [];
 
-  // @Input() data = [];
-  public data = new Array();
+  chartOptions: Highcharts.Options = {
+    title:  {
+      text: 'column'
+    }, 
+    series: [
+      {
+        type: 'area',
+        name: 'PCC',
+        data: this.data_pcc
+      },{
+        type: 'area',
+        name: 'PV',
+        data: this.data_pv
+      },{
+        type: 'area',
+        name: 'BESS',
+        data: this.data_bess
+      },{
+        type: 'area',
+        name: 'GENSET',
+        data: this.data_genset
+      }
+    ]
+  }
   
-  constructor(private http: HttpClient) { }
+  constructor() {  }
 
-  ngOnInit(): void {
- 
-    this.http.get<any>('http://localhost:8051/continents')
-      .subscribe(
-        data => {
-                  this.data = data;
-                  // console.log(this.data);
-                              
-                  this.chartOptions = {
-                    chart: {
-                        type: 'area'
-                    },
-                    title: {
-                        text: 'Random DATA'
-                    },
-                    subtitle: {
-                        text: 'Demo'
-                    },
-                    tooltip: {
-                        split: true,
-                        valueSuffix: ' millions'
-                    },
-                    credits: {
-                      enabled: false
-                    },
-                    exporting: {
-                      enabled: true
-                    },
-                    series: this.data
-                  };              
-    });
+  ngOnInit(): void { }
 
-    HC_exporting(Highcharts);
+  ngOnChanges(changes: SimpleChanges) {
+  
+    this.chartOptions.title =  {
+      text: this.label
+    };
 
-    setTimeout(() => {
-      window.dispatchEvent(
-        new Event('Resize')
-      );
-    }, 300);
+    // this.chartOptions.series[0] = {
+    //   type: 'area',
+    //   data: [this.data_pcc, this.data_pv]
+    // }
+
+    this.chartOptions.series = [
+      {
+        type: 'area',
+        name: 'PCC',
+        data: this.data_pcc
+      },{
+        type: 'area',
+        name: 'PV',
+        data: this.data_pv
+      },{
+        type: 'area',
+        name: 'BESS',
+        data: this.data_bess
+      },{
+        type: 'area',
+        name: 'GENSET',
+        data: this.data_genset
+      }
+    ]
+
+    this.updateFlag = true;
+    if(this.data_pcc.length) {
+      this.updateData = true;
+    }
+    console.log("********* ngOnChanges ********")
+    console.log(this.chartOptions.series[0])
+
   }
 }
