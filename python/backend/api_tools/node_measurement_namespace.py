@@ -475,7 +475,7 @@ class node_measurement_list(Resource):
             'counter_bess_t23': 0
         }
         
-        SP_timezone = 2 # Timezone at SP - Brazil (improve this code please!!!)
+        SP_timezone = 3 # Timezone at SP - Brazil (improve this code please!!!)
         for i in range(24):
 
             final_time = datetime.today() - timedelta(hours=(int(i) + SP_timezone)) 
@@ -1114,7 +1114,7 @@ class node_measurement_ListCreateFromParent(Resource):
         '''
         Deletes all measurements from id_info_no
         '''
-        
+
         parameters = [node_measurement_model.id, node_information_model.name, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
             node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
             node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
@@ -1133,3 +1133,34 @@ class node_measurement_ListCreateFromParent(Resource):
 
         return '', http.client.NO_CONTENT
 
+
+# ENDPOINT /v1/api/node_measurement/DateTimeMax/ -> DELETE all measurements before DateTimeMax
+@node_measurement_namespace.route('/<DateTimeMax>/')
+class node_measurement_DeleteFromDateTime(Resource):
+
+    @node_measurement_namespace.doc('delete_measurement',
+                         responses={http.client.NO_CONTENT: 'No content'})
+    def delete(self, DateTimeMax):
+        '''
+        DELETE all measurements before DateTimeMax
+        '''
+
+        datetime_max_trans = datetime.strptime(DateTimeMax,'%Y-%m-%dT%H:%M:%S.%f')
+        
+        parameters = [node_measurement_model.id, node_information_model.name, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
+            node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
+            node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
+            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh]
+        main_query = node_measurement_model.query.join(node_information_model).with_entities(*parameters)
+        measurements = (main_query.all())
+        measurements = (main_query.filter(node_measurement_model.time_iso <= datetime_max_trans).all())
+
+        if not measurements:
+            # The node is not present
+            return '', http.client.NO_CONTENT
+
+        # db.session.delete(measurements)
+        node_measurement_model.query.filter(node_measurement_model.time_iso <= datetime_max_trans).delete()
+        db.session.commit()
+
+        return '', http.client.NO_CONTENT

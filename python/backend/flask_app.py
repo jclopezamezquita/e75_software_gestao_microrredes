@@ -1,3 +1,4 @@
+import re
 from api_tools.db import db
 from api_tools.app import create_app
 import cron_tools.cron_functions as cron_functions
@@ -35,7 +36,7 @@ def leitura_medidas_laboratoriais(num):
     resultado = cron_functions.microgrid_measurements(URL='http://192.168.0.137:5000/')
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(10, 3, -1, -1, -1)
+@cron(0, 3, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the end of the day
@@ -44,6 +45,10 @@ def cron_everyday(num):
     if resultado:
         cron_functions.write_results_database(resultado)
     print(resultado)
+
+    resultado2 = cron_functions.delete_old_measurements(timezone_SP=3)
+    print(resultado2)
+
 
 @app.route('/random')
 def random_plot():

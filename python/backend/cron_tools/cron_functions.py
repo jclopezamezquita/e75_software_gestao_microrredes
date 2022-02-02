@@ -4,6 +4,7 @@ from cron_tools.optimizer.optimizer import optimizer_milp_function
 import json
 import requests
 import math
+from datetime import datetime, timedelta
 
 
 def microgrid_dayahead_optimizer():
@@ -377,7 +378,21 @@ def microgrid_measurements(URL):
     except:
         print("The EMS needs to be connected to the API of the microgrid in operation!")
 
-    #return measurements
+
+def delete_old_measurements(timezone_SP):
+    try:
+        URL = "http://nginx:80/"
+
+
+        DateTimeMax_trans = datetime.today() - timedelta(hours=24 + timezone_SP)
+        DateTimeMax = DateTimeMax_trans.strftime("%Y-%m-%dT%H%%3A%M%%3A%S.000")
+
+        data = requests.delete(url=URL + "/v1/api/node_measurement/" + DateTimeMax + "/", headers={"accept" : "application/json"})
+        
+        return data.text
+
+    except:
+        return "There is no communication with local API!"
 
 
 def nominal_active_load_phase_a(node_name, type, nominal_kva, power_factor):
