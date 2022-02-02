@@ -35,7 +35,7 @@ def leitura_medidas_laboratoriais(num):
     resultado = cron_functions.microgrid_measurements(URL='http://192.168.0.137:5000/')
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(-5, -1, -1, -1, -1)
+@cron(10, 3, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the end of the day
