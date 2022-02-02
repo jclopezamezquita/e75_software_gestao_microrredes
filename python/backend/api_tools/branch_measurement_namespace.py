@@ -78,6 +78,7 @@ class branch_measurement_list(Resource):
 
         return measurements
 
+
 # ENDPOINT /v1/api/branch_measurement/no/x/ -> GET all measurements from a parent branch x
 @branch_measurement_namespace.route('/branch/<int:id_info_ramo>/')
 class branch_measurement_ListCreateFromParent(Resource):
