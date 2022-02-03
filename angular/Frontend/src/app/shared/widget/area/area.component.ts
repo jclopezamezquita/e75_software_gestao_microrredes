@@ -34,15 +34,15 @@ export class AreaComponent {
     title:  {
       text: 'column'
     },
+    credits: {
+      enabled: false
+    },
     yAxis: {
       title: {
         text: 'Values [kW]'
       }
     },
     xAxis: {
-      title: {
-        text: 'Time'
-      },
       type: 'datetime'
     },
     plotOptions: {

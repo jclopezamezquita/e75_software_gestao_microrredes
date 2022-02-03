@@ -43,9 +43,6 @@ export class SocAreaComponent {
       }
     },
     xAxis: {
-      title: {
-        text: 'Time'
-      },
       type: 'datetime'
     },
     plotOptions: {

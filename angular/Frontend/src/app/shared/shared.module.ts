@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu'
 import { MatListModule } from '@angular/material/list'
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { MatGridListModule } from '@angular/material/grid-list'
 
 
 import { HeaderComponent } from './components/header/header.component';
@@ -51,7 +52,8 @@ import { SocAreaComponent } from './widget/soc-area/soc-area.component';
     RouterModule,
     HighchartsChartModule,
     HttpClientModule,
-    ModelModule
+    ModelModule,
+    MatGridListModule
   ],
   exports: [
     HeaderComponent,
