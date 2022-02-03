@@ -23,6 +23,7 @@ import { CostsComponent } from './widget/costs/costs.component';
 import { ModelModule } from './model/model.module'
 import { sharedState } from './model/sharedState.model';
 import { BarsComponent } from './widget/bars/bars.component';
+import { SocAreaComponent } from './widget/soc-area/soc-area.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { BarsComponent } from './widget/bars/bars.component';
     PieComponent,
     RealtimeComponent,
     CostsComponent,
-    BarsComponent
+    BarsComponent,
+    SocAreaComponent
   ],
   imports: [
     CommonModule,
@@ -60,7 +62,8 @@ import { BarsComponent } from './widget/bars/bars.component';
     PieComponent,
     RealtimeComponent,
     CostsComponent,
-    BarsComponent
+    BarsComponent,
+    SocAreaComponent
   ],
   providers: [
     sharedState

@@ -390,6 +390,7 @@ export class AreaComponent {
           }
         ]
         
+        this.now2 = new Date()
         this.chartOptions.plotOptions.series.pointStart = this.now2.setHours(this.now2.getHours()-this.SP_Timezone-23)   
 
         this.updateFlag = true;
