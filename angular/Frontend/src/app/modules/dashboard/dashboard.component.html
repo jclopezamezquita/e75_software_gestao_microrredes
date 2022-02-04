@@ -9,7 +9,8 @@
 <br> -->
 
 <div>
-    <app-widget-area label="MICROGRID OPERATION"></app-widget-area>
+    <app-widget-area label="MICROGRID OPERATION" [meas_pcc]="measurements_pcc" [meas_pv]="measurements_pv"
+    [meas_genset]="measurements_genset" [meas_bess]="measurements_bess"></app-widget-area>
 </div>
 
 <br>
@@ -20,13 +21,14 @@
 
 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
     <mat-card fxFlex="33">
-        <app-soc-widget-area label="State of Charge"></app-soc-widget-area>
+        <app-soc-widget-area label="State of Charge" [meas_bess_soc]="measurements_bess_soc"></app-soc-widget-area>
     </mat-card>
     <mat-card fxFlex="33">
-        <app-pv-widget-area label="Photovoltaic Generation"></app-pv-widget-area>
+        <app-pv-widget-area label="Photovoltaic Generation" [meas_pv]="measurements_pv"></app-pv-widget-area>
     </mat-card>
     <mat-card fxFlex="33">
-        <app-widget-pie label="Distributed Energy Sources"></app-widget-pie>
+        <app-widget-pie label="Distributed Energy Sources" [meas_pcc_23]="measurements_pcc[23]" [meas_pv_23]="measurements_pv[23]"
+        [meas_genset_23]="measurements_genset[23]" [meas_bess_23]="measurements_bess[23]"></app-widget-pie>
     </mat-card>
 </div>
 
@@ -35,6 +37,18 @@
 <mat-divider></mat-divider>
 
 <br>
+
+<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+    <mat-card class="card-demo mat-card" fxFlex="33">
+        <h2 class="text-center">Total daily consumption: {{total_daily_consumption}} kWh</h2>
+    </mat-card>
+    <mat-card class="card-demo mat-card" fxFlex="33">
+        <h2 class="text-center">Total daily operation cost: {{total_daily_cost}} BRL</h2>
+    </mat-card>
+    <mat-card class="card-demo mat-card" fxFlex="33">
+        <h2 class="text-center">Total daily generation: {{total_daily_generation}} kWh</h2>
+    </mat-card>
+</div>
 
 <!---
 

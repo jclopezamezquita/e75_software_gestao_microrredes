@@ -1,8 +1,6 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
 import * as Highcharts from 'highcharts'
 import HC_exporting from 'highcharts/modules/exporting';
-import { Measurements_24hours } from 'src/app/shared/model/measurements_24hours.model';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-pv-widget-area',
@@ -11,10 +9,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PvAreaComponent {
 
-  private intervalUpdate: any = null;
-
-  public measurements_pv = new Array();
-  
   public now1 = new Date();
   public now2 = new Date();
   public SP_Timezone = 3
@@ -23,6 +17,7 @@ export class PvAreaComponent {
   updateFlag = false;
   updateData = false;
 
+  @Input() meas_pv = [];
   @Input() label: string;
 
   chartOptions: Highcharts.Options = {
@@ -53,113 +48,34 @@ export class PvAreaComponent {
 
   }
 
-  constructor(private http: HttpClient) {
+  constructor() {  }
 
-    this.http.get<Measurements_24hours>('http://localhost:8051/v1/api/node_measurement/last_24h/')
-    .subscribe(
-      data2 => {
-        this.measurements_pv = [];
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t00)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t01)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t02)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t03)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t04)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t05)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t06)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t07)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t08)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t09)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t10)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t11)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t12)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t13)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t14)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t15)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t16)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t17)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t18)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t19)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t20)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t21)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t22)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t23)));
-    
-        this.chartOptions.series = [
-          {
-            type: 'line',
-            name: 'pv',
-            data: this.measurements_pv
-          }
-        ]
-    
-        this.updateFlag = true;
-        if(this.measurements_pv.length) {
-          this.updateData = true;
-        }
-    });
+  ngOnInit(): void { }
 
-  }
-
-  ngOnInit(): void { 
+  ngOnChanges(changes: SimpleChanges) {
 
     this.chartOptions.title =  {
       text: this.label
     };
 
-    this.intervalUpdate = setInterval(function(){
-      // if(this.share.mode == MODES.PLAY) {
-        this.showData();
-      // }
-    }.bind(this), 5000);
+    for (let i = 0; i < this.meas_pv.length; i++) {
+      this.meas_pv[i] = Math.abs(this.meas_pv[i]);
+    }
 
+    this.chartOptions.series = [
+      {
+        type: 'area',
+        name: 'SOC',
+        data: this.meas_pv
+      }
+    ]
+
+    this.now2 = new Date()
+    this.chartOptions.plotOptions.series.pointStart = this.now2.setHours(this.now2.getHours()-this.SP_Timezone-23)   
+
+    this.updateFlag = true;
+    if(this.meas_pv.length) {
+      this.updateData = true;
+    }
   }
-
-  private showData(): void {
-    this.http.get<Measurements_24hours>('http://localhost:8051/v1/api/node_measurement/last_24h/')
-    .subscribe(
-      data2 => {
-        this.measurements_pv = [];
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t00)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t01)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t02)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t03)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t04)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t05)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t06)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t07)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t08)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t09)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t10)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t11)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t12)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t13)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t14)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t15)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t16)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t17)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t18)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t19)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t20)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t21)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t22)));
-        this.measurements_pv.push(Math.abs(Number(data2.pv_t23)));
-    
-        this.chartOptions.series = [
-          {
-            type: 'area',
-            name: 'pv',
-            data: this.measurements_pv
-          }
-        ]
-        
-        this.now2 = new Date()
-        this.chartOptions.plotOptions.series.pointStart = this.now2.setHours(this.now2.getHours()-this.SP_Timezone-23)   
-
-        this.updateFlag = true;
-        if(this.measurements_pv.length) {
-          this.updateData = true;
-        }
-    });
-  }
-
 }

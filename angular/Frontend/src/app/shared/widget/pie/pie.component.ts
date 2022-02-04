@@ -1,28 +1,22 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
 import * as Highcharts from 'highcharts'
 import HC_exporting from 'highcharts/modules/exporting';
-import { Measurements_24hours } from 'src/app/shared/model/measurements_24hours.model';
-import { HttpClient } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-widget-pie',
   templateUrl: './pie.component.html',
   styleUrls: ['./pie.component.scss']
 })
-export class PieComponent implements OnInit {
-
-  private intervalUpdate: any = null;
-
-  public measurements_pcc = new Array();
-  public measurements_pv = new Array();
-  public measurements_genset = new Array();
-  public measurements_bess = new Array();
+export class PieComponent {
   
   Highcharts: typeof Highcharts = Highcharts;
   updateFlag = false;
   updateData = false;
 
+  @Input() meas_pcc_23: number;
+  @Input() meas_pv_23: number;
+  @Input() meas_genset_23: number;
+  @Input() meas_bess_23: number;
   @Input() label: string;
 
   chartOptions: Highcharts.Options = {
@@ -69,108 +63,38 @@ export class PieComponent implements OnInit {
     }
   }
   
-  constructor(private http: HttpClient) {
-  
-    this.http.get<Measurements_24hours>('http://localhost:8051/v1/api/node_measurement/last_24h/')
-    .subscribe(
-      data2 => {
-        this.measurements_pcc = [];
-        this.measurements_pcc.push(Number(data2.pcc_t23));
-        
-        this.measurements_pv = [];
-        this.measurements_pv.push(Number(data2.pv_t23));
-            
-        this.measurements_genset = [];
-        this.measurements_genset.push(Number(data2.genset_t23));
-        
-        this.measurements_bess = [];
-        this.measurements_bess.push(Number(data2.bess_t23));
-    
-        this.chartOptions.series = [
-          {
-            type: 'pie',
-            name: 'Sources',
-            colorByPoint: true,
-            data: [{
-                name: 'PV',
-                y: Math.abs(this.measurements_pv[0])
-            }, {
-                name: 'PCC',
-                y: Math.max(0,this.measurements_pcc[0])
-            }, {
-                name: 'GENSET',
-                y: Math.abs(this.measurements_genset[0])
-            }, {
-                name: 'BESS',
-                y: Math.abs(Math.min(0,this.measurements_bess[0]))
-            }]
-          }
-        ]
+  constructor() {  }
 
-        this.updateFlag = true;
-        if(this.measurements_pcc.length) {
-          this.updateData = true;
-        }
-    });
-    
-  }
+  ngOnInit(): void { }
 
-  ngOnInit(): void {
-  
+  ngOnChanges(changes: SimpleChanges) {
+
     this.chartOptions.title =  {
       text: this.label
     };
 
-    this.intervalUpdate = setInterval(function(){
-      // if(this.share.mode == MODES.PLAY) {
-        this.showData();
-      // }
-    }.bind(this), 5000);
-  
-  }
-
-    private showData(): void {
-      this.http.get<Measurements_24hours>('http://localhost:8051/v1/api/node_measurement/last_24h/')
-      .subscribe(
-        data2 => {
-          this.measurements_pcc = [];
-          this.measurements_pcc.push(Number(data2.pcc_t23));
-          
-          this.measurements_pv = [];
-          this.measurements_pv.push(Number(data2.pv_t23));
-              
-          this.measurements_genset = [];
-          this.measurements_genset.push(Number(data2.genset_t23));
-          
-          this.measurements_bess = [];
-          this.measurements_bess.push(Number(data2.bess_t23));
+    this.chartOptions.series = [
+      {
+        type: 'pie',
+        name: 'Sources',
+        colorByPoint: true,
+        data: [{
+            name: 'PV',
+            y: Math.abs(this.meas_pv_23)
+        }, {
+            name: 'PCC',
+            y: Math.max(0,this.meas_pcc_23)
+        }, {
+            name: 'GENSET',
+            y: Math.abs(this.meas_genset_23)
+        }, {
+            name: 'BESS',
+            y: Math.abs(Math.min(0,this.meas_bess_23))
+        }]
+      }
+    ]
       
-          this.chartOptions.series = [
-            {
-              type: 'pie',
-              name: 'Sources',
-              colorByPoint: true,
-              data: [{
-                  name: 'PV',
-                  y: Math.abs(this.measurements_pv[0])
-              }, {
-                  name: 'PCC',
-                  y: Math.max(0,this.measurements_pcc[0])
-              }, {
-                  name: 'GENSET',
-                  y: Math.abs(this.measurements_genset[0])
-              }, {
-                  name: 'BESS',
-                  y: Math.abs(Math.min(0,this.measurements_bess[0]))
-              }]
-            }
-          ]
-            
-          this.updateFlag = true;
-          if(this.measurements_pcc.length) {
-            this.updateData = true;
-          }
-      });
-    }
-  
+    this.updateFlag = true;
+    this.updateData = true;
+  }
 }
