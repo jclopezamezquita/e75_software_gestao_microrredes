@@ -94,6 +94,7 @@ export class DashboardComponent implements OnInit {
         this.measurements_pv.push(Number(data2.pv_t21));
         this.measurements_pv.push(Number(data2.pv_t22));
         this.measurements_pv.push(Number(data2.pv_t23));
+        // console.log(this.measurements_pv);
             
         this.measurements_genset = [];
         this.measurements_genset.push(Number(data2.genset_t00));
@@ -177,14 +178,17 @@ export class DashboardComponent implements OnInit {
         this.total_daily_consumption = 0.0;
 
         for (let i = 0; i < this.measurements_pv.length; i++) {
-          this.total_daily_generation = this.total_daily_generation + Math.abs(this.measurements_pv[i]);
+          let meas_pv_index = this.measurements_pv[i];
+          this.total_daily_generation = this.total_daily_generation + Math.abs(meas_pv_index);
         }
         for (let i = 0; i < this.measurements_genset.length; i++) {
-          this.total_daily_generation = this.total_daily_generation + Math.abs(this.measurements_genset[i]);
+          let meas_genset_index = this.measurements_genset[i];
+          this.total_daily_generation = this.total_daily_generation + Math.abs(meas_genset_index);
         }
         for (let i = 0; i < this.measurements_bess.length; i++) {
           if (this.measurements_bess[i] > 0.0) {
-            this.total_daily_generation = this.total_daily_generation + Math.abs(this.measurements_bess[i]);
+            let meas_bess_index = this.measurements_bess[i];
+            this.total_daily_generation = this.total_daily_generation + Math.abs(meas_bess_index);
           }
         }
         for (let i = 0; i < this.measurements_pcc.length; i++) {
@@ -246,7 +250,7 @@ export class DashboardComponent implements OnInit {
               // console.log(this.costsChart[i])
               // console.log(this.measurements_pcc[i + (23 - hour)])
             }
-            // this.total_daily_cost = Math.round(100 * this.total_daily_cost)/100;
+            this.total_daily_cost = Math.round(100 * this.total_daily_cost)/100;
     
       });
 
