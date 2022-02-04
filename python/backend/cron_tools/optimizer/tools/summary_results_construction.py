@@ -68,14 +68,13 @@ class SummaryResults:
 		for t in data.T:
 			output_file["power_of_the_ess"].append(results.PB['1'][t])
 
-		output_file["active_power_genset_w_outage"] = {}
+		output_file["active_power_genset"] = {}
 		for s in data.S:
 			aux_list = []
-			for c in data.O:
-				aux_list = [(results.PG['1'][t][c][s]) for t in data.T]
+			aux_list = [(results.PG_con['1'][t][s]) for t in data.T]
 			
-			output_file["active_power_genset_w_outage"]["scen_" + s] = {}
-			output_file["active_power_genset_w_outage"]["scen_" + s]= aux_list
+			output_file["active_power_genset"]["scen_" + s] = {}
+			output_file["active_power_genset"]["scen_" + s]= aux_list
 
 
 		self.List_TOS = [];
@@ -119,11 +118,6 @@ class SummaryResults:
 
 			output_file["total_pv_curtailment"]["scen_" + s] = {}
 			output_file["total_pv_curtailment"]["scen_" + s]= aux_list_3
-
-
-		# save results
-		#with open('output_file.json', 'w') as outfile:
-		#    json.dump(output_file, outfile, indent=3)
 
 		return output_file
 	

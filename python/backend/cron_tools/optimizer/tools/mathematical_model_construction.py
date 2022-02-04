@@ -1230,7 +1230,7 @@ class MathematicalModel:
 		self.xd = self.CreateDictionaryForEachVariable_NTOS(varDic, 'xd')
 
 		# Creating dictionaries for variables depending of self.List_GDTOS
-		self.PG = self.CreateDictionaryForEachVariable_GDTOS(varDic, 'PG')
+		self.PG_con = self.CreateDictionaryForEachVariable_GDTS(varDic, 'PG_con')
 
 		# Creating dictionaries for variables depending of self.List_BT
 		self.EB = self.CreateDictionaryForEachVariable_BT(varDic, 'EB')
