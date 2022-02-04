@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu'
 import { MatListModule } from '@angular/material/list'
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { MatGridListModule } from '@angular/material/grid-list'
 
 
 import { HeaderComponent } from './components/header/header.component';
@@ -23,6 +24,8 @@ import { CostsComponent } from './widget/costs/costs.component';
 import { ModelModule } from './model/model.module'
 import { sharedState } from './model/sharedState.model';
 import { BarsComponent } from './widget/bars/bars.component';
+import { SocAreaComponent } from './widget/soc-area/soc-area.component';
+import { PvAreaComponent } from './widget/pv-area/pv-area.component';
 
 
 @NgModule({
@@ -35,7 +38,9 @@ import { BarsComponent } from './widget/bars/bars.component';
     PieComponent,
     RealtimeComponent,
     CostsComponent,
-    BarsComponent
+    BarsComponent,
+    SocAreaComponent,
+    PvAreaComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +54,8 @@ import { BarsComponent } from './widget/bars/bars.component';
     RouterModule,
     HighchartsChartModule,
     HttpClientModule,
-    ModelModule
+    ModelModule,
+    MatGridListModule
   ],
   exports: [
     HeaderComponent,
@@ -60,7 +66,9 @@ import { BarsComponent } from './widget/bars/bars.component';
     PieComponent,
     RealtimeComponent,
     CostsComponent,
-    BarsComponent
+    BarsComponent,
+    SocAreaComponent,
+    PvAreaComponent
   ],
   providers: [
     sharedState
