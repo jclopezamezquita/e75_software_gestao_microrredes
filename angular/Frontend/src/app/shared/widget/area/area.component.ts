@@ -85,6 +85,7 @@ export class AreaComponent {
     if(this.meas_pcc.length) {
       this.updateData = true;
     }
+
   }
 
 }

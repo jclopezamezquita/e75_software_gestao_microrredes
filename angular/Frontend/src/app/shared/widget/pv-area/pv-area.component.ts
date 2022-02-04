@@ -12,6 +12,7 @@ export class PvAreaComponent {
   public now1 = new Date();
   public now2 = new Date();
   public SP_Timezone = 3
+  public meas_pv_aux = new Array();
 
   Highcharts: typeof Highcharts = Highcharts;
   updateFlag = false;
@@ -59,14 +60,14 @@ export class PvAreaComponent {
     };
 
     for (let i = 0; i < this.meas_pv.length; i++) {
-      this.meas_pv[i] = Math.abs(this.meas_pv[i]);
+      this.meas_pv_aux.push(Math.abs(this.meas_pv[i]));
     }
 
     this.chartOptions.series = [
       {
         type: 'area',
         name: 'SOC',
-        data: this.meas_pv
+        data: this.meas_pv_aux
       }
     ]
 
@@ -77,5 +78,8 @@ export class PvAreaComponent {
     if(this.meas_pv.length) {
       this.updateData = true;
     }
+    
+    this.meas_pv_aux = [];
+
   }
 }
