@@ -22,9 +22,11 @@ export class PieComponent {
   chartOptions: Highcharts.Options = {
     chart: {
       plotBackgroundColor: null,
-	  plotBorderWidth: null,
-	  plotShadow: false,
-	  type: 'pie'
+	    plotBorderWidth: null,
+	    plotShadow: false,
+	    type: 'pie',
+      borderWidth: 0,
+      margin: [2, 2, 2, 2]
     },
     title:  {
       text: 'column'
@@ -70,7 +72,8 @@ export class PieComponent {
   ngOnChanges(changes: SimpleChanges) {
 
     this.chartOptions.title =  {
-      text: this.label
+      // text: this.label
+      text: null
     };
 
     this.chartOptions.series = [
