@@ -45,8 +45,17 @@ export class PvAreaComponent {
         // pointStart: Date.UTC(2020, 2, 3),
         pointInterval: 3600 * 1000 // one hour
       }
+    },
+    chart: {
+      backgroundColor: null,
+      borderWidth: 0,
+      // margin: [2, 2, 2, 2],
+      // height: 60
+    },
+    tooltip: {
+        xDateFormat: 'Time: %Y-%m-%dT%H',
+        shared: true
     }
-
   }
 
   constructor() {  }
