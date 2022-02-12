@@ -180,3 +180,35 @@ class branch_measurement_ListCreateFromParent(Resource):
         db.session.commit()
 
         return '', http.client.NO_CONTENT
+
+
+# ENDPOINT /v1/api/branch_measurement/DateTimeMax/ -> DELETE all measurements before DateTimeMax
+@branch_measurement_namespace.route('/<DateTimeMax>/')
+class branch_measurement_DeleteFromDateTime(Resource):
+
+    @branch_measurement_namespace.doc('delete_measurement',
+                        responses={http.client.NO_CONTENT: 'No content'})
+    def delete(self, DateTimeMax):
+        '''
+        DELETE all measurements before DateTimeMax
+        '''
+
+        datetime_max_trans = datetime.strptime(DateTimeMax,'%Y-%m-%dT%H:%M:%S.%f')
+        
+        parameters = [branch_measurement_model.id, branch_information_model.name, branch_measurement_model.time_iso, branch_measurement_model.active_power_flow_a_kw, 
+            branch_measurement_model.active_power_flow_b_kw, branch_measurement_model.active_power_flow_c_kw, branch_measurement_model.reactive_power_flow_a_kvar,
+            branch_measurement_model.reactive_power_flow_b_kvar, branch_measurement_model.reactive_power_flow_c_kvar, branch_measurement_model.current_a_A,
+            branch_measurement_model.current_b_A, branch_measurement_model.current_c_A]
+        main_query = branch_measurement_model.query.join(branch_information_model).with_entities(*parameters)
+        measurements = (main_query.all())
+        measurements = (main_query.filter(branch_measurement_model.id_info_ramo <= datetime_max_trans).all())
+
+        if not measurements:
+            # The branch is not present
+            return '', http.client.NO_CONTENT
+
+        # db.session.delete(measurements)
+        branch_measurement_model.query.filter(branch_measurement_model.time_iso <= datetime_max_trans).delete()
+        db.session.commit()
+
+        return '', http.client.NO_CONTENT

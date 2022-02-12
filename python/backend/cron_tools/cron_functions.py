@@ -388,6 +388,8 @@ def delete_old_measurements(timezone_SP):
         DateTimeMax = DateTimeMax_trans.strftime("%Y-%m-%dT%H%%3A%M%%3A%S.000")
 
         data = requests.delete(url=URL + "/v1/api/node_measurement/" + DateTimeMax + "/", headers={"accept" : "application/json"})
+
+        data_branch = requests.delete(url=URL + "/v1/api/branch_measurement/" + DateTimeMax + "/", headers={"accept" : "application/json"})
         
         return data.text
 
