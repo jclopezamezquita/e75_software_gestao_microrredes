@@ -27,10 +27,12 @@ EMS will provide the following services:
 
     `$ sudo ./rebuild.sh`
 
-## Backend with database
+## Inner Execution:
+
+- Frontend - open the browser at http://localhost:4202
+- EMS API Backend - open the browser at http://localhost:8051
 
 
-## Frontend
 
 
 ## Acknowledgment
