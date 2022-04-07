@@ -17,7 +17,7 @@ export class PostsComponent implements OnInit {
   constructor(private model: Model, private http: HttpClient) { 
 
 
-    this.http.get<Milp_parameters>('http://localhost:8051/v1/api/milp_parameters/1/')
+    this.http.get<Milp_parameters>('http://192.168.192.47:8051/v1/api/milp_parameters/1/')
       .subscribe(
         data2 => {
           this.costsChart = [];
