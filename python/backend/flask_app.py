@@ -33,7 +33,7 @@ def leitura_medidas_laboratoriais(num):
     now = datetime.now()
     print ("%s/%s/%s %s:%s:%s" % (now.month,now.day,now.year,now.hour,now.minute,now.second))
 
-    resultado = cron_functions.microgrid_measurements(URL='http://192.168.0.137:5000/') # URL from PC Cindy
+    resultado = cron_functions.microgrid_measurements(URL='http://10.144.153.142:5000/') # URL from PC Cindy
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
 @cron(10, 3, -1, -1, -1)

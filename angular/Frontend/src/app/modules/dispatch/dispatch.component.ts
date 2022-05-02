@@ -17,7 +17,7 @@ export class DispatchComponent implements OnInit {
 
   constructor(private http: HttpClient) {
 
-    this.http.get<Economic_dispatch>('http://192.168.192.47:8051/v1/api/economic_dispatch/1/')
+    this.http.get<Economic_dispatch>('http://10.144.246.154:8051/v1/api/economic_dispatch/1/')
       .subscribe(
         data2 => {
           this.dispatchData_BESS = [];

@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private showData(): void {
-    this.http.get<Measurements_24hours>('http://192.168.192.47:8051/v1/api/node_measurement/last_24h/')
+    this.http.get<Measurements_24hours>('http://10.144.246.154:8051/v1/api/node_measurement/last_24h/')
     .subscribe(
       data2 => {
         this.measurements_pcc = [];
@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit {
         this.total_daily_generation = Math.round(100 * this.total_daily_generation)/100;
         this.total_daily_consumption = Math.round(100 * this.total_daily_consumption)/100;
 
-        this.http.get<Milp_parameters>('http://192.168.192.47:8051/v1/api/milp_parameters/1/')
+        this.http.get<Milp_parameters>('http://10.144.246.154:8051/v1/api/milp_parameters/1/')
         .subscribe(
           data2 => {
             this.costsChart = [];
