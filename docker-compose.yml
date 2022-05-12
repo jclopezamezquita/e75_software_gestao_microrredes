@@ -58,6 +58,8 @@ services:
       - ./angular/Frontend:/Frontend
     depends_on:
       - nginx
+    environment:
+      - TEST= test
     
 
 # volumes definition here

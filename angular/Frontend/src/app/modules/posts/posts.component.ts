@@ -17,7 +17,7 @@ export class PostsComponent implements OnInit {
   constructor(private model: Model, private http: HttpClient) { 
 
 
-    this.http.get<Milp_parameters>('http://10.144.246.154:8051/v1/api/milp_parameters/1/')
+    this.http.get<Milp_parameters>('http://api-ems.ngrok.io/v1/api/milp_parameters/1/')
       .subscribe(
         data2 => {
           this.costsChart = [];
