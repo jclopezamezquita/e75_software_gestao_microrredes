@@ -22,7 +22,9 @@ def microgrid_dayahead_optimizer():
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
     data_milp = json.loads(data_milp.text)
 
-    URL2='http://192.168.0.137:5000/'
+    #URL2='http://192.168.0.137:5000/'
+    '''
+    URL2='http://hil.sa.ngrok.io/'
 
     measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
     measurements = json.loads(measurements.text)
@@ -33,6 +35,8 @@ def microgrid_dayahead_optimizer():
         for x in measurements[index2]['node']:
             if x['der'] == 'bess':
                 initial_SOC = x['SOC']
+    '''
+    initial_SOC = 15
 
 
     if not data_nodes:
@@ -67,7 +71,7 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'genset':
                 cont5 += 1
                 input_data['set_of_thermal_generator'] = [str(cont5)]
-        input_data['set_of_outage'] = ['8']
+        input_data['set_of_outage'] = []
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
         input_data['coefficient_demand_scen'] = [1.0]
@@ -281,7 +285,6 @@ def write_results_database(resultado):
         print(data.text)
 
     else:
-        print("entrou no else")
         dispatch = {"bat_power_t00": resultado['power_of_the_ess'][23], "bat_power_t01": resultado['power_of_the_ess'][0], "bat_power_t02": resultado['power_of_the_ess'][1], 
         "bat_power_t03": resultado['power_of_the_ess'][2], "bat_power_t04": resultado['power_of_the_ess'][3], "bat_power_t05": resultado['power_of_the_ess'][4],
         "bat_power_t06": resultado['power_of_the_ess'][5], "bat_power_t07": resultado['power_of_the_ess'][6], "bat_power_t08": resultado['power_of_the_ess'][7],
@@ -316,12 +319,9 @@ def write_results_database(resultado):
         "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][22]}
 
         data = requests.put(url=URL + "/v1/api/economic_dispatch/1/", data=dispatch, headers={"accept" : "application/json"})
-        print(dispatch)
-        print('Put request')
         print(data.status_code)
         print(data.text)
         print(resultado)
-        print(resultado['power_of_the_ess'][16])
 
 
 def microgrid_measurements(URL):

@@ -104,7 +104,7 @@ def optimizer_milp_function(input_data):
         if results.Status == "Optimal":
             output = summary_results.WritingFeasibleOutputFile()
             print("\n************* END: Summary Results  *************\n")
-            print("Solution written to output_file.json")
+
 
         else:
             output = summary_results.WritingUnfeasibleOutputFile()
