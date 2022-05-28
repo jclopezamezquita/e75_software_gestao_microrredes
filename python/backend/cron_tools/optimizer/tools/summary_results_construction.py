@@ -66,7 +66,6 @@ class SummaryResults:
 
 		# Grid-connected and islanded operation
 		if len(data.O) >= 1:
-			print("Tem contingencia AAAAAAAAAAA")
 			output_file["active_power_genset"] = {}
 			for s in data.S:
 				for c in data.O:
@@ -95,7 +94,7 @@ class SummaryResults:
 					for t in data.T:
 						for i in data.N:
 							if data.PDa[(i,t)] != 0:
-								self.Tot_lc[(t,c,s)] = self.Tot_lc[(t,c,s)] + ((1 - results.xd[i][t][c][s]) * (data.PDa[(i,t)] + data.PDb[(i,t)] + data.PDc[(i,t)]) * data.sd[(s)])
+								self.Tot_lc[(t,c,s)] =  ((1 - results.xd[i][t][c][s]) * (data.PDa[(i,t)] + data.PDb[(i,t)] + data.PDc[(i,t)]) * data.sd[(s)])
 
 				aux_list_2 = []
 				for c in data.O:

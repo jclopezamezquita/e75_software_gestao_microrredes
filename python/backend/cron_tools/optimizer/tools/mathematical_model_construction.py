@@ -241,13 +241,13 @@ class MathematicalModel:
 
 		# Island Operation
 		for (i,t,c,s) in self.List_NTOS:
-			if int(t) >= int(c) and int(t) < int(c) + 3:
+			if int(t) >= int(c) and int(t) < int(c) + 2:
 				prob_CS += PS_a[i][t][c][s] == 0, "Island_operation_active_phase_a_CS_%s" %str((i,t,c,s))
 				prob_CS += PS_b[i][t][c][s] == 0, "Island_operation_active_phase_b_CS_%s" %str((i,t,c,s))
 				prob_CS += PS_c[i][t][c][s] == 0, "Island_operation_active_phase_c_CS_%s" %str((i,t,c,s))
 
 		for (i,t,c,s) in self.List_NTOS:
-			if int(t) >= int(c) and int(t) < int(c) + 3:
+			if int(t) >= int(c) and int(t) < int(c) + 2:
 				prob_CS += QS_a[i][t][c][s] == 0, "Island_operation_reactive_phase_a_CS_%s" %str((i,t,c,s))
 				prob_CS += QS_b[i][t][c][s] == 0, "Island_operation_reactive_phase_b_CS_%s" %str((i,t,c,s))
 				prob_CS += QS_c[i][t][c][s] == 0, "Island_operation_reactive_phase_c_CS_%s" %str((i,t,c,s))
@@ -847,13 +847,13 @@ class MathematicalModel:
 
 		# Island Operation
 		for (i,t,c,s) in self.List_NTOS:
-			if int(t) >= int(c) and int(t) < int(c) + 3:
+			if int(t) >= int(c) and int(t) < int(c) + 2:
 				prob += PS_a[i][t][c][s] == 0, "Island_operation_active_phase_a_%s" %str((i,t,c,s))
 				prob += PS_b[i][t][c][s] == 0, "Island_operation_active_phase_b_%s" %str((i,t,c,s))
 				prob += PS_c[i][t][c][s] == 0, "Island_operation_active_phase_c_%s" %str((i,t,c,s))
 
 		for (i,t,c,s) in self.List_NTOS:
-			if int(t) >= int(c) and int(t) < int(c) + 3:
+			if int(t) >= int(c) and int(t) < int(c) + 2:
 				prob += QS_a[i][t][c][s] == 0, "Island_operation_reactive_phase_a_%s" %str((i,t,c,s))
 				prob += QS_b[i][t][c][s] == 0, "Island_operation_reactive_phase_b_%s" %str((i,t,c,s))
 				prob += QS_c[i][t][c][s] == 0, "Island_operation_reactive_phase_c_%s" %str((i,t,c,s))
@@ -1093,7 +1093,7 @@ class MathematicalModel:
 			prob += QG[n][t][c][s] <= data.QG_max[(n)], "Reactive_Power_Limit_GD_2_%s" %str((n,t,c,s))
 
 		for (n,t,c,s) in self.List_GDTOS:
-			if int(t) < int(c) and int(t) >= int(c) + 3:
+			if int(t) < int(c) and int(t) >= int(c) + 2:
 				prob += PGa[n][t][c][s] == 0, "Grid_connected_active_phase_a_%s" %str((n,t,c,s))
 				prob += PGb[n][t][c][s] == 0, "Grid_connected_active_phase_b_%s" %str((n,t,c,s))
 				prob += PGc[n][t][c][s] == 0, "Grid_connected_active_phase_c_%s" %str((n,t,c,s))
@@ -1174,7 +1174,7 @@ class MathematicalModel:
 				prob += QS_c_con[n][t][s] == 0, "Fix_REactive_Power_Bus_Load_con_c_%s" %str((n,t,s))
 
 		for (n,t,c,s) in self.List_NTOS:
-			if data.Tb[(n)] == 1 and int(t) < int(c) and int(t) >= int(c) + 3:
+			if data.Tb[(n)] == 1 and int(t) < int(c) and int(t) >= int(c) + 2:
 				prob += Va[n][t][c][s] == data.Vnom, "Fix_Voltage_a_%s" %str((n,t,c,s))
 				prob += Vb[n][t][c][s] == data.Vnom, "Fix_Voltage_b_%s" %str((n,t,c,s))
 				prob += Vc[n][t][c][s] == data.Vnom, "Fix_Voltage_c_%s" %str((n,t,c,s))
@@ -1183,7 +1183,7 @@ class MathematicalModel:
 				prob += Vc_sqr[n][t][c][s] == data.Vnom**2, "Fix_Voltage_sqr_SE_c_%s" %str((n,t,c,s))
 
 		for (n,t,c,s) in self.List_NTOS:
-			if data.Tb[(n)] == 2 and int(t) >= int(c) and int(t) < int(c) + 3:
+			if data.Tb[(n)] == 2 and int(t) >= int(c) and int(t) < int(c) + 2:
 				prob += Va[n][t][c][s] == data.Vnom, "Fix_Voltage_cc_a_%s" %str((n,t,s))
 				prob += Vb[n][t][c][s] == data.Vnom, "Fix_Voltage_cc_b_%s" %str((n,t,s))
 				prob += Vc[n][t][c][s] == data.Vnom, "Fix_Voltage_cc_c_%s" %str((n,t,s))

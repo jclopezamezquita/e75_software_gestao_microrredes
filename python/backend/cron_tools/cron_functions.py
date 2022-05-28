@@ -1,3 +1,4 @@
+from cmath import sqrt
 from json.encoder import py_encode_basestring
 from platform import node
 from cron_tools.optimizer.optimizer import optimizer_milp_function
@@ -22,13 +23,14 @@ def microgrid_dayahead_optimizer():
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
     data_milp = json.loads(data_milp.text)
 
-    #URL2='http://192.168.0.137:5000/'
+    URL2='https://7a1907bbd056.ngrok.io/'
+    
+    #URL2='http://hil.sa.ngrok.io/'
     '''
-    URL2='http://hil.sa.ngrok.io/'
-
+    URL2='https://bce39359427a.ngrok.io/'
+    
     measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
     measurements = json.loads(measurements.text)
-    print("medidas para pegar o SOC atual da bateria!")
     print(measurements)
 
     for index2 in measurements:
@@ -36,7 +38,7 @@ def microgrid_dayahead_optimizer():
             if x['der'] == 'bess':
                 initial_SOC = x['SOC']
     '''
-    initial_SOC = 15
+    initial_SOC = 100
 
 
     if not data_nodes:
@@ -71,7 +73,7 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'genset':
                 cont5 += 1
                 input_data['set_of_thermal_generator'] = [str(cont5)]
-        input_data['set_of_outage'] = []
+        input_data['set_of_outage'] = ['14']
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
         input_data['coefficient_demand_scen'] = [1.0]
@@ -399,37 +401,37 @@ def delete_old_measurements(timezone_SP):
 
 def nominal_active_load_phase_a(node_name, type, nominal_kva, power_factor):
     if type == 'load':
-        return nominal_kva/3
+        return (nominal_kva/3)*power_factor
     else:
         return 0
 
 def nominal_active_load_phase_b(node_name, type, nominal_kva, power_factor):
     if type == 'load':
-        return nominal_kva/3
+        return (nominal_kva/3)*power_factor
     else:
         return 0
 
 def nominal_active_load_phase_c(node_name, type, nominal_kva, power_factor):
     if type == 'load':
-        return nominal_kva/3
+        return (nominal_kva/3)*power_factor
     else:
         return 0
 
 def nominal_reactive_load_phase_a(node_name, type, nominal_kva, power_factor):
     if type == 'load':
-        return nominal_kva/3
+        return (nominal_kva/3) * math.sqrt(1-(math.pow(power_factor,2)))
     else:
         return 0
 
 def nominal_reactive_load_phase_b(node_name, type, nominal_kva, power_factor):
     if type == 'load':
-        return nominal_kva/3
+        return (nominal_kva/3) * math.sqrt(1-(math.pow(power_factor,2)))
     else:
         return 0
 
 def nominal_reactive_load_phase_c(node_name, type, nominal_kva, power_factor):
     if type == 'load':
-        return nominal_kva/3
+        return (nominal_kva/3) * math.sqrt(1-(math.pow(power_factor,2)))
     else:
         return 0
 
@@ -471,19 +473,19 @@ def profile_active_load_phase_c(node_name, type, nominal_kva, power_factor, time
 
 def profile_reactive_load_phase_a(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.143767036, 0.131238173, 0.139046789, 0.139400255, 0.140096392, 0.13386353, 0.116681337, 0.133439912, 0.192811296, 0.286951798, 0.292067601, 0.325390479, 0.337211331, 0.327249545, 0.365205247, 0.343805753, 0.325727755, 0.29122576, 0.410127723, 0.443, 0.413794589, 0.330989262, 0.200393262, 0.155557128]
+        return [0.32, 0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def profile_reactive_load_phase_b(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.143767036, 0.131238173, 0.139046789, 0.139400255, 0.140096392, 0.13386353, 0.116681337, 0.133439912, 0.192811296, 0.286951798, 0.292067601, 0.325390479, 0.337211331, 0.327249545, 0.365205247, 0.343805753, 0.325727755, 0.29122576, 0.410127723, 0.443, 0.413794589, 0.330989262, 0.200393262, 0.155557128]
+        return [0.32, 0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def profile_reactive_load_phase_c(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.143767036, 0.131238173, 0.139046789, 0.139400255, 0.140096392, 0.13386353, 0.116681337, 0.133439912, 0.192811296, 0.286951798, 0.292067601, 0.325390479, 0.337211331, 0.327249545, 0.365205247, 0.343805753, 0.325727755, 0.29122576, 0.410127723, 0.443, 0.413794589, 0.330989262, 0.200393262, 0.155557128]
+        return [0.32, 0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
