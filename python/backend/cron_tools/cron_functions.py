@@ -23,11 +23,9 @@ def microgrid_dayahead_optimizer():
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
     data_milp = json.loads(data_milp.text)
 
-    URL2='https://7a1907bbd056.ngrok.io/'
+    URL2='https://eeb1-177-194-78-203.ngrok.io/'
     
     #URL2='http://hil.sa.ngrok.io/'
-    '''
-    URL2='https://bce39359427a.ngrok.io/'
     
     measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
     measurements = json.loads(measurements.text)
@@ -37,8 +35,8 @@ def microgrid_dayahead_optimizer():
         for x in measurements[index2]['node']:
             if x['der'] == 'bess':
                 initial_SOC = x['SOC']
-    '''
-    initial_SOC = 100
+    
+    #initial_SOC = 100
 
 
     if not data_nodes:
@@ -73,7 +71,7 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'genset':
                 cont5 += 1
                 input_data['set_of_thermal_generator'] = [str(cont5)]
-        input_data['set_of_outage'] = ['14']
+        input_data['set_of_outage'] = ['11']
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
         input_data['coefficient_demand_scen'] = [1.0]
@@ -437,57 +435,57 @@ def nominal_reactive_load_phase_c(node_name, type, nominal_kva, power_factor):
 
 def photovoltaic_generation_phase_a(node_name, type, nominal_kva, power_factor):
     if type == 'pv':
-        return nominal_kva/3
+        return (nominal_kva/3)*power_factor
     else:
         return 0
 
 def photovoltaic_generation_phase_b(node_name, type, nominal_kva, power_factor):
     if type == 'pv':
-        return nominal_kva/3
+        return (nominal_kva/3)*power_factor
     else:
         return 0
 
 def photovoltaic_generation_phase_c(node_name, type, nominal_kva, power_factor):
     if type == 'pv':
-        return nominal_kva/3
+        return (nominal_kva/3)*power_factor
     else:
         return 0
 
 def profile_active_load_phase_a(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.36, 0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39]
+        return [0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39, 0.36]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def profile_active_load_phase_b(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.36, 0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39]
+        return [0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39, 0.36]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def profile_active_load_phase_c(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.36, 0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39]
+        return [0.34, 0.36, 0.36, 0.37, 0.36, 0.33, 0.37, 0.52, 0.69, 0.73, 0.81, 0.82, 0.85, 1.00, 0.94, 0.91, 0.75, 0.92, 0.96, 0.89, 0.77, 0.52, 0.39, 0.36]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def profile_reactive_load_phase_a(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.32, 0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35]
+        return [0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35, 0.32]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def profile_reactive_load_phase_b(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.32, 0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35]
+        return [0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35, 0.32]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def profile_reactive_load_phase_c(node_name, type, nominal_kva, power_factor, timesteps):
     if type == 'load':
-        return [0.32, 0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35]
+        return [0.29, 0.31, 0.31, 0.31, 0.30, 0.26, 0.30, 0.43, 0.64, 0.66, 0.73, 0.76, 0.74, 0.82, 0.77, 0.73, 0.66, 0.92, 1.00, 0.93, 0.75, 0.45, 0.35, 0.32]
     else:
         return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 def profile_photovoltaic_generation(node_name, type, nominal_kva, power_factor, timesteps):
-    return [0, 0, 0, 0, 0, 0.011589674, 0.090665761, 0.288016304, 0.535353261, 0.740774457, 0.88669837, 0.959524457, 0.965475543, 0.911154891, 0.795298913, 0.62298913, 0.401345109, 0.170475543, 0.029660326, 0.000163043, 0, 0, 0, 0]
+    return [0, 0, 0, 0, 0.009, 0.073, 0.234, 0.449, 0.636, 0.768, 0.835, 0.841, 0.791, 0.685, 0.529, 0.333, 0.138, 0.024, 0, 0, 0, 0, 0, 0]

@@ -480,6 +480,10 @@ class MathematicalModel:
 		# Energy Storage System - Battery
 		EB = LpVariable.dicts("EB",(data.B, data.T))
 		PB = LpVariable.dicts("PB",(data.B, data.T))
+		QB = LpVariable.dicts("QB",(data.B, data.T))
+		QB_dis_a = LpVariable.dicts("QB_dis_a",(data.B, data.T))
+		QB_dis_b = LpVariable.dicts("QB_dis_b",(data.B, data.T))
+		QB_dis_c = LpVariable.dicts("QB_dis_c",(data.B, data.T))
 		b_ch = LpVariable.dicts("b_ch",(data.B, data.T),cat='Binary')
 		b_dis = LpVariable.dicts("b_dis",(data.B, data.T),cat='Binary')
 		PB_ch = LpVariable.dicts("PB_ch",(data.B, data.T))
@@ -929,15 +933,15 @@ class MathematicalModel:
 		# Reactive Power Flow ----------------------------------------------------------------
 		for (i,t,c,s) in self.List_NTOS:
 			prob += lpSum([Qa[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) - lpSum([(Qlss_a[a,j][t][c][s] * data.p[(i,a,j)]) for (a,j) in data.L]) + \
-			QS_a[i][t][c][s] + lpSum([QGa[a][t][c][s] for a in data.dict_nos_gd[i]]) - (data.QDa[(i,t)] * data.sd[(s)]) * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_a_%s" %str((i,t,c,s))
+			QS_a[i][t][c][s] + lpSum([QGa[a][t][c][s] for a in data.dict_nos_gd[i]]) + lpSum([QB_dis_a[a][t] for a in data.dict_nos_bs[i]]) - (data.QDa[(i,t)] * data.sd[(s)]) * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_a_%s" %str((i,t,c,s))
 
 		for (i,t,c,s) in self.List_NTOS:
 			prob += lpSum([Qb[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) - lpSum([(Qlss_b[a,j][t][c][s] * data.p[(i,a,j)]) for (a,j) in data.L]) + \
-			QS_b[i][t][c][s] + lpSum([QGb[a][t][c][s] for a in data.dict_nos_gd[i]]) - (data.QDb[(i,t)] * data.sd[(s)]) * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_b_%s" %str((i,t,c,s))
+			QS_b[i][t][c][s] + lpSum([QGb[a][t][c][s] for a in data.dict_nos_gd[i]]) + lpSum([QB_dis_b[a][t] for a in data.dict_nos_bs[i]]) - (data.QDb[(i,t)] * data.sd[(s)]) * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_b_%s" %str((i,t,c,s))
 
 		for (i,t,c,s) in self.List_NTOS:
 			prob += lpSum([Qc[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) - lpSum([(Qlss_c[a,j][t][c][s] * data.p[(i,a,j)]) for (a,j) in data.L]) + \
-			QS_c[i][t][c][s] + lpSum([QGc[a][t][c][s] for a in data.dict_nos_gd[i]]) - (data.QDc[(i,t)] * data.sd[(s)]) * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_c_%s" %str((i,t,c,s))
+			QS_c[i][t][c][s] + lpSum([QGc[a][t][c][s] for a in data.dict_nos_gd[i]]) + lpSum([QB_dis_c[a][t] for a in data.dict_nos_bs[i]]) - (data.QDc[(i,t)] * data.sd[(s)]) * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_c_%s" %str((i,t,c,s))
 
 		# Voltage Droop in the Lines ----------------------------------------------------------------
 		for (i,j,t,c,s) in self.List_LTOS:
@@ -1134,6 +1138,24 @@ class MathematicalModel:
 		
 		for (i,t)  in self.List_BT:
 			prob += PB_dis_a[i][t] == PB_dis_c[i][t], "Balance_power_discharging_3_%s" %str((i,t))
+		
+		for (i,t)  in self.List_BT:
+			prob += QB[i][t] - QB_dis_a[i][t] - QB_dis_b[i][t] - QB_dis_c[i][t] == 0, "Total_reactive_discharging_%s" %str((i,t))
+
+		for (i,t)  in self.List_BT:
+			prob += QB_dis_a[i][t] == QB_dis_b[i][t], "Balance_reactive_power_discharging_1_%s" %str((i,t))
+
+		for (i,t)  in self.List_BT:
+			prob += QB_dis_b[i][t] == QB_dis_c[i][t], "Balance_reactive_power_discharging_2_%s" %str((i,t))
+		
+		for (i,t)  in self.List_BT:
+			prob += QB_dis_a[i][t] == QB_dis_c[i][t], "Balance_reactive_power_discharging_3_%s" %str((i,t))
+
+		for (i,t)  in self.List_BT:
+			prob += QB[i][t] - PB_dis[i][t] * math.tan(math.acos(0.707)) <= 0, "Limits_reactive_power_1_%s" %str((i,t))
+
+		for (i,t)  in self.List_BT:
+			prob += - QB[i][t] - PB_dis[i][t] * math.tan(math.acos(0.707)) <= 0, "Limits_reactive_power_2_%s" %str((i,t))
 
 		for (i,t)  in self.List_BT:
 			prob += 0 <= PB_ch[i][t], "Limits_charging_power_1%s" %str((i,t))
