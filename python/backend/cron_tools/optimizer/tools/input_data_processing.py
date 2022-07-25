@@ -18,12 +18,12 @@ class InputData:
 		self.Prob = {}
 		for index in range(len(data["probability_of_scen"])):
 			self.Prob[self.S[index]] = data["probability_of_scen"][index]
-		self.srs = {}
-		for index in range(len(data["coefficient_demand_scen"])):
-			self.srs[self.S[index]] = data["coefficient_demand_scen"][index]
 		self.sd = {}
+		for index in range(len(data["coefficient_demand_scen"])):
+			self.sd[self.S[index]] = data["coefficient_demand_scen"][index]
+		self.srs = {}
 		for index in range(len(data["coefficient_pv_scen"])):
-			self.sd[self.S[index]] = data["coefficient_pv_scen"][index]		
+			self.srs[self.S[index]] = data["coefficient_pv_scen"][index]		
 		self.Tb = {}
 		for index in range(len(data["type_of_bus"])):
 			self.Tb[self.N[index]] = data["type_of_bus"][index]

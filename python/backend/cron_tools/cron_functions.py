@@ -23,9 +23,10 @@ def microgrid_dayahead_optimizer():
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
     data_milp = json.loads(data_milp.text)
 
-    URL2='https://eeb1-177-194-78-203.ngrok.io/'
+    URL2='https://66a6823282b2.ngrok.io/'
     
     #URL2='http://hil.sa.ngrok.io/'
+
     
     measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
     measurements = json.loads(measurements.text)
@@ -36,7 +37,7 @@ def microgrid_dayahead_optimizer():
             if x['der'] == 'bess':
                 initial_SOC = x['SOC']
     
-    #initial_SOC = 100
+    #initial_SOC = 20
 
 
     if not data_nodes:
@@ -75,7 +76,7 @@ def microgrid_dayahead_optimizer():
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
         input_data['coefficient_demand_scen'] = [1.0]
-        input_data['coefficient_pv_scen'] = [1.0]
+        input_data['coefficient_pv_scen'] = [0.2]
         input_data['type_of_bus'] = []
         for index in data_nodes:
             if index['type'] == 'PCC':
@@ -329,6 +330,7 @@ def microgrid_measurements(URL):
     try:
         measurements = requests.get(url=URL + "last_item", headers={"accept" : "application/json"})
         measurements = json.loads(measurements.text)
+        print(measurements)
 
         URL2 = "http://nginx:80/"
 
@@ -338,25 +340,31 @@ def microgrid_measurements(URL):
 
 
         for index2 in measurements:
-            for index1,x in zip(node_information,measurements[index2]['node']):
-                if index1['name'] == x['name']:
-                    if index1['der'] == x['der']:
-                        if x['der'] == 'bess':
-                            node_measurement = {"time_iso": index2, "active_power_a_kw": x['Pmag_phase_A_rms']/1000, "active_power_b_kw": x['Pmag_phase_B_rms']/1000,"active_power_c_kw": x['Pmag_phase_C_rms']/1000, 
-                            "reactive_power_a_kvar": x['Qmag_phase_A_rms']/1000, "reactive_power_b_kvar": x['Qmag_phase_B_rms']/1000, "reactive_power_c_kvar": x['Qmag_phase_C_rms']/1000, 
-                            "voltage_a_kv": x['Vmag_phase_A_rms']/1000, "voltage_b_kv": x['Vmag_phase_B_rms']/1000, "voltage_c_kv": x['Vmag_phase_C_rms']/1000, "soc_kwh": x['SOC']*(index1['bat_nom_energy']/100), "id_info_no": index1['id']}
-                            id_info_no = str(index1['id'])
-                            data = requests.post(url=URL2 + "/v1/api/node_measurement/no/" + id_info_no + "/", data=node_measurement, headers={"accept" : "application/json"})
-                            print(data.status_code)
-                            print(data.text)
-                        else:
-                            node_measurement = {"time_iso": index2, "active_power_a_kw": x['Pmag_phase_A_rms']/1000, "active_power_b_kw": x['Pmag_phase_B_rms']/1000,"active_power_c_kw": x['Pmag_phase_C_rms']/1000, 
-                            "reactive_power_a_kvar": x['Qmag_phase_A_rms']/1000, "reactive_power_b_kvar": x['Qmag_phase_B_rms']/1000, "reactive_power_c_kvar": x['Qmag_phase_C_rms']/1000, 
-                            "voltage_a_kv": x['Vmag_phase_A_rms']/1000, "voltage_b_kv": x['Vmag_phase_B_rms']/1000, "voltage_c_kv": x['Vmag_phase_C_rms']/1000, "id_info_no": index1['id']}
-                            id_info_no = str(index1['id'])
-                            data = requests.post(url=URL2 + "/v1/api/node_measurement/no/" + id_info_no + "/", data=node_measurement, headers={"accept" : "application/json"})
-                            print(data.status_code)
-                            print(data.text)
+            print(index2)
+            #for index1,x in zip(node_information,measurements[index2]['node']):
+            for index1 in node_information:
+                for x in measurements[index2]['node']:
+                    if index1['name'] == x['name']:
+                        print(index1['name'])
+                        print(x['name'])
+                        if index1['der'] == x['der']:
+                            print(x['der'])
+                            if x['der'] == 'bess':
+                                node_measurement = {"time_iso": index2, "active_power_a_kw": x['Pmag_phase_A_rms']/1000, "active_power_b_kw": x['Pmag_phase_B_rms']/1000,"active_power_c_kw": x['Pmag_phase_C_rms']/1000, 
+                                "reactive_power_a_kvar": x['Qmag_phase_A_rms']/1000, "reactive_power_b_kvar": x['Qmag_phase_B_rms']/1000, "reactive_power_c_kvar": x['Qmag_phase_C_rms']/1000, 
+                                "voltage_a_kv": x['Vmag_phase_A_rms']/1000, "voltage_b_kv": x['Vmag_phase_B_rms']/1000, "voltage_c_kv": x['Vmag_phase_C_rms']/1000, "soc_kwh": x['SOC']*(index1['bat_nom_energy']/100), "id_info_no": index1['id']}
+                                id_info_no = str(index1['id'])
+                                data = requests.post(url=URL2 + "/v1/api/node_measurement/no/" + id_info_no + "/", data=node_measurement, headers={"accept" : "application/json"})
+                                print(data.status_code)
+                                print(data.text)
+                            else:
+                                node_measurement = {"time_iso": index2, "active_power_a_kw": x['Pmag_phase_A_rms']/1000, "active_power_b_kw": x['Pmag_phase_B_rms']/1000,"active_power_c_kw": x['Pmag_phase_C_rms']/1000, 
+                                "reactive_power_a_kvar": x['Qmag_phase_A_rms']/1000, "reactive_power_b_kvar": x['Qmag_phase_B_rms']/1000, "reactive_power_c_kvar": x['Qmag_phase_C_rms']/1000, 
+                                "voltage_a_kv": x['Vmag_phase_A_rms']/1000, "voltage_b_kv": x['Vmag_phase_B_rms']/1000, "voltage_c_kv": x['Vmag_phase_C_rms']/1000, "id_info_no": index1['id']}
+                                id_info_no = str(index1['id'])
+                                data = requests.post(url=URL2 + "/v1/api/node_measurement/no/" + id_info_no + "/", data=node_measurement, headers={"accept" : "application/json"})
+                                print(data.status_code)
+                                print(data.text)
         print("Node measurements were inserted.")
 
         branch_information = requests.get(url=URL2 + "v1/api/branch_information", headers={"accept" : "application/json"})

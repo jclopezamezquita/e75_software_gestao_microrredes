@@ -25,7 +25,7 @@ def create_DB():
     db.create_all()
 
 # uwsgidecorators.timer(interval, func)
-@timer(300)
+@timer(120)
 def leitura_medidas_laboratoriais(num):
     '''
     This cron is executed every five minutes
@@ -34,10 +34,11 @@ def leitura_medidas_laboratoriais(num):
     print ("%s/%s/%s %s:%s:%s" % (now.month,now.day,now.year,now.hour,now.minute,now.second))
 
     #resultado = cron_functions.microgrid_measurements(URL='http://hil.sa.ngrok.io/') # URL from PC Cindy
-    resultado = cron_functions.microgrid_measurements(URL='https://eeb1-177-194-78-203.ngrok.io/') # URL from PC Cindy
+    resultado = cron_functions.microgrid_measurements(URL='https://0579-2804-431-c7ee-d5fc-b80f-2af7-9b20-47b6.sa.ngrok.io/') 
+
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(0, 2, -1, -1, -1)
+@cron(50, 2, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the start of the day - dispatch defined for the next day
