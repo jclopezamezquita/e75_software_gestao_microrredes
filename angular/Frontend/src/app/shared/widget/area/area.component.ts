@@ -32,7 +32,7 @@ export class AreaComponent {
     },
     yAxis: {
       title: {
-        text: 'Values [kW]'
+        text: 'Active Power [kW]'
       }
     },
     xAxis: {

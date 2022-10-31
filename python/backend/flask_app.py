@@ -25,7 +25,7 @@ def create_DB():
     db.create_all()
 
 # uwsgidecorators.timer(interval, func)
-@timer(120)
+@timer(300)
 def leitura_medidas_laboratoriais(num):
     '''
     This cron is executed every five minutes
@@ -34,19 +34,24 @@ def leitura_medidas_laboratoriais(num):
     print ("%s/%s/%s %s:%s:%s" % (now.month,now.day,now.year,now.hour,now.minute,now.second))
 
     #resultado = cron_functions.microgrid_measurements(URL='http://hil.sa.ngrok.io/') # URL from PC Cindy
-    resultado = cron_functions.microgrid_measurements(URL='https://0579-2804-431-c7ee-d5fc-b80f-2af7-9b20-47b6.sa.ngrok.io/') 
+    resultado = cron_functions.microgrid_measurements(URL='https://bcd89f1a2c30.ngrok.io/') 
 
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(50, 2, -1, -1, -1)
+@cron(40, 2, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the start of the day - dispatch defined for the next day
     '''
+    start = time.time()
+
     resultado = cron_functions.microgrid_dayahead_optimizer()
     if resultado:
         cron_functions.write_results_database(resultado)
     print(resultado)
+    end = time.time()
+
+    print("The time of execution of EDO is: ", (end-start), "s")
 
     resultado2 = cron_functions.delete_old_measurements(timezone_SP=3)
     print(resultado2)

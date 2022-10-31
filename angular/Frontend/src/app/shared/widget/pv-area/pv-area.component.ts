@@ -33,7 +33,7 @@ export class PvAreaComponent {
     },
     yAxis: {
       title: {
-        text: 'Generation [kW]'
+        text: 'Active Power [kW]'
       }
     },
     xAxis: {
@@ -75,7 +75,7 @@ export class PvAreaComponent {
     this.chartOptions.series = [
       {
         type: 'area',
-        name: 'SOC',
+        name: 'PV',
         data: this.meas_pv_aux
       }
     ]

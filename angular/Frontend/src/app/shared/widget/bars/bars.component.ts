@@ -21,6 +21,11 @@ export class BarsComponent {
   chartOptions: Highcharts.Options = {
     title:  {
       text: 'column'
+    },
+    yAxis: {
+      title: {
+        text: 'Active Power [kW]'
+      }
     }, 
     series: [
       {
