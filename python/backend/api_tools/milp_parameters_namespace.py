@@ -1,7 +1,8 @@
 import http.client
 from datetime import datetime, timedelta
 import dateutil.relativedelta
-from flask_restplus import Namespace, Resource, fields, inputs, abort
+# from flask_restplus import Namespace, Resource, fields, inputs, abort
+from flask_restx import Namespace, Resource, fields, inputs, abort
 from api_tools.models import milp_parameters_model
 from api_tools.db import db
 from sqlalchemy import exc

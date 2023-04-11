@@ -2,7 +2,8 @@ import sys
 import http.client
 from sqlalchemy import exc
 from datetime import datetime, timedelta
-from flask_restplus import Namespace, Resource, fields, inputs, abort
+# from flask_restplus import Namespace, Resource, fields, inputs, abort
+from flask_restx import Namespace, Resource, fields, inputs, abort
 from api_tools.models import node_measurement_model, node_information_model
 from api_tools.db import db
 from calendar import monthrange
