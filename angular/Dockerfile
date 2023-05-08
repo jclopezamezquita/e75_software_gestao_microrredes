@@ -9,7 +9,8 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 # and install dependencies
 RUN apt-get update \
     && apt-get install -y curl \
-    && apt-get -y autoclean
+    && apt-get -y autoclean \
+    && apt-get install gettext-base
 
 # nvm environment variables
 ENV NVM_DIR /usr/local/nvm
@@ -41,4 +42,5 @@ WORKDIR /Frontend
 
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# CMD ["ng", "serve", "--host", "0.0.0.0"]
+CMD envsubst < src/environments/environment.template.ts > src/environments/environment.ts && ng serve --host 0.0.0.0

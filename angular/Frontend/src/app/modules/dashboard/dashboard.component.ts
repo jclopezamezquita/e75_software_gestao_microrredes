@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Measurements_24hours } from 'src/app/shared/model/measurements_24hours.model';
 import { Milp_parameters } from 'src/app/shared/model/milp_parameter.model';
 import { HttpClient } from '@angular/common/http';
-
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private showData(): void {
-    this.http.get<Measurements_24hours>('http://api-ems.ngrok.io/v1/api/node_measurement/last_24h/')
+    this.http.get<Measurements_24hours>(environment.backendUrl + '/node_measurement/last_24h/')
     .subscribe(
       data2 => {
         this.measurements_pcc = [];
@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit {
         this.total_daily_generation = Math.round(100 * this.total_daily_generation)/100;
         this.total_daily_consumption = Math.round(100 * this.total_daily_consumption)/100;
 
-        this.http.get<Milp_parameters>('http://api-ems.ngrok.io/v1/api/milp_parameters/1/')
+        this.http.get<Milp_parameters>(environment.backendUrl + '/milp_parameters/1/')
         .subscribe(
           data2 => {
             this.costsChart = [];

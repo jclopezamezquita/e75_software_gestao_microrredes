@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Economic_dispatch } from 'src/app/shared/model/economic_dispatch.model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class DispatchComponent implements OnInit {
 
   constructor(private http: HttpClient) {
 
-    this.http.get<Economic_dispatch>('http://api-ems.ngrok.io/v1/api/economic_dispatch/1/')
+    this.http.get<Economic_dispatch>(environment.backendUrl + '/economic_dispatch/1/')
       .subscribe(
         data2 => {
           this.dispatchData_BESS = [];

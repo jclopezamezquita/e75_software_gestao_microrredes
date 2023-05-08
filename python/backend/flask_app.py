@@ -25,16 +25,15 @@ def create_DB():
     db.create_all()
 
 # uwsgidecorators.timer(interval, func)
-@timer(300)
+@timer(60)
 def leitura_medidas_laboratoriais(num):
     '''
-    This cron is executed every five minutes
+    This cron is executed every one minutes
     '''
     now = datetime.now()
     print ("%s/%s/%s %s:%s:%s" % (now.month,now.day,now.year,now.hour,now.minute,now.second))
-
-    #resultado = cron_functions.microgrid_measurements(URL='http://hil.sa.ngrok.io/') # URL from PC Cindy
-    resultado = cron_functions.microgrid_measurements(URL='https://bcd89f1a2c30.ngrok.io/') 
+    
+    resultado = cron_functions.microgrid_measurements(URL=os.getenv('HIL_API_URL', 'https://ems-api.ngrok.io/'))
 
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3

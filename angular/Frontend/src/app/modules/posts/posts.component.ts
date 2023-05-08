@@ -3,6 +3,7 @@ import { Milp_parameters } from 'src/app/shared/model/milp_parameter.model';
 import { Model } from 'src/app/shared/model/repository.model'; 
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class PostsComponent implements OnInit {
   constructor(private model: Model, private http: HttpClient) { 
 
 
-    this.http.get<Milp_parameters>('http://api-ems.ngrok.io/v1/api/milp_parameters/1/')
+    this.http.get<Milp_parameters>(environment.backendUrl + '/milp_parameters/1/')
       .subscribe(
         data2 => {
           this.costsChart = [];
