@@ -17,7 +17,7 @@ def microgrid_dayahead_optimizer():
     
     data_nodes = requests.get(url=URL + "v1/api/node_information", headers={"accept" : "application/json"})
     data_nodes = json.loads(data_nodes.text)
-    print(data_nodes)
+    #print(data_nodes)
     data_branches = requests.get(url=URL + "v1/api/branch_information", headers={"accept" : "application/json"})
     data_branches = json.loads(data_branches.text)
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
@@ -31,7 +31,7 @@ def microgrid_dayahead_optimizer():
     
     measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
     measurements = json.loads(measurements.text)
-    print(measurements)
+    #print(measurements)
 
     for index2 in measurements:
         for x in measurements[index2]['node']:
@@ -331,17 +331,17 @@ def microgrid_measurements(URL):
     try:
         measurements = requests.get(url=URL + "last_item", headers={"accept" : "application/json"})
         measurements = json.loads(measurements.text)
-        print(measurements)
+        #print(measurements)
 
         URL2 = "http://nginx:80/"
 
         node_information = requests.get(url=URL2 + "v1/api/node_information", headers={"accept" : "application/json"})
         node_information = json.loads(node_information.text)
-        print(node_information)
+        #print(node_information)
 
 
         for index2 in measurements:
-            print(index2)
+            #print(index2)
             #for index1,x in zip(node_information,measurements[index2]['node']):
             for index1 in node_information:
                 for x in measurements[index2]['node']:
@@ -368,7 +368,7 @@ def microgrid_measurements(URL):
 
         branch_information = requests.get(url=URL2 + "v1/api/branch_information", headers={"accept" : "application/json"})
         branch_information = json.loads(branch_information.text)
-        print(branch_information)
+        #print(branch_information)
 
         for x1 in measurements:
             for x2,x in zip(branch_information,measurements[x1]['branch']):
