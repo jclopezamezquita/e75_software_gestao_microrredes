@@ -45,8 +45,6 @@ Email: j262748@dac.unicamp.br
 Juan Camilo López
 Email: jclopeza@unicamp.br
 
-Cindy Paola
-Email: cindy19gl@gmail.com 
 
 
 
