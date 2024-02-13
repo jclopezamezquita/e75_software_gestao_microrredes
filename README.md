@@ -29,7 +29,7 @@ EMS will provide the following services:
 
 ## Inner Execution:
 
-- Frontend - open the browser at http://localhost:4202
+- Frontend - OPEN the browser at http://localhost:4202
 
 - EMS Backend API- open the browser at http://localhost:8051
 
