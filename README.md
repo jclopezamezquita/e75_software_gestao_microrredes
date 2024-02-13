@@ -1,7 +1,7 @@
-# Energy Management System (EMS) with EVs
+# Energy Management System (EMS) with EVs 
 
 ## Introduction
-A program that uses tools like Python, MySQL, Docker and Angular in its development.
+A program that uses tools like Python, MySQL, Docker and Angular.
 
 EMS will provide the following services:
 * Optimal day-ahead dispatch of the available distributed energy resources (DER);
