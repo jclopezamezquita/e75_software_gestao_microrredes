@@ -1,4 +1,4 @@
-# Energy Management System (EMS)
+# Energy Management System (EMS) with EVs
 
 ## Introduction
 A program that uses tools like Python, MySQL, Docker and Angular in its development.
