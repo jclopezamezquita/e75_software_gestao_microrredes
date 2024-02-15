@@ -3,7 +3,7 @@
 """
 import os, sys
 from cron_tools.optimizer.tools.input_data_processing import InputData
-from cron_tools.optimizer.tools.mathematical_model_construction import MathematicalModel
+from cron_tools.optimizer.tools.mathematical_model_construction_pyomo import MathematicalModel
 from cron_tools.optimizer.tools.summary_results_construction import SummaryResults
 
 
@@ -30,7 +30,7 @@ def optimizer_milp_function(input_data):
         model.ConstructionOfLists()
 
         # Formulating the problem
-        prob_CS = model.ProblemFormultion_ColdStart()
+        model_cs = model.ProblemFormultion_ColdStart()
 
         # Writing the problem in a file .lp
         # model.WritingProblemFileCS(prob_CS,"Cold_Start")
@@ -47,7 +47,7 @@ def optimizer_milp_function(input_data):
         results = model
 
         # Solving the mathematical model via PULP - Cold Start
-        results.Solving_Model_CS(prob_CS)
+        results.Solving_Model_CS(model_cs)
 
         print("\n************* END: Solving mathematical model - Cold Start *************\n")
 

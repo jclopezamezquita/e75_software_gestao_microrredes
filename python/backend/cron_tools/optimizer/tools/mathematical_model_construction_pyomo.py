@@ -3,8 +3,10 @@
 """
 import os
 import sys
-from pulp import *
+from pyomo.environ import *
 import math
+import subprocess
+from pyomo.opt import SolverFactory
 
 class MathematicalModel:
 	def __init__(self, data):
@@ -13,43 +15,54 @@ class MathematicalModel:
 	def ConstructionOfLists(self):
 		# self.List formed by sets T, S and C
 		data = self.data
-		self.List_LTS = [];
+		self.List_LTS = []
 		for (i,j) in data.L:
 			for t in data.T:
 				for s in data.S:
 					self.List_LTS += [[i, j, t, s]]
-		self.List_NTS = [];
+		self.List_NTS = []
 		for i in data.N:
 			for t in data.T:
 				for s in data.S:
 					self.List_NTS += [[i, t, s]]
-		self.List_GDTS = [];
+		self.List_GDTS = []
 		for i in data.GD:
 			for t in data.T:
 				for s in data.S:
 					self.List_GDTS += [[i, t, s]]
-		self.List_LTOS = [];
+		self.List_LTOS = []
 		for (i,j) in data.L:
 			for t in data.T:
 				for c in data.O:
 					for s in data.S:
 						self.List_LTOS += [[i, j, t, c, s]]
-		self.List_NTOS = [];
+		self.List_NTOS = []
 		for i in data.N:
 			for t in data.T:
 				for c in data.O:
 					for s in data.S:
 						self.List_NTOS += [[i, t, c, s]]
-		self.List_GDTOS = [];
+		self.List_GDTOS = []
 		for i in data.GD:
 			for t in data.T:
 				for c in data.O:
 					for s in data.S:
 						self.List_GDTOS += [[i, t, c, s]]
-		self.List_BT = [];
+		self.List_BT = []
 		for i in data.B:
 			for t in data.T:
 				self.List_BT += [[i, t]]
+		'''
+		self.List_EVT = []
+		for i in data.EV:
+			for t in data.T:
+				self.List_EVT += [[i, t]]
+		self.List_EVTd = []
+		for i in data.EV:
+			for t in data.T:
+				if int(t) >= int(data.t_arrival[i]) and int(t) <= int(data.t_departure[i]):
+					self.List_EVTd.append([i, t])
+		'''
 		self.List_NTSY = [];
 		for i in data.N:
 			for t in data.T:
@@ -76,12 +89,14 @@ class MathematicalModel:
 					for s in data.S:
 						for y in data.Y:
 							self.List_LTOSY += [[i, j, t, c, s, y]]
+		'''
 		self.List_GDTSY = [];
 		for i in data.GD:
 			for t in data.T:
 				for s in data.S:
 					for y in data.Y:
 						self.List_GDTSY += [[i, t, s, y]]
+		
 		self.List_GDTOSY = [];
 		for i in data.GD:
 			for t in data.T:
@@ -89,286 +104,379 @@ class MathematicalModel:
 					for s in data.S:
 						for y in data.Y:
 							self.List_GDTOSY += [[i, t, c, s, y]]
-		
+		'''
 		#return (self.List_NTS, self.List_NTOS, self.List_LTS, self.List_LTOS, self.List_SETS, self.List_SETOS, self.List_sPDTS, self.List_sQDTS, self.List_sPDTOS, self.List_sQDTOS, self.List_GDTS, self.List_GDTOS, self.List_sPVT, self.List_sPVTO, self.List_BT, self.List_LTSY, self.List_LTOSY, self.List_SETSY, self.List_SETOSY, self.List_GDTSY, self.List_GDTOSY)
 
 	def ProblemFormultion_ColdStart(self):
 		data = self.data
 
 		# Type of problem
-		prob_CS = LpProblem("Cold_Start_for_EMS",LpMinimize)
+		model_cs = ConcreteModel("Modelo_coldstar_EMS_PYOMO")
 
 		# Declare variables
-		# Grid - without outage (grid-connected operation)
-		Pa_con = LpVariable.dicts("Pa_con",(data.L, data.T, data.S))
-		Pb_con = LpVariable.dicts("Pb_con",(data.L, data.T, data.S))
-		Pc_con = LpVariable.dicts("Pc_con",(data.L, data.T, data.S))
-		Qa_con = LpVariable.dicts("Qa_con",(data.L, data.T, data.S))
-		Qb_con = LpVariable.dicts("Qb_con",(data.L, data.T, data.S))
-		Qc_con = LpVariable.dicts("Qc_con",(data.L, data.T, data.S))
-		Va_con = LpVariable.dicts("Va_con",(data.N, data.T, data.S))
-		Vb_con = LpVariable.dicts("Vb_con",(data.N, data.T, data.S))
-		Vc_con = LpVariable.dicts("Vc_con",(data.N, data.T, data.S))
-		PS_a_con = LpVariable.dicts("PS_a_con",(data.N, data.T, data.S))
-		PS_b_con = LpVariable.dicts("PS_b_con",(data.N, data.T, data.S))
-		PS_c_con = LpVariable.dicts("PS_c_con",(data.N, data.T, data.S))
-		QS_a_con = LpVariable.dicts("QS_a_con",(data.N, data.T, data.S))
-		QS_b_con = LpVariable.dicts("QS_b_con",(data.N, data.T, data.S))
-		QS_c_con = LpVariable.dicts("QS_c_con",(data.N, data.T, data.S))
-		PS_con = LpVariable.dicts("PS_con",(data.N, data.T, data.S))
-		QS_con = LpVariable.dicts("QS_con",(data.N, data.T, data.S))
+		model_cs.Pa = Var(data.L, data.T, data.S, within = Reals)
+		model_cs.Pb = Var(data.L, data.T, data.S, within = Reals)
+		model_cs.Pc = Var(data.L, data.T, data.S, within = Reals)
+		model_cs.Qa = Var(data.L, data.T, data.S, within = Reals)
+		model_cs.Qb = Var(data.L, data.T, data.S, within = Reals)
+		model_cs.Qc = Var(data.L, data.T, data.S, within = Reals)
+		model_cs.Va = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Vb = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Vc = Var(data.N, data.T, data.S, within = Reals)
 
-		# Genset - without outage (grid-connected operation)
-		PGa_con = LpVariable.dicts("PGa_con",(data.GD, data.T, data.S))
-		PGb_con = LpVariable.dicts("PGb_con",(data.GD, data.T, data.S))
-		PGc_con = LpVariable.dicts("PGc_con",(data.GD, data.T, data.S))
-		QGa_con = LpVariable.dicts("QGa_con",(data.GD, data.T, data.S))
-		QGb_con = LpVariable.dicts("QGb_con",(data.GD, data.T, data.S))
-		QGc_con = LpVariable.dicts("QGc_con",(data.GD, data.T, data.S))
-		PG_con = LpVariable.dicts("PG_con",(data.GD, data.T, data.S))
-		QG_con = LpVariable.dicts("QG_con",(data.GD, data.T, data.S))
+		model_cs.Ppcc_a = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Ppcc_b = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Ppcc_c = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Qpcc_a = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Qpcc_b = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Qpcc_c = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Ppcc = Var(data.N, data.T, data.S, within = Reals)
+		model_cs.Qpcc = Var(data.N, data.T, data.S, within = Reals)
 
-		# Grid - with outage (grid islanded operation)
-		Pa = LpVariable.dicts("Pa",(data.L, data.T, data.O, data.S))
-		Pb = LpVariable.dicts("Pb",(data.L, data.T, data.O, data.S))
-		Pc = LpVariable.dicts("Pc",(data.L, data.T, data.O, data.S))
-		Qa = LpVariable.dicts("Qa",(data.L, data.T, data.O, data.S))
-		Qb = LpVariable.dicts("Qb",(data.L, data.T, data.O, data.S))
-		Qc = LpVariable.dicts("Qc",(data.L, data.T, data.O, data.S))
-		Va = LpVariable.dicts("Va",(data.N, data.T, data.O, data.S))
-		Vb = LpVariable.dicts("Vb",(data.N, data.T, data.O, data.S))
-		Vc = LpVariable.dicts("Vc",(data.N, data.T, data.O, data.S))
-		PS_a = LpVariable.dicts("PS_a",(data.N, data.T, data.O, data.S))
-		PS_b = LpVariable.dicts("PS_b",(data.N, data.T, data.O, data.S))
-		PS_c = LpVariable.dicts("PS_c",(data.N, data.T, data.O, data.S))
-		QS_a = LpVariable.dicts("QS_a",(data.N, data.T, data.O, data.S))
-		QS_b = LpVariable.dicts("QS_b",(data.N, data.T, data.O, data.S))
-		QS_c = LpVariable.dicts("QS_c",(data.N, data.T, data.O, data.S))
-		PS = LpVariable.dicts("PS",(data.N, data.T, data.O, data.S))
-		QS = LpVariable.dicts("QS",(data.N, data.T, data.O, data.S))
-		xd = LpVariable.dicts("xd",(data.N, data.T, data.O, data.S),0,1)
+		model_cs.PGa = Var(data.GD, data.T, data.S, within = NonNegativeReals)
+		model_cs.PGb = Var(data.GD, data.T, data.S, within = NonNegativeReals)
+		model_cs.PGc = Var(data.GD, data.T, data.S, within = NonNegativeReals)
+		model_cs.QGa = Var(data.GD, data.T, data.S, within = NonNegativeReals)
+		model_cs.QGb = Var(data.GD, data.T, data.S, within = NonNegativeReals)
+		model_cs.QGc = Var(data.GD, data.T, data.S, within = NonNegativeReals)
+		model_cs.PG =  Var(data.GD, data.T, data.S, within = NonNegativeReals)
+		model_cs.QG =  Var(data.GD, data.T, data.S, within = NonNegativeReals)
 
-		# Genset - with outage (grid islanded operation)
-		PGa = LpVariable.dicts("PGa",(data.GD, data.T, data.O, data.S))
-		PGb = LpVariable.dicts("PGb",(data.GD, data.T, data.O, data.S))
-		PGc = LpVariable.dicts("PGc",(data.GD, data.T, data.O, data.S))
-		PG = LpVariable.dicts("PG",(data.GD, data.T, data.O, data.S))
-		QGa = LpVariable.dicts("QGa",(data.GD, data.T, data.O, data.S))
-		QGb = LpVariable.dicts("QGb",(data.GD, data.T, data.O, data.S))
-		QGc = LpVariable.dicts("QGc",(data.GD, data.T, data.O, data.S))
-		QG = LpVariable.dicts("QG",(data.GD, data.T, data.O, data.S))
+		# Variables for contingences
+
+		model_cs.Pa_out = Var(data.L, data.T, data.O, data.S, within = Reals)
+		model_cs.Pb_out = Var(data.L, data.T, data.O, data.S, within = Reals)
+		model_cs.Pc_out = Var(data.L, data.T, data.O, data.S, within = Reals)
+		model_cs.Qa_out = Var(data.L, data.T, data.O, data.S, within = Reals)
+		model_cs.Qb_out = Var(data.L, data.T, data.O, data.S, within = Reals)
+		model_cs.Qc_out = Var(data.L, data.T, data.O, data.S, within = Reals)
+		model_cs.Va_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Vb_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Vc_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+
+		model_cs.Ppcc_a_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Ppcc_b_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Ppcc_c_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Qpcc_a_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Qpcc_b_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Qpcc_c_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Ppcc_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+		model_cs.Qpcc_out = Var(data.N, data.T, data.O, data.S, within = Reals)
+
+		model_cs.PGa_out = Var(data.GD, data.T, data.O, data.S, within = NonNegativeReals)
+		model_cs.PGb_out = Var(data.GD, data.T, data.O, data.S, within = NonNegativeReals)
+		model_cs.PGc_out = Var(data.GD, data.T, data.O, data.S, within = NonNegativeReals)
+		model_cs.QGa_out = Var(data.GD, data.T, data.O, data.S, within = NonNegativeReals)
+		model_cs.QGb_out = Var(data.GD, data.T, data.O, data.S, within = NonNegativeReals)
+		model_cs.QGc_out = Var(data.GD, data.T, data.O, data.S, within = NonNegativeReals)
+		model_cs.PG_out =  Var(data.GD, data.T, data.O, data.S, within = NonNegativeReals)
+		model_cs.QG_out =  Var(data.GD, data.T, data.O, data.S, within = NonNegativeReals)
+
+		model_cs.xd = Var(data.N, data.T, data.O, data.S, domain = Reals, bounds = (0, 1))	
 
 		# Objective function
-		lpSum([])
+		if len(data.O) >= 1 :
+			cost_operation_contingency_cs = (sum(data.Prob[s]*(0.01/len(data.O) * (sum(data.cEDS[t] * data.delta_t * (model_cs.Ppcc_a_out[i, t, o, s] + model_cs.Ppcc_b_out[i, t, o, s] + model_cs.Ppcc_c_out[i, t, o, s]) for (i, t, o, s) in self.List_NTOS) + 
+											sum([data.cost_PG[i] * data.delta_t * model_cs.PG_out[i,t,o, s] for (i,t,o,s) in self.List_GDTOS]) + 
+											sum([data.delta_t * data.alpha_c[i] * data.sd[s] * (data.PDa[(i,t)]+data.PDb[(i,t)]+data.PDc[(i,t)]) * (1-model_cs.xd[i,t,o,s]) for (i,t,o,s) in self.List_NTOS]))) + 
+											(0.99 * sum(data.cEDS[t] * data.delta_t * (model_cs.Ppcc_a[i, t,s] + model_cs.Ppcc_b[i, t,s] + model_cs.Ppcc_c[i, t,s]) for (i, t,s) in self.List_NTS) + 
+											sum(data.cost_PG[i] * data.delta_t * model_cs.PG[i, t,s] for (i, t,s) in self.List_GDTS)) for s in data.S))
+		else :
+			cost_operation_contingency_cs = (sum(data.Prob[s]*(0.01/1000000 * (sum(data.cEDS[t] * data.delta_t * (model_cs.Ppcc_a_out[i, t, o, s] + model_cs.Ppcc_b_out[i, t, o, s] + model_cs.Ppcc_c_out[i, t, o, s]) for (i, t, o, s) in self.List_NTOS) + 
+											sum([data.delta_t * data.alpha_c[i] * data.sd[s] * (data.PDa[(i,t)]+data.PDb[(i,t)]+data.PDc[(i,t)]) * (1-model_cs.xd[i,t,o,s]) for (i,t,o,s) in self.List_NTOS]))) +
+											(0.99 * sum(data.cEDS[t] * data.delta_t * (model_cs.Ppcc_a[i, t,s] + model_cs.Ppcc_b[i, t,s] + model_cs.Ppcc_c[i, t,s]) for (i, t,s) in self.List_NTS)) for s in data.S))
 
-		if len(data.O) >= 1:
-			prob_CS += \
-				lpSum([data.Prob[(s)] * (0.01/len(data.O) * (lpSum([data.cEDS[(t)] * data.delta_t * (PS_a[i][t][c][s]+PS_b[i][t][c][s]+PS_c[i][t][c][s]) for (i,t,c,s) in self.List_NTOS]) + \
-				lpSum([data.cost_PG[(i)] * data.delta_t * PG[i][t][c][s] for (i,t,c,s) in self.List_GDTOS]) + \
-				lpSum([data.delta_t * data.alpha_c[(i)] * data.sd[(s)] * (data.PDa[(i,t)]+data.PDb[(i,t)]+data.PDc[(i,t)]) * (1-xd[i][t][c][s]) for (i,t,c,s) in self.List_NTOS])) + \
-				0.99 * (lpSum([data.cEDS[(t)] * data.delta_t * (PS_a_con[i][t][s] + PS_b_con[i][t][s] + PS_c_con[i][t][s]) for (i,t,s) in self.List_NTS]) + \
-				lpSum([data.cost_PG[(i)] * data.delta_t * PG_con[i][t][s] for (i,t,s) in self.List_GDTS]))) for s in data.S]), "Objective_Function_CS"
-		else:
-			prob_CS += \
-				lpSum([data.Prob[(s)] * (0.01/1000000 * (lpSum([data.cEDS[(t)] * data.delta_t * (PS_a[i][t][c][s]+PS_b[i][t][c][s]+PS_c[i][t][c][s]) for (i,t,c,s) in self.List_NTOS]) + \
-				lpSum([data.cost_PG[(i)] * data.delta_t * PG[i][t][c][s] for (i,t,c,s) in self.List_GDTOS]) + \
-				lpSum([data.delta_t * data.alpha_c[(i)] * data.sd[(s)] * (data.PDa[(i,t)]+data.PDb[(i,t)]+data.PDc[(i,t)]) * (1-xd[i][t][c][s]) for (i,t,c,s) in self.List_NTOS])) + \
-				0.99 * (lpSum([data.cEDS[(t)] * data.delta_t * (PS_a_con[i][t][s] + PS_b_con[i][t][s] + PS_c_con[i][t][s]) for (i,t,s) in self.List_NTS]) + \
-				lpSum([data.cost_PG[(i)] * data.delta_t * PG_con[i][t][s] for (i,t,s) in self.List_GDTS]))) for s in data.S]), "Objective_Function_CS"
+		model_cs.objective_function_cs = Objective(expr=cost_operation_contingency_cs)
 
-		# Active Power Flow ---------------------------------------------------------------- 
-		for (i,t,s) in self.List_NTS:
-			prob_CS += lpSum([Pa_con[a,j][t][s] * data.df[(i,a,j)] for (a,j) in data.L]) + PS_a_con[i][t][s] + \
-			lpSum([PGa_con[a][t][s] for a in data.dict_nos_gd[i]]) - data.PDa[(i,t)] * data.sd[(s)] == 0, "Active_Power_Balance_Phase_a_con_CS_%s" %str((i,t,s))
-		
-		for (i,t,s) in self.List_NTS:
-			prob_CS += lpSum([Pb_con[a,j][t][s] * data.df[(i,a,j)] for (a,j) in data.L]) + PS_b_con[i][t][s] + \
-			lpSum([PGb_con[a][t][s] for a in data.dict_nos_gd[i]]) - data.PDb[(i,t)] * data.sd[(s)] == 0, "Active_Power_Balance_Phase_b_con_CS_%s" %str((i,t,s))
+		# Constraints without contingences---------------------------------------------------------------- 
 
-		for (i,t,s) in self.List_NTS:
-			prob_CS += lpSum([Pc_con[a,j][t][s] * data.df[(i,a,j)] for (a,j) in data.L]) + PS_c_con[i][t][s] + \
-			lpSum([PGc_con[a][t][s] for a in data.dict_nos_gd[i]]) - data.PDc[(i,t)] * data.sd[(s)] == 0, "Active_Power_Balance_Phase_c_con_CS_%s" %str((i,t,s))
+		#ACTIVE POWER BALANCE WITHOUT CONTINGENCES
+		def active_power_balance_rule_a(model_cs, i,t, s):
+			return (
+				sum(model_cs.Pa[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) +
+				model_cs.Ppcc_a[i, t, s] + sum(model_cs.PGa[a, t, s] for a in data.dict_nos_gd[i]) - data.PDa[(i,t)]*data.sd[s] == 0) 
+		model_cs.active_power_balance_a = Constraint(self.List_NTS, rule=active_power_balance_rule_a)
 
-		# Reactive Power Flow ----------------------------------------------------------------
-		for (i,t,s) in self.List_NTS:
-			prob_CS += lpSum([Qa_con[a,j][t][s] * data.df[(i,a,j)] for (a,j) in data.L]) + QS_a_con[i][t][s] + \
-			lpSum([QGa_con[a][t][s] for a in data.dict_nos_gd[i]]) - data.QDa[(i,t)] * data.sd[(s)] == 0, "Reactive_Power_Balance_Phase_a_con_CS_%s" %str((i,t,s))
+		def active_power_balance_rule_b(model_cs, i,t, s):
+			return (
+				sum(model_cs.Pb[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) +
+				model_cs.Ppcc_b[i, t, s] + sum(model_cs.PGb[a, t, s] for a in data.dict_nos_gd[i]) -
+				data.PDb[(i,t)]*data.sd[s] == 0)
+		model_cs.active_power_balance_b = Constraint(self.List_NTS, rule=active_power_balance_rule_b)
 
-		for (i,t,s) in self.List_NTS:
-			prob_CS += lpSum([Qb_con[a,j][t][s] * data.df[(i,a,j)] for (a,j) in data.L]) + QS_b_con[i][t][s] + \
-			lpSum([QGb_con[a][t][s] for a in data.dict_nos_gd[i]]) - data.QDb[(i,t)] * data.sd[(s)] == 0, "Reactive_Power_Balance_Phase_b_con_CS_%s" %str((i,t,s))
+		def active_power_balance_rule_c(model_cs, i,t, s):
+			return (
+				sum(model_cs.Pc[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) +
+				model_cs.Ppcc_c[i, t, s] + sum(model_cs.PGc[a, t, s] for a in data.dict_nos_gd[i]) -
+				data.PDc[(i,t)]*data.sd[s] == 0)
+		model_cs.active_power_balance_c = Constraint(self.List_NTS, rule=active_power_balance_rule_c)
 
-		for (i,t,s) in self.List_NTS:
-			prob_CS += lpSum([Qc_con[a,j][t][s] * data.df[(i,a,j)] for (a,j) in data.L]) + QS_c_con[i][t][s] + \
-			lpSum([QGc_con[a][t][s] for a in data.dict_nos_gd[i]]) - data.QDc[(i,t)] * data.sd[(s)] == 0, "Reactive_Power_Balance_Phase_c_con_CS_%s" %str((i,t,s))
+		#REACTIVE POWER BALANCE
+		def reactive_power_balance_rule_a(model_cs, i,t, s):
+			return (
+				sum(model_cs.Qa[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) +
+				model_cs.Qpcc_a[i, t, s] + sum(model_cs.QGa[a, t, s] for a in data.dict_nos_gd[i]) -
+				data.QDa[(i,t)]*data.sd[s] == 0)
+		model_cs.reactive_power_balance_a = Constraint(self.List_NTS, rule=reactive_power_balance_rule_a)
 
-		# Genset  ----------------------------------------------------------------
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += PGa_con[n][t][s] +  PGb_con[n][t][s] + PGc_con[n][t][s] - PG_con[n][t][s] == 0, "Total_active_power_GD_con_CS_%s" %str((n,t,s))
+		def reactive_power_balance_rule_b(model_cs, i,t, s):
+			return (
+				sum(model_cs.Qb[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) +
+				model_cs.Qpcc_b[i, t, s] + sum(model_cs.QGb[a, t, s] for a in data.dict_nos_gd[i])-
+				data.QDb[(i,t)]*data.sd[s] == 0)
+		model_cs.reactive_power_balance_b = Constraint(self.List_NTS, rule=reactive_power_balance_rule_b)
 
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += QGa_con[n][t][s] +  QGb_con[n][t][s] + QGc_con[n][t][s] - QG_con[n][t][s] == 0, "Total_reactive_power_GD_con_CS_%s" %str((n,t,s))
+		def reactive_power_balance_rule_c(model_cs, i,t, s):
+			return (
+				sum(model_cs.Qc[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) +
+				model_cs.Qpcc_c[i, t, s]+ sum(model_cs.QGc[a, t, s] for a in data.dict_nos_gd[i]) -
+				data.QDc[(i,t)]*data.sd[s] == 0)
+		model_cs.reactive_power_balance_c = Constraint(self.List_NTS, rule=reactive_power_balance_rule_c)
 
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += data.PG_min[(n)] <= PG_con[n][t][s], "Active_Power_Limit_GD_1_con_CS_%s" %str((n,t,s))
+		#Genset 
+		def genset_power_rule(model_cs, i,t, s):
+			return(model_cs.PGa[i, t, s] + model_cs.PGb[i, t, s] + model_cs.PGc[i, t, s] == model_cs.PG[i, t, s])
+		model_cs.genset_power_active = Constraint(self.List_GDTS, rule=genset_power_rule)
 
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += PG_con[n][t][s] <= data.PG_max[(n)], "Active_Power_Limit_GD_2_con_CS_%s" %str((n,t,s))
+		def genset_power_reactive_rule(model_cs, i,t, s):
+			return(model_cs.QGa[i, t, s] + model_cs.QGb[i, t, s] + model_cs.QGc[i, t, s] == model_cs.QG[i, t, s])
+		model_cs.genset_power_reactive = Constraint(self.List_GDTS, rule=genset_power_reactive_rule)
 
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += data.QG_min[(n)] <= QG_con[n][t][s], "Reactive_Power_Limit_GD_1_con_CS_%s" %str((n,t,s))
+		def genset_power_active_limits_rule_1(model_cs, i,t, s):
+			return(model_cs.PG[i, t, s] >= data.PG_min[i])
+		model_cs.genset_power_active_limits_1 = Constraint(self.List_GDTS, rule = genset_power_active_limits_rule_1)
 
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += QG_con[n][t][s] <= data.QG_max[(n)], "Reactive_Power_Limit_GD_2_con_CS_%s" %str((n,t,s))
+		def genset_power_active_limits_rule_2(model_cs, i,t, s):
+			return(model_cs.PG[i, t, s] <= data.PG_max[i])
+		model_cs.genset_power_active_limits_2 = Constraint(self.List_GDTS, rule = genset_power_active_limits_rule_2)
 
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += PGa_con[n][t][s] == 0, "Grid_connected_active_phase_a_con_CS_%s" %str((n,t,s))
-		
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += PGb_con[n][t][s] == 0, "Grid_connected_active_phase_b_con_CS_%s" %str((n,t,s))
+		def genset_power_reactive_limits_rule_1(model_cs, i,t, s):
+			return(model_cs.QG[i, t, s] >= data.QG_min[i])
+		model_cs.genset_power_reactive_limits_1 = Constraint(self.List_GDTS, rule = genset_power_reactive_limits_rule_1)
 
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += PGc_con[n][t][s] == 0, "Grid_connected_active_phase_c_con_CS_%s" %str((n,t,s))
-		
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += QGa_con[n][t][s] == 0, "Grid_connected_reactive_phase_a_con_CS_%s" %str((n,t,s))
-		
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += QGb_con[n][t][s] == 0, "Grid_connected_reactive_phase_b_con_CS_%s" %str((n,t,s))
+		def genset_power_reactive_limits_rule_2(model_cs, i,t, s):
+			return(model_cs.QG[i, t, s] <= data.QG_max[i])
+		model_cs.genset_power_reactive_limits_2 = Constraint(self.List_GDTS, rule = genset_power_reactive_limits_rule_2)
 
-		for (n,t,s) in self.List_GDTS:
-			prob_CS += QGc_con[n][t][s] == 0, "Grid_connected_reactive_phase_c_con_CS_%s" %str((n,t,s))
+		def genset_operation_1_rule(model_cs, i,t, s):
+			return(model_cs.PGa[i, t, s] == 0)
+		model_cs.genset_operation_1 = Constraint(self.List_GDTS, rule = genset_operation_1_rule)
 
-		# Island Operation
-		for (i,t,c,s) in self.List_NTOS:
-			if int(t) >= int(c) and int(t) < int(c) + 2:
-				prob_CS += PS_a[i][t][c][s] == 0, "Island_operation_active_phase_a_CS_%s" %str((i,t,c,s))
-				prob_CS += PS_b[i][t][c][s] == 0, "Island_operation_active_phase_b_CS_%s" %str((i,t,c,s))
-				prob_CS += PS_c[i][t][c][s] == 0, "Island_operation_active_phase_c_CS_%s" %str((i,t,c,s))
+		def genset_operation_2_rule(model_cs, i,t, s):
+			return(model_cs.PGb[i, t, s] == 0)
+		model_cs.genset_operation_2 = Constraint(self.List_GDTS, rule = genset_operation_2_rule)
 
-		for (i,t,c,s) in self.List_NTOS:
-			if int(t) >= int(c) and int(t) < int(c) + 2:
-				prob_CS += QS_a[i][t][c][s] == 0, "Island_operation_reactive_phase_a_CS_%s" %str((i,t,c,s))
-				prob_CS += QS_b[i][t][c][s] == 0, "Island_operation_reactive_phase_b_CS_%s" %str((i,t,c,s))
-				prob_CS += QS_c[i][t][c][s] == 0, "Island_operation_reactive_phase_c_CS_%s" %str((i,t,c,s))
+		def genset_operation_3_rule(model_cs, i,t, s):
+			return(model_cs.PGc[i, t, s] == 0)
+		model_cs.genset_operation_3 = Constraint(self.List_GDTS, rule = genset_operation_3_rule)
+
+		def genset_operation_4_rule(model_cs, i,t, s):
+			return(model_cs.QGa[i, t, s] == 0)
+		model_cs.genset_operation_4 = Constraint(self.List_GDTS, rule = genset_operation_4_rule)
+
+		def genset_operation_5_rule(model_cs, i,t, s):
+			return(model_cs.QGb[i, t, s] == 0)
+		model_cs.genset_operation_5 = Constraint(self.List_GDTS, rule = genset_operation_5_rule)
+
+		def genset_operation_6_rule(model_cs, i,t, s):
+			return(model_cs.QGc[i, t, s] == 0)
+		model_cs.genset_operation_6 = Constraint(self.List_GDTS, rule = genset_operation_6_rule)
+
+		#FIX VARIABLES
+
+		def fix_voltage_a_rule(model_cs,i,t,s):
+			return(model_cs.Va[i,t,s] == data.Vnom)
+		model_cs.fix_voltage_a = Constraint(self.List_NTS, rule = fix_voltage_a_rule)
+
+		def fix_voltage_b_rule(model_cs,i,t,s):
+			return(model_cs.Vb[i,t,s] == data.Vnom)
+		model_cs.fix_voltage_b = Constraint(self.List_NTS, rule = fix_voltage_b_rule)
+
+		def fix_voltage_c_rule(model_cs,i,t,s):
+			return(model_cs.Vc[i,t,s] == data.Vnom)
+		model_cs.fix_voltage_c = Constraint(self.List_NTS, rule = fix_voltage_c_rule)
+
+		model_cs.fix_active_power = ConstraintList()
+		for i in data.Tb:
+			for t in data.T:
+				for s in data.S:
+					if data.Tb[i] != 1:
+						model_cs.fix_active_power.add(expr = model_cs.Ppcc_a[i,t,s] == 0)
+						model_cs.fix_active_power.add(expr = model_cs.Ppcc_b[i,t,s] == 0)
+						model_cs.fix_active_power.add(expr = model_cs.Ppcc_c[i,t,s] == 0)
+
+		model_cs.fix_reactive_power = ConstraintList()
+		for i in data.Tb:
+			for t in data.T:
+				for s in data.S:
+					if data.Tb[i] != 1:
+						model_cs.fix_reactive_power.add(expr=model_cs.Qpcc_a[i, t, s] == 0)
+						model_cs.fix_reactive_power.add(expr=model_cs.Qpcc_b[i, t, s] == 0)
+						model_cs.fix_reactive_power.add(expr=model_cs.Qpcc_c[i, t, s] == 0)
 
 		# ------------------------------------------------------------------------------
 		#------------- Operation with outage - COLD START ------------------------------
 		# ------------------------------------------------------------------------------
 		#
-		# Active Power Flow ----------------------------------------------------------------
-		for (i,t,c,s) in self.List_NTOS:
-			prob_CS += lpSum([Pa[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) + PS_a[i][t][c][s] + \
-			lpSum([PGa[a][t][c][s] for a in data.dict_nos_gd[i]])  - data.PDa[(i,t)] * data.sd[(s)] * xd[i][t][c][s] == 0, "Active_Power_Balance_Phase_a_CS_%s" %str((i,t,c,s))
-		
-		for (i,t,c,s) in self.List_NTOS:
-			prob_CS += lpSum([Pb[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) + PS_b[i][t][c][s] + \
-			lpSum([PGb[a][t][c][s] for a in data.dict_nos_gd[i]]) - data.PDb[(i,t)] * data.sd[(s)] * xd[i][t][c][s] == 0, "Active_Power_Balance_Phase_b_CS_%s" %str((i,t,c,s))
+		#ACTIVE POWER BALANCE
 
-		for (i,t,c,s) in self.List_NTOS:
-			prob_CS += lpSum([Pc[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) + PS_c[i][t][c][s] + \
-			lpSum([PGc[a][t][c][s] for a in data.dict_nos_gd[i]]) - data.PDc[(i,t)] * data.sd[(s)] * xd[i][t][c][s] == 0, "Active_Power_Balance_Phase_c_CS_%s" %str((i,t,c,s))
+		def active_power_balance_rule_a_out(model_cs, i, t, o, s):
+			return (
+				sum(model_cs.Pa_out[a, j, t, o, s] * data.df[(i, a, j)] for (a, j) in data.L) +
+				sum(model_cs.PGa_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
+				model_cs.Ppcc_a_out[i, t, o, s] - data.PDa[(i, t)] * model_cs.xd[i, t, o, s] * data.sd[s] == 0
+			)
 
-		# Reactive Power Flow ----------------------------------------------------------------
-		for (i,t,c,s) in self.List_NTOS:
-			prob_CS += lpSum([Qa[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) + QS_a[i][t][c][s] + \
-			lpSum([QGa[a][t][c][s] for a in data.dict_nos_gd[i]]) - data.QDa[(i,t)] * data.sd[(s)] * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_a_CS_%s" %str((i,t,c,s))
+		model_cs.active_power_balance_a_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_a_out)
 
-		for (i,t,c,s) in self.List_NTOS:
-			prob_CS += lpSum([Qb[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) + QS_b[i][t][c][s] + \
-			lpSum([QGb[a][t][c][s] for a in data.dict_nos_gd[i]]) - data.QDb[(i,t)] * data.sd[(s)] * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_b_CS_%s" %str((i,t,c,s))
+		def active_power_balance_rule_b_out(model_cs, i, t, o, s):
+			return (
+				sum(model_cs.Pb_out[a, j, t, o, s] * data.df[(i, a, j)] for (a, j) in data.L) +
+				sum(model_cs.PGb_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
+				model_cs.Ppcc_b_out[i, t, o, s] -
+				data.PDb[(i, t)] * model_cs.xd[i, t, o, s] * data.sd[s] == 0
+			)
 
-		for (i,t,c,s) in self.List_NTOS:
-			prob_CS += lpSum([Qc[a,j][t][c][s] * data.df[(i,a,j)] for (a,j) in data.L]) + QS_c[i][t][c][s] + \
-			lpSum([QGc[a][t][c][s] for a in data.dict_nos_gd[i]]) - data.QDc[(i,t)] * data.sd[(s)] * xd[i][t][c][s] == 0, "Reactive_Power_Balance_Phase_c_CS_%s" %str((i,t,c,s))
-		
-		# Genset --------------------------------------------------------------------
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += PGa[n][t][c][s] +  PGb[n][t][c][s] + PGc[n][t][c][s] - PG[n][t][c][s] == 0, "Total_active_power_GD_CS_%s" %str((n,t,c,s))
+		model_cs.active_power_balance_b_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_b_out)
 
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += QGa[n][t][c][s] +  QGb[n][t][c][s] + QGc[n][t][c][s] - QG[n][t][c][s] == 0, "Total_reactive_power_GD_CS_%s" %str((n,t,c,s))
+		def active_power_balance_rule_c_out(model_cs, i, t, o, s):
+			return (
+				sum(model_cs.Pc_out[a, j, t, o, s] * data.df[(i, a, j)] for (a, j) in data.L) +
+				sum(model_cs.PGc_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
+				model_cs.Ppcc_c_out[i, t, o, s] -
+				data.PDc[(i, t)] * model_cs.xd[i, t, o, s] * data.sd[s] == 0
+			)
 
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += data.PG_min[(n)] <= PG[n][t][c][s], "Active_Power_Limit_GD_1_CS_%s" %str((n,t,c,s))
+		model_cs.active_power_balance_c_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_c_out)
 
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += PG[n][t][c][s] <= data.PG_max[(n)], "Active_Power_Limit_GD_2_CS_%s" %str((n,t,c,s))
+		#REACTIVE POWER BALANCE
 
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += data.QG_min[(n)] <= QG[n][t][c][s], "Reactive_Power_Limit_GD_1_CS_%s" %str((n,t,c,s))
+		def reactive_power_balance_rule_a_out(model_cs, i, t, o, s):
+			return (
+				sum(model_cs.Qa_out[a, j, t, o, s] * data.df[(i, a, j)] for (a, j) in data.L) +
+				sum(model_cs.QGa_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
+				model_cs.Qpcc_a_out[i, t, o, s] -
+				data.QDa[(i, t)] * model_cs.xd[i, t, o, s] * data.sd[s] == 0
+			)
 
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += QG[n][t][c][s] <= data.QG_max[(n)], "Reactive_Power_Limit_GD_2_CS_%s" %str((n,t,c,s))
+		model_cs.reactive_power_balance_a_out = Constraint(self.List_NTOS, rule=reactive_power_balance_rule_a_out)
 
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += PGa[n][t][c][s] == 0, "Grid_connected_active_phase_a_CS_%s" %str((n,t,c,s))
-		
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += PGb[n][t][c][s] == 0, "Grid_connected_active_phase_b_CS_%s" %str((n,t,c,s))
+		def reactive_power_balance_rule_b_out(model_cs, i, t, o, s):
+			return (
+				sum(model_cs.Qb_out[a, j, t, o, s] * data.df[(i, a, j)] for (a, j) in data.L) +
+				sum(model_cs.QGb_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
+				model_cs.Qpcc_b_out[i, t, o, s] -
+				data.QDb[(i, t)] * model_cs.xd[i, t, o, s] * data.sd[s] == 0
+			)
 
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += PGc[n][t][c][s] == 0, "Grid_connected_active_phase_c_CS_%s" %str((n,t,c,s))
-		
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += QGa[n][t][c][s] == 0, "Grid_connected_reactive_phase_a_CS_%s" %str((n,t,c,s))
-		
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += QGb[n][t][c][s] == 0, "Grid_connected_reactive_phase_b_CS_%s" %str((n,t,c,s))
+		model_cs.reactive_power_balance_b_out = Constraint(self.List_NTOS, rule=reactive_power_balance_rule_b_out)
 
-		for (n,t,c,s) in self.List_GDTOS:
-			prob_CS += QGc[n][t][c][s] == 0, "Grid_connected_reactive_phase_c_CS_%s" %str((n,t,c,s))
+		def reactive_power_balance_rule_c_out(model_cs, i, t, o, s):
+			return (
+				sum(model_cs.Qc_out[a, j, t, o, s] * data.df[(i, a, j)] for (a, j) in data.L) +
+				sum(model_cs.QGc_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
+				model_cs.Qpcc_c_out[i, t, o, s] -
+				data.QDc[(i, t)] * model_cs.xd[i, t, o, s] * data.sd[s] == 0
+			)
 
-		#----------------- FIX Variables --------------------------------------------------
-		for (n,t,s) in self.List_NTS:
-			if data.Tb[(n)] != 1:
-				prob_CS += PS_a_con[n][t][s] == 0, "Fix_Active_Power_Bus_Load_con_a_CS_%s" %str((n,t,s))
-				prob_CS += PS_b_con[n][t][s] == 0, "Fix_Active_Power_Bus_Load_con_b_CS_%s" %str((n,t,s))
-				prob_CS += PS_c_con[n][t][s] == 0, "Fix_Active_Power_Bus_Load_con_c_CS_%s" %str((n,t,s))
-				prob_CS += QS_a_con[n][t][s] == 0, "Fix_REactive_Power_Bus_Load_con_a_CS_%s" %str((n,t,s))
-				prob_CS += QS_b_con[n][t][s] == 0, "Fix_REactive_Power_Bus_Load_con_b_CS_%s" %str((n,t,s))
-				prob_CS += QS_c_con[n][t][s] == 0, "Fix_REactive_Power_Bus_Load_con_c_CS_%s" %str((n,t,s))
+		model_cs.reactive_power_balance_c_out = Constraint(self.List_NTOS, rule=reactive_power_balance_rule_c_out)
 
-		for (n,t,c,s) in self.List_NTOS:
-			if data.Tb[(n)] != 1:
-				prob_CS += PS_a[n][t][c][s] == 0, "Fix_Active_Power_Bus_Load_a_CS_%s" %str((n,t,c,s))
-				prob_CS += PS_b[n][t][c][s] == 0, "Fix_Active_Power_Bus_Load_b_CS_%s" %str((n,t,c,s))
-				prob_CS += PS_c[n][t][c][s] == 0, "Fix_Active_Power_Bus_Load_c_CS_%s" %str((n,t,c,s))
-				prob_CS += QS_a[n][t][c][s] == 0, "Fix_Reactive_Power_Bus_Load_a_CS_%s" %str((n,t,c,s))
-				prob_CS += QS_b[n][t][c][s] == 0, "Fix_Reactive_Power_Bus_Load_b_CS_%s" %str((n,t,c,s))
-				prob_CS += QS_c[n][t][c][s] == 0, "Fix_Reactive_Power_Bus_Load_c_CS_%s" %str((n,t,c,s))
+		#Genset Operation
 
-		for (n,t,s) in self.List_NTS:
-			prob_CS += Va_con[n][t][s] == data.Vnom, "Fix_Voltage_con_a_CS_%s" %str((n,t,s))
-			prob_CS += Vb_con[n][t][s] == data.Vnom, "Fix_Voltage_con_b_CS_%s" %str((n,t,s))
-			prob_CS += Vc_con[n][t][s] == data.Vnom, "Fix_Voltage_con_c_CS_%s" %str((n,t,s))	
+		def genset_power_rule_out(model_cs, i, t, o, s):
+			return (model_cs.PGa_out[i, t, o, s] + model_cs.PGb_out[i, t, o, s] + model_cs.PGc_out[i, t, o, s] == model_cs.PG_out[i, t, o, s])
 
-		for (n,t,c,s) in self.List_NTOS:
-			prob_CS += Va[n][t][c][s] == data.Vnom, "Fix_Voltage_a_CS_%s" %str((n,t,c,s))
-			prob_CS += Vb[n][t][c][s] == data.Vnom, "Fix_Voltage_b_CS_%s" %str((n,t,c,s))
-			prob_CS += Vc[n][t][c][s] == data.Vnom, "Fix_Voltage_c_CS_%s" %str((n,t,c,s))
+		model_cs.genset_power_active_out = Constraint(self.List_GDTOS, rule=genset_power_rule_out)
 
-		return prob_CS
+		def genset_power_reactive_rule_out(model_cs, i, t, o, s):
+			return (model_cs.QGa_out[i, t, o, s] + model_cs.QGb_out[i, t, o, s] + model_cs.QGc_out[i, t, o, s] == model_cs.QG_out[i, t, o, s])
 
-	def WritingProblemFileCS(self, prob_CS, filename):
-		# The problem data is written to an .lp file
-		prob_CS.writeLP(filename + ".lp")
+		model_cs.genset_power_reactive_out = Constraint(self.List_GDTOS, rule=genset_power_reactive_rule_out)
 
-	def Solving_Model_CS(self,prob_CS):
+		def genset_power_active_limits_rule_out_1(model_cs, i, t, o, s):
+			return (model_cs.PG_out[i, t, o, s] >= data.PG_min[i])
+
+		model_cs.genset_power_active_limits_1_out = Constraint(self.List_GDTOS, rule=genset_power_active_limits_rule_out_1)
+
+		def genset_power_active_limits_rule_out_2(model_cs, i, t, o, s):
+			return (model_cs.PG_out[i, t, o, s] <= data.PG_max[i])
+
+		model_cs.genset_power_active_limits_2_out = Constraint(self.List_GDTOS, rule=genset_power_active_limits_rule_out_2)
+
+		def genset_power_reactive_limits_rule_out_1(model_cs, i, t, o, s):
+			return (model_cs.QG_out[i, t, o, s] >= data.QG_min[i])
+
+		model_cs.genset_power_reactive_limits_1_out = Constraint(self.List_GDTOS, rule=genset_power_reactive_limits_rule_out_1)
+
+		def genset_power_reactive_limits_rule_out_2(model_cs, i, t, o, s):
+			return (model_cs.QG_out[i, t, o, s] <= data.QG_max[i])
+
+		model_cs.genset_power_reactive_limits_2_out = Constraint(self.List_GDTOS, rule=genset_power_reactive_limits_rule_out_2)
+
+		# FIX Variables: Islanded operation
+
+		model_cs.islanded_operation = ConstraintList()
+		for i in data.N:
+			for t in data.T:
+				for o in data.O:
+					for s in data.S:
+						if int(t) >= int(o) and int(t) < int(o) + 2:
+							model_cs.islanded_operation.add(expr=model_cs.Ppcc_a_out[i, t, o, s] == 0)
+							model_cs.islanded_operation.add(expr=model_cs.Ppcc_b_out[i, t, o, s] == 0)
+							model_cs.islanded_operation.add(expr=model_cs.Ppcc_c_out[i, t, o, s] == 0)
+							model_cs.islanded_operation.add(expr=model_cs.Qpcc_a_out[i, t, o, s] == 0)
+							model_cs.islanded_operation.add(expr=model_cs.Qpcc_b_out[i, t, o, s] == 0)
+							model_cs.islanded_operation.add(expr=model_cs.Qpcc_c_out[i, t, o, s] == 0)
+
+		def fix_voltage_a_rule_out(model_cs, i, t, o, s):
+			return (model_cs.Va_out[i, t, o, s] == data.Vnom)
+
+		model_cs.fix_voltage_a_out = Constraint(self.List_NTOS, rule=fix_voltage_a_rule_out)
+
+		def fix_voltage_b_rule_out(model_cs, i, t, o, s):
+			return (model_cs.Vb_out[i, t, o, s] == data.Vnom)
+
+		model_cs.fix_voltage_b_out = Constraint(self.List_NTOS, rule=fix_voltage_b_rule_out)
+
+		def fix_voltage_c_rule_out(model_cs, i, t, o, s):
+			return (model_cs.Vc_out[i, t, o, s] == data.Vnom)
+
+		model_cs.fix_voltage_c_out = Constraint(self.List_NTOS, rule=fix_voltage_c_rule_out)
+
+		model_cs.fix_active_power_out = ConstraintList()
+		for i in data.Tb:
+			for t in data.T:
+				for o in data.O:
+					for s in data.S:
+						if data.Tb[i] != 1:
+							model_cs.fix_active_power_out.add(expr=model_cs.Ppcc_a_out[i, t, o, s] == 0)
+							model_cs.fix_active_power_out.add(expr=model_cs.Ppcc_b_out[i, t, o, s] == 0)
+							model_cs.fix_active_power_out.add(expr=model_cs.Ppcc_c_out[i, t, o, s] == 0)
+
+		model_cs.fix_reactive_power_out = ConstraintList()
+		for i in data.Tb:
+			for t in data.T:
+				for o in data.O:
+					for s in data.S:
+						if data.Tb[i] != 1:
+							model_cs.fix_reactive_power_out.add(expr=model_cs.Qpcc_a_out[i, t, o, s] == 0)
+							model_cs.fix_reactive_power_out.add(expr=model_cs.Qpcc_b_out[i, t, o, s] == 0)
+							model_cs.fix_reactive_power_out.add(expr=model_cs.Qpcc_c_out[i, t, o, s] == 0)
+		return model_cs
+
+	def Solving_Model_CS(self, model_cs):
 		data = self.data
 		try:
-			cwd = os.getcwd()
-			prob_CS.solve(solver=MOSEK(task_file_name = 'dump.task.gz'))
+			solver = SolverFactory('cbc', executable = 'C:/Users/deria/Code/e75_software_gestao_microrredes/python/cbc.exe')
+			results = solver.solve(model_cs)
+			# Puedes agregar aquí código para manejar los resultados, si lo deseas
 		except Exception as e:
-			prob_CS.solve()
+			print("Error al resolver el modelo:", e)
 
-		self.Status = LpStatus[prob_CS.status]
-		self.ObjectiveFunctionValue = value(prob_CS.objective)
-
-		Variablenames = prob_CS.variables() # This is a self.List
+		Variablenames = model_cs.variables() # This is a self.List
 		# Getting a self.Lists with the name and value of all problem variables
 		varDic = {}
-		for v in prob_CS.variables():
+		for v in model_cs.variables():
 			varDic[v.name] = v.varValue
 		self.varDic = varDic
 
@@ -397,7 +505,6 @@ class MathematicalModel:
 		self.Va = self.CreateDictionaryForEachVariable_NTOS(varDic, 'Va')
 		self.Vb = self.CreateDictionaryForEachVariable_NTOS(varDic, 'Vb')
 		self.Vc = self.CreateDictionaryForEachVariable_NTOS(varDic, 'Vc')
-		
 
 	def ProblemFormulation(self):
 		data = self.data
