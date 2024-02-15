@@ -23,7 +23,7 @@ def microgrid_dayahead_optimizer():
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
     data_milp = json.loads(data_milp.text)
     
-    
+    '''
     URL2='https://bcd89f1a2c30.ngrok.io/'
     
     #URL2='http://hil.sa.ngrok.io/'
@@ -37,8 +37,8 @@ def microgrid_dayahead_optimizer():
         for x in measurements[index2]['node']:
             if x['der'] == 'bess':
                 initial_SOC = x['SOC']
-    
-    # initial_SOC = 20
+    '''  
+    initial_SOC = 20
 
 
     if not data_nodes:
