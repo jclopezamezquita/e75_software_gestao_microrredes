@@ -107,7 +107,7 @@ class MathematicalModel:
 		'''
 		#return (self.List_NTS, self.List_NTOS, self.List_LTS, self.List_LTOS, self.List_SETS, self.List_SETOS, self.List_sPDTS, self.List_sQDTS, self.List_sPDTOS, self.List_sQDTOS, self.List_GDTS, self.List_GDTOS, self.List_sPVT, self.List_sPVTO, self.List_BT, self.List_LTSY, self.List_LTOSY, self.List_SETSY, self.List_SETOSY, self.List_GDTSY, self.List_GDTOSY)
 
-	def ProblemFormultion_ColdStart(self):
+	def ProblemFormulation_ColdStart(self):
 		data = self.data
 
 		# Type of problem
@@ -474,25 +474,25 @@ class MathematicalModel:
 			print("Error al resolver el modelo:", e)
 
 		# Saving variables of the problem
-		Pa_0 = model_cs.Pa.get_values()
-		Pb_0 = model_cs.Pb.get_values()
-		Pc_0 = model_cs.Pc.get_values()
-		Qa_0 = model_cs.Qa.get_values()
-		Qb_0 = model_cs.Qb.get_values()
-		Qc_0 = model_cs.Qc.get_values()
-		Va_0 = model_cs.Va.get_values()
-		Vb_0 = model_cs.Vb.get_values()
-		Vc_0 = model_cs.Vc.get_values()
+		self.Pa = model_cs.Pa.get_values()
+		self.Pb = model_cs.Pb.get_values()
+		self.Pc = model_cs.Pc.get_values()
+		self.Qa = model_cs.Qa.get_values()
+		self.Qb = model_cs.Qb.get_values()
+		self.Qc = model_cs.Qc.get_values()
+		self.Va = model_cs.Va.get_values()
+		self.Vb = model_cs.Vb.get_values()
+		self.Vc = model_cs.Vc.get_values()
 
-		Pa_0_out = model_cs.Pa_out.get_values()
-		Pb_0_out = model_cs.Pb_out.get_values()
-		Pc_0_out = model_cs.Pc_out.get_values()
-		Qa_0_out = model_cs.Qa_out.get_values()
-		Qb_0_out = model_cs.Qb_out.get_values()
-		Qc_0_out = model_cs.Qc_out.get_values()
-		Va_0_out = model_cs.Va_out.get_values()
-		Vb_0_out = model_cs.Vb_out.get_values()
-		Vc_0_out = model_cs.Vc_out.get_values()
+		self.Pa_out = model_cs.Pa_out.get_values()
+		self.Pb_out = model_cs.Pb_out.get_values()
+		self.Pc_out = model_cs.Pc_out.get_values()
+		self.Qa_out = model_cs.Qa_out.get_values()
+		self.Qb_out = model_cs.Qb_out.get_values()
+		self.Qc_out = model_cs.Qc_out.get_values()
+		self.Va_out = model_cs.Va_out.get_values()
+		self.Vb_out = model_cs.Vb_out.get_values()
+		self.Vc_out = model_cs.Vc_out.get_values()
 		
 	def ProblemFormulation(self):
 		data = self.data

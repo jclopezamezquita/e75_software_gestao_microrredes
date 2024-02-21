@@ -405,7 +405,7 @@ class InputData:
 		return(self.PDa, self.PDb, self.PDc, self.QDa, self.QDb, self.QDc, self.PVa, self.PVb, self.PVc, self.Raa_p, self.Rbb_p, self.Rcc_p, self.Rab_p, self.Rac_p, self.Rbc_p, self.df, self.PS_Dsmax, self.QS_Dsmax, self.PS_ms, self.QS_ms, self.S_Dsmax, self.S_ms)
 
 	def SavingApproximations(self,results):
-		
+		''''
 		self.List_LTS = []
 		for (i,j) in self.L:
 			for t in self.T:
@@ -431,6 +431,9 @@ class InputData:
 				for c in self.O:
 					for s in self.S:
 						self.List_NTOS += [[i, t, c, s]]
+
+		self.Pa_0 = results.Pa.get_values()
+		print("Pa_0 data:",self.Pa_0)
 
 		self.Pa_0_con = {}
 		self.Pb_0_con = {}
@@ -501,7 +504,29 @@ class InputData:
 			self.Va_0[(i,t,c,s)] = results.Va[i][t][c][s]
 			self.Vb_0[(i,t,c,s)] = results.Vb[i][t][c][s]
 			self.Vc_0[(i,t,c,s)] = results.Vc[i][t][c][s]
+		'''
 
+		self.Pa_0 = results.Pa
+		self.Pb_0 = results.Pb
+		self.Pc_0 = results.Pc
+		self.Qa_0 = results.Qa
+		self.Qb_0 = results.Qb
+		self.Qc_0 = results.Qc
+		self.Va_0 = results.Va
+		self.Vb_0 = results.Vb
+		self.Vc_0 = results.Vc
+
+		self.Pa_0_out = results.Pa_out
+		self.Pb_0_out = results.Pb_out
+		self.Pc_0_out = results.Pc_out
+		self.Qa_0_out = results.Qa_out
+		self.Qb_0_out = results.Qb_out
+		self.Qc_0_out = results.Qc_out
+		self.Va_0_out = results.Va_out
+		self.Vb_0_out = results.Vb_out
+		self.Vc_0_out = results.Vc_out
+
+	
 		return True
 		
 		

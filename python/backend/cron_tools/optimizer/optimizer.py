@@ -30,10 +30,7 @@ def optimizer_milp_function(input_data):
         model.ConstructionOfLists()
 
         # Formulating the problem
-        model_cs = model.ProblemFormultion_ColdStart()
-
-        # Writing the problem in a file .lp
-        # model.WritingProblemFileCS(prob_CS,"Cold_Start")
+        model_cs = model.ProblemFormulation_ColdStart()
 
         print("\n************* END: Formulating mathematical model - Cold Start  *************\n", flush=True)
 
@@ -70,11 +67,7 @@ def optimizer_milp_function(input_data):
 
         # Formulating the problem
         prob = model_PL.ProblemFormulation()
-
-
-        # Writing the problem in a file .lp
-        # model_PL.WritingProblemFile(prob,"EMS_three_phase_for_Microgrids")
-
+        
         print("\n************* END: Formulating mathematical model - PL  *************\n", flush=True)
 
         ######################################################################
