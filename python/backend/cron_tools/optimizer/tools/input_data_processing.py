@@ -21,9 +21,9 @@ class InputData:
 		self.sd = {}
 		for index in range(len(data["coefficient_demand_scen"])):
 			self.sd[self.S[index]] = data["coefficient_demand_scen"][index]
-		self.srs = {}
+		self.spv = {}
 		for index in range(len(data["coefficient_pv_scen"])):
-			self.srs[self.S[index]] = data["coefficient_pv_scen"][index]		
+			self.spv[self.S[index]] = data["coefficient_pv_scen"][index]		
 		self.Tb = {}
 		for index in range(len(data["type_of_bus"])):
 			self.Tb[self.N[index]] = data["type_of_bus"][index]
@@ -154,13 +154,13 @@ class InputData:
 		self.EBi = {}
 		self.EBmin = {}
 		self.EBmax = {}
-		self.eta = {}
+		self.eta_b = {}
 		for index in range(len(data["set_of_energy_storage_systems"])):
 			self.PBmax[self.B[index]] = data["maximum_power_ess"][index]
 			self.EBi[self.B[index]] = data["initial_energy_of_the_ess"][index]
 			self.EBmin[self.B[index]] = data["minimum_energy_capacity_ess"][index]
 			self.EBmax[self.B[index]] = data["maximum_energy_capacity_ess"][index]
-			self.eta[self.B[index]] = data["ess_efficiency"][index]
+			self.eta_b[self.B[index]] = data["ess_efficiency"][index]
 		self.Y = data["number_discrete_blocks_piecewise_linearization"]
 
 		self.Vmax = self.Vnom * 1.05 # kV
@@ -370,6 +370,7 @@ class InputData:
 					self.p[(i,a,j)] = 0
 
 		# Define linearization block
+		'''
 		self.PS_Dsmax = {}
 		self.QS_Dsmax = {}
 		for i in self.N:
@@ -389,20 +390,37 @@ class InputData:
 			for y in self.Y:
 				self.PS_ms[(i,y)] = ((2 * (int(y))) - 1) * self.PS_Dsmax[(i)]
 				self.QS_ms[(i,y)] = ((2 * (int(y))) - 1) * self.QS_Dsmax[(i)]
+		'''
 
-		self.S_Dsmax = {}
+		self.Spcc_Dp_max = {}
+		for i in self.N:
+			self.Spcc_Dp_max[(i)] = ' '
+
+		self.Spcc_ms = {}
+		for i in self.N:
+			for y in self.Y:
+				self.Spcc_ms[(i,y)] = ' '
+	
+		for i in self.N:
+			self.Spcc_Dp_max[(i)] = self.Smax[i]/len(self.Y)
+			for y in self.Y:
+				self.Spcc_ms[(i,y)] = ((2 * (int(y))) - 1) * self.Spcc_Dp_max[(i)]
+		
+
+
+		self.S_Dp_max = {}
 		self.S_ms = {}
 		for (i,j) in self.L:
-			self.S_Dsmax[(i,j)] = ' '
+			self.S_Dp_max[(i,j)] = ' '
 			for y in self.Y:
 				self.S_ms[(i,j,y)] = ' '
 		
 		for (i,j) in self.L:
-			self.S_Dsmax[(i,j)] = (self.Vnom * self.Imax[i,j]) / len(self.Y)
+			self.S_Dp_max[(i,j)] = (self.Vnom * self.Imax[i,j]) / len(self.Y)
 			for y in self.Y:
-				self.S_ms[(i,j,y)] = ((2 * (int(y))) - 1) * self.S_Dsmax[(i,j)]
+				self.S_ms[(i,j,y)] = ((2 * (int(y))) - 1) * self.S_Dp_max[(i,j)]
 
-		return(self.PDa, self.PDb, self.PDc, self.QDa, self.QDb, self.QDc, self.PVa, self.PVb, self.PVc, self.Raa_p, self.Rbb_p, self.Rcc_p, self.Rab_p, self.Rac_p, self.Rbc_p, self.df, self.PS_Dsmax, self.QS_Dsmax, self.PS_ms, self.QS_ms, self.S_Dsmax, self.S_ms)
+		return(self.PDa, self.PDb, self.PDc, self.QDa, self.QDb, self.QDc, self.PVa, self.PVb, self.PVc, self.Raa_p, self.Rbb_p, self.Rcc_p, self.Rab_p, self.Rac_p, self.Rbc_p, self.df, self.Spcc_Dp_max, self.Spcc_ms, self.S_Dp_max, self.S_ms)
 
 	def SavingApproximations(self,results):
 		''''

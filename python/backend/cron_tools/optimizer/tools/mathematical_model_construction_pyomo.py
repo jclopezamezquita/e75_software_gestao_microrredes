@@ -1013,7 +1013,7 @@ class MathematicalModel:
 
 		def qb_limits_rule(model, i, j, t, s, y):
 			return( model.Qb_Dp[i, j, t, s, y] <= data.S_Dp_max[i,j])
-		model.qc_limits = Constraint(self.List_LTSY, rule=qb_limits_rule)
+		model.qb_limits = Constraint(self.List_LTSY, rule=qb_limits_rule)
 
 		def qc_limits_rule(model, i, j, t, s, y):
 			return( model.Qc_Dp[i, j, t, s, y] <= data.S_Dp_max[i,j])
