@@ -92,7 +92,7 @@ def optimizer_milp_function(input_data):
 
         summary_results = SummaryResults(data, results)
 
-        print("\n************* START: Summary Results  *************\n")
+        print("\n************* START: Summary Results  ************\n")
 
 
         if results.Status == "optimal":
