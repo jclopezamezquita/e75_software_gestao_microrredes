@@ -94,7 +94,8 @@ def optimizer_milp_function(input_data):
 
         print("\n************* START: Summary Results  *************\n")
 
-        if results.Status == "Optimal":
+
+        if results.Status == "optimal":
             output = summary_results.WritingFeasibleOutputFile()
             print("\n************* END: Summary Results  *************\n")
 

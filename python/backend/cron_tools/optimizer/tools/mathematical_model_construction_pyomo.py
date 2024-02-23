@@ -420,7 +420,7 @@ class MathematicalModel:
 			for t in data.T:
 				for o in data.O:
 					for s in data.S:
-						if int(t) >= int(o) and int(t) < int(o) + 2:
+						if int(t) >= int(o) and int(t) < int(o) + data.out_time:
 							model_cs.islanded_operation.add(expr=model_cs.Ppcc_a_out[i, t, o, s] == 0)
 							model_cs.islanded_operation.add(expr=model_cs.Ppcc_b_out[i, t, o, s] == 0)
 							model_cs.islanded_operation.add(expr=model_cs.Ppcc_c_out[i, t, o, s] == 0)
@@ -686,7 +686,7 @@ class MathematicalModel:
 		if len(data.O) >= 1 :
 			cost_operation_contingency = (sum(data.Prob[s]*(0.01/len(data.O) * (sum(data.cEDS[t] * data.delta_t * (model.Ppcc_a_out[i, t, o, s] + model.Ppcc_b_out[i, t, o, s] + model.Ppcc_c_out[i, t, o, s]) for (i, t, o, s) in self.List_NTOS) + 
 											sum([data.cost_PG[i] * data.delta_t * model.PG_out[i,t,o, s] for (i,t,o,s) in self.List_GDTOS]) + 
-											sum([data.delta_t * data.alpha_c[i] * data.sd[s] * (data.PDa[(i,t)]+data.PDb[(i,t)]+data.PDc[(i,t)]) * (1-model.xd[i,t,o,s]) for (i,t,o,s) in self.List_NTOS]))) + 
+											sum([data.delta_t * data.alpha_c[i] * data.sd[s] * (data.PDa[('3',t)]+data.PDb[('3',t)]+data.PDc[('3',t)]) * (1-model.xd['3',t,o,s]) for (i,t,o,s) in self.List_NTOS]))) + 
 											(0.99 * sum(data.cEDS[t] * data.delta_t * (model.Ppcc_a[i, t,s] + model.Ppcc_b[i, t,s] + model.Ppcc_c[i, t,s]) for (i, t,s) in self.List_NTS) + 
 											sum(data.cost_PG[i] * data.delta_t * model.PG[i, t,s] for (i, t,s) in self.List_GDTS)) for s in data.S))
 		else :
@@ -1625,7 +1625,7 @@ class MathematicalModel:
 			for t in data.T:
 				for o in data.O:
 					for s in data.S:
-						if data.Tb[i] == 1 and (int(t) < int(o) or int(t) >= int(o) + 2):
+						if data.Tb[i] == 1 and (int(t) < int(o) or int(t) >= int(o) + data.out_time):
 							model.fix_voltage_out_1.add(expr=model.Va_out[i, t, o, s] == data.Vnom)
 							model.fix_voltage_out_1.add(expr=model.Vb_out[i, t, o, s] == data.Vnom)
 							model.fix_voltage_out_1.add(expr=model.Vc_out[i, t, o, s] == data.Vnom)
@@ -1638,7 +1638,7 @@ class MathematicalModel:
 			for t in data.T:
 				for o in data.O:
 					for s in data.S:
-						if data.Tb[i] == 2 and int(t) >= int(o) and int(t) < int(o) + 2:  
+						if data.Tb[i] == 2 and int(t) >= int(o) and int(t) < int(o) + data.out_time:
 							model.fix_voltage_out_2.add(expr = model.Va_out[i, t, o, s] == data.Vnom)
 							model.fix_voltage_out_2.add(expr = model.Vb_out[i, t, o, s] == data.Vnom)
 							model.fix_voltage_out_2.add(expr = model.Vc_out[i, t, o, s] == data.Vnom)
@@ -1678,13 +1678,14 @@ class MathematicalModel:
 		except Exception as e:
 			print("Error al resolver el modelo:", e)
 
-		# Saving variables of the problem
-		xd = model.xd.get_values()
-		PG = model.PG.get_values()
-		PG_out = model.PG_out.get_values()
-		EB = model.EB.get_values()
-		PB = model.PB.get_values()
-		PB_ch = model.PB_ch.get_values()
-		PB_dis = model.PB_dis.get_values()
+		self.Status = results.solver.termination_condition
+		self.ObjectiveFunctionValue = results.problem.lower_bound
 
-		print("PB: ",PB)
+		# Saving variables of the problem
+		self.xd = model.xd.get_values()
+		self.PG = model.PG.get_values()
+		self.PG_out = model.PG_out.get_values()
+		self.EB = model.EB.get_values()
+		self.PB = model.PB.get_values()
+		self.PB_ch = model.PB_ch.get_values()
+		self.PB_dis = model.PB_dis.get_values()		

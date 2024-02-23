@@ -162,7 +162,7 @@ class InputData:
 			self.EBmax[self.B[index]] = data["maximum_energy_capacity_ess"][index]
 			self.eta_b[self.B[index]] = data["ess_efficiency"][index]
 		self.Y = data["number_discrete_blocks_piecewise_linearization"]
-
+		self.out_time = 2
 		self.Vmax = self.Vnom * 1.05 # kV
 		self.Vmin = self.Vnom * 0.92 # kV
 
