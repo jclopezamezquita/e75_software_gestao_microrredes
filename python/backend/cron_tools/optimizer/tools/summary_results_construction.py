@@ -70,7 +70,7 @@ class SummaryResults:
 			for s in data.S:
 				for c in data.O:
 					aux_list = []
-					aux_list = [(results.PG_out['1'][t][c][s]) for t in data.T]
+					aux_list = [(results.PG_out['1',t,c,s]) for t in data.T]
 			
 					output_file["active_power_genset"]["scen_" + s] = {}
 					output_file["active_power_genset"]["scen_" + s]= aux_list

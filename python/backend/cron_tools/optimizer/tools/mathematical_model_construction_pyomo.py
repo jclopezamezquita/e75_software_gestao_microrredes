@@ -1315,7 +1315,7 @@ class MathematicalModel:
 				(2*(data.Rab_p[i,j]*model.Pb_out[i, j, t, o, s] + data.Xab_p[i,j]*model.Qb_out[i, j, t, o, s])) + 
 				(2*(data.Rac_p[i,j]*model.Pc_out[i, j, t, o, s] + data.Xac_p[i,j]*model.Qc_out[i, j, t, o, s])) -
 				(1/data.Va_0_out[i, t, o, s]**2) * ((data.Raa_p[i,j]**2 + data.Xaa_p[i,j]**2) * (model.Pa_sqr_out[i, j, t, o, s] + 
-				model.Qa_sqr_out[i, j, t, o, s])) == model.data.Va_sqr_out[i, t, o, s] - model.data.Va_sqr_out[j, t, o, s])
+				model.Qa_sqr_out[i, j, t, o, s])) == model.Va_sqr_out[i, t, o, s] - model.Va_sqr_out[j, t, o, s])
 		model.voltage_droop_out_a = Constraint(self.List_LTOS, rule= voltage_droop_out_rule_out_a)
 		
 		def voltage_droop_out_rule_out_b(model, i, j, t, o, s):
@@ -1323,7 +1323,7 @@ class MathematicalModel:
 				(2*(data.Rbb_p[i,j]*model.Pb_out[i, j, t, o, s] + data.Xbb_p[i,j]*model.Qb_out[i, j, t, o, s])) + 
 				(2*(data.Rbc_p[i,j]*model.Pc_out[i, j, t, o, s] + data.Xbc_p[i,j]*model.Qc_out[i, j, t, o, s])) -
 				(1/data.Vb_0_out[i, t, o, s]**2) * ((data.Rbb_p[i,j]**2 + data.Xbb_p[i,j]**2) * (model.Pb_sqr_out[i, j, t, o, s] + 
-				model.Qb_sqr_out[i, j, t, o, s])) == model.data.Vb_sqr_out[i, t, o, s] - model.data.Vb_sqr_out[j, t, o, s])
+				model.Qb_sqr_out[i, j, t, o, s])) == model.Vb_sqr_out[i, t, o, s] - model.Vb_sqr_out[j, t, o, s])
 		model.voltage_droop_out_b = Constraint(self.List_LTOS, rule= voltage_droop_out_rule_out_b)
 		
 		def voltage_droop_out_rule_out_c(model, i, j, t, o, s):
@@ -1331,7 +1331,7 @@ class MathematicalModel:
 				(2*(data.Rcb_p[i,j]*model.Pb_out[i, j, t, o, s] + data.Xcb_p[i,j]*model.Qb_out[i, j, t, o, s])) + 
 				(2*(data.Rcc_p[i,j]*model.Pc_out[i, j, t, o, s] + data.Xcc_p[i,j]*model.Qc_out[i, j, t, o, s])) -
 				(1/data.Vc_0_out[i, t, o, s]**2) * ((data.Rcc_p[i,j]**2 + data.Xcc_p[i,j]**2) * (model.Pc_sqr_out[i, j, t, o, s] + 
-				model.Qc_sqr_out[i, j, t, o, s])) == model.data.Vc_sqr_out[i, t, o, s] - model.data.Vc_sqr_out[j, t, o, s])
+				model.Qc_sqr_out[i, j, t, o, s])) == model.Vc_sqr_out[i, t, o, s] - model.Vc_sqr_out[j, t, o, s])
 		model.voltage_droop_out_c = Constraint(self.List_LTOS, rule= voltage_droop_out_rule_out_c)
 
 		# Limite máximo de fluxo de corrente e equações de linearização ----------------------------------------------------------------
@@ -1516,11 +1516,12 @@ class MathematicalModel:
 			return(model.QG_out[i, t, o, s] <= data.QG_max[i] * model.oG_out[i, t, o, s])
 		model.genset_power_reactive_limits_2_out = Constraint(self.List_GDTOS, rule = genset_power_reactive_limits_rule_out_2)
 		
+		model.genset_operation_grid_connected = ConstraintList()
 		for i in data.GD:
 			for t in data.T:
 				for o in data.O:
 					for s in data.S:
-						if int(t) < int(o) or int(t) >= int(o) + 2:
+						if int(t) < int(o) or int(t) >= int(o) + data.out_time:
 							model.genset_operation_grid_connected.add(expr = model.PGa_out[i, t, o, s] == 0)
 							model.genset_operation_grid_connected.add(expr = model.PGb_out[i, t, o, s] == 0)
 							model.genset_operation_grid_connected.add(expr = model.PGc_out[i, t, o, s] == 0)
