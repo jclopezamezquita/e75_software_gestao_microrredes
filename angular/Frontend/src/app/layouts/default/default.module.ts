@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { DashboardService } from 'src/app/modules/dashboard.service';
 import { FormsModule } from '@angular/forms';
 import { DispatchComponent } from 'src/app/modules/dispatch/dispatch.component';
+import { EVComponent } from 'src/app/modules/ev/ev.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { DispatchComponent } from 'src/app/modules/dispatch/dispatch.component';
     DefaultComponent,
     DashboardComponent,
     PostsComponent,
-    DispatchComponent
+    DispatchComponent,
+    EVComponent
   ],
   imports: [
     CommonModule,

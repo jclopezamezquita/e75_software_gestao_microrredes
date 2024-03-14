@@ -70,6 +70,13 @@ data = requests.post(url=URL + "v1/api/milp_parameters", data=model_parameters, 
 print(data.status_code)
 print(data.text)
 
+# EV parameters
+EV_parameters = {"EV_battery_size_1": 340, "EV_power_size_1": 40, "EV_initial_SoC_1": 50, "EV_arrival_time_1": 6, "EV_departure_time_1": 18, 
+"EV_battery_size_2": 0, "EV_power_size_2": 0, "EV_initial_SoC_2": 0, "EV_arrival_time_2": 0, "EV_departure_time_2": 0} 
+data = requests.post(url=URL + "v1/api/ev_parameters", data=EV_parameters, headers={"accept" : "application/json"})
+print(data.status_code)
+print(data.text)
+
 
 # Dados da tabela economic_dispatch
 dispatch = {"bat_power_t00": 0.0, "bat_power_t01": 0.0, "bat_power_t02": 0.0, "bat_power_t03": 0.0, "bat_power_t04": 0.0, "bat_power_t05": 0.0, "bat_power_t06": 0.0,

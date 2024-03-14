@@ -10,6 +10,7 @@ def create_app():
     from api_tools.branch_measurement_namespace import branch_measurement_namespace
     from api_tools.economic_dispatch_namespace import economic_dispatch_namespace
     from api_tools.milp_parameters_namespace import milp_parameters_namespace
+    from api_tools.ev_parameters_namespace import ev_parameters_namespace
 
     application = Flask(__name__)
     #api = Api(application, version='0.1', title='E75_EMS_LabREI Backend API',
@@ -28,5 +29,6 @@ def create_app():
     api.add_namespace(branch_measurement_namespace)
     api.add_namespace(economic_dispatch_namespace)
     api.add_namespace(milp_parameters_namespace)
+    api.add_namespace(ev_parameters_namespace)
 
     return application
