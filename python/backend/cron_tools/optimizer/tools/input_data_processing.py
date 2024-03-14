@@ -168,15 +168,15 @@ class InputData:
 
 	# Function to calculate Parameters
 	def CalculateParameters(self):
-		self.PDa = {};
-		self.PDb = {};
-		self.PDc = {};
-		self.QDa = {};
-		self.QDb = {};
-		self.QDc = {};
+		self.PDa = {}
+		self.PDb = {}
+		self.PDc = {}
+		self.QDa = {}
+		self.QDb = {}
+		self.QDc = {}
 	
 		# Transforms the demands in variate values in the time
-		self.List_NT = [];
+		self.List_NT = []
 		for i in self.N:
 			for t in self.T:
 				self.List_NT += [[i, t]]
