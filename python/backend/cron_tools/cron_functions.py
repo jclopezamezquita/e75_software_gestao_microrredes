@@ -41,7 +41,11 @@ def microgrid_dayahead_optimizer():
         for x in measurements[index2]['node']:
             if x['der'] == 'bess':
                 initial_SOC = x['SOC']
+<<<<<<< HEAD
     '''
+=======
+    '''  
+>>>>>>> 6650cee7a18285400e1e9ce757756975da389899
     initial_SOC = 20
 
 
@@ -77,11 +81,11 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'genset':
                 cont5 += 1
                 input_data['set_of_thermal_generator'] = [str(cont5)]
-        input_data['set_of_outage'] = [ ]
+        input_data['set_of_outage'] = ['18']
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
         input_data['coefficient_demand_scen'] = [1.0]
-        input_data['coefficient_pv_scen'] = [0.2]
+        input_data['coefficient_pv_scen'] = [1.0]
         input_data['type_of_bus'] = []
         for index in data_nodes:
             if index['type'] == 'PCC':

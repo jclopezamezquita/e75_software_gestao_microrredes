@@ -1,7 +1,7 @@
-# Energy Management System (EMS)
+# Energy Management System (EMS) with EVs 
 
 ## Introduction
-A program that uses tools like Python, MySQL, Docker and Angular in its development.
+A program that uses tools like Python, MySQL, Docker and Angular.
 
 EMS will provide the following services:
 * Optimal day-ahead dispatch of the available distributed energy resources (DER);
@@ -29,7 +29,7 @@ EMS will provide the following services:
 
 ## Inner Execution:
 
-- Frontend - open the browser at http://localhost:4202
+- Frontend - OPEN the browser at http://localhost:4202
 
 - EMS Backend API- open the browser at http://localhost:8051
 

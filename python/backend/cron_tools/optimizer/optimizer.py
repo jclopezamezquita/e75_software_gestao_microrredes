@@ -3,7 +3,7 @@
 """
 import os, sys
 from cron_tools.optimizer.tools.input_data_processing import InputData
-from cron_tools.optimizer.tools.mathematical_model_construction import MathematicalModel
+from cron_tools.optimizer.tools.mathematical_model_construction_pyomo import MathematicalModel
 from cron_tools.optimizer.tools.summary_results_construction import SummaryResults
 
 
@@ -30,10 +30,7 @@ def optimizer_milp_function(input_data):
         model.ConstructionOfLists()
 
         # Formulating the problem
-        prob_CS = model.ProblemFormultion_ColdStart()
-
-        # Writing the problem in a file .lp
-        # model.WritingProblemFileCS(prob_CS,"Cold_Start")
+        model_cs = model.ProblemFormulation_ColdStart()
 
         print("\n************* END: Formulating mathematical model - Cold Start  *************\n", flush=True)
 
@@ -47,7 +44,7 @@ def optimizer_milp_function(input_data):
         results = model
 
         # Solving the mathematical model via PULP - Cold Start
-        results.Solving_Model_CS(prob_CS)
+        results.Solving_Model_CS(model_cs)
 
         print("\n************* END: Solving mathematical model - Cold Start *************\n")
 
@@ -70,11 +67,7 @@ def optimizer_milp_function(input_data):
 
         # Formulating the problem
         prob = model_PL.ProblemFormulation()
-
-
-        # Writing the problem in a file .lp
-        # model_PL.WritingProblemFile(prob,"EMS_three_phase_for_Microgrids")
-
+        
         print("\n************* END: Formulating mathematical model - PL  *************\n", flush=True)
 
         ######################################################################
@@ -99,9 +92,10 @@ def optimizer_milp_function(input_data):
 
         summary_results = SummaryResults(data, results)
 
-        print("\n************* START: Summary Results  *************\n")
+        print("\n************* START: Summary Results  ************\n")
 
-        if results.Status == "Optimal":
+
+        if results.Status == "optimal":
             output = summary_results.WritingFeasibleOutputFile()
             print("\n************* END: Summary Results  *************\n")
 

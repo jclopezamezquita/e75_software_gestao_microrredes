@@ -21,9 +21,9 @@ class InputData:
 		self.sd = {}
 		for index in range(len(data["coefficient_demand_scen"])):
 			self.sd[self.S[index]] = data["coefficient_demand_scen"][index]
-		self.srs = {}
+		self.spv = {}
 		for index in range(len(data["coefficient_pv_scen"])):
-			self.srs[self.S[index]] = data["coefficient_pv_scen"][index]		
+			self.spv[self.S[index]] = data["coefficient_pv_scen"][index]		
 		self.Tb = {}
 		for index in range(len(data["type_of_bus"])):
 			self.Tb[self.N[index]] = data["type_of_bus"][index]
@@ -154,29 +154,29 @@ class InputData:
 		self.EBi = {}
 		self.EBmin = {}
 		self.EBmax = {}
-		self.eta = {}
+		self.eta_b = {}
 		for index in range(len(data["set_of_energy_storage_systems"])):
 			self.PBmax[self.B[index]] = data["maximum_power_ess"][index]
 			self.EBi[self.B[index]] = data["initial_energy_of_the_ess"][index]
 			self.EBmin[self.B[index]] = data["minimum_energy_capacity_ess"][index]
 			self.EBmax[self.B[index]] = data["maximum_energy_capacity_ess"][index]
-			self.eta[self.B[index]] = data["ess_efficiency"][index]
+			self.eta_b[self.B[index]] = data["ess_efficiency"][index]
 		self.Y = data["number_discrete_blocks_piecewise_linearization"]
-
+		self.out_time = 2
 		self.Vmax = self.Vnom * 1.05 # kV
 		self.Vmin = self.Vnom * 0.92 # kV
 
 	# Function to calculate Parameters
 	def CalculateParameters(self):
-		self.PDa = {};
-		self.PDb = {};
-		self.PDc = {};
-		self.QDa = {};
-		self.QDb = {};
-		self.QDc = {};
+		self.PDa = {}
+		self.PDb = {}
+		self.PDc = {}
+		self.QDa = {}
+		self.QDb = {}
+		self.QDc = {}
 	
 		# Transforms the demands in variate values in the time
-		self.List_NT = [];
+		self.List_NT = []
 		for i in self.N:
 			for t in self.T:
 				self.List_NT += [[i, t]]
@@ -229,18 +229,18 @@ class InputData:
 			self.Xbc[(i,j)] = self.Xbc[(i,j)]/1000
 
 		# Calculats the impedance magnitude and angle in the lines
-		self.Thaa = {};
-		self.Zaa = {};
-		self.Thbb = {};
-		self.Zbb = {};
-		self.Thcc = {};
-		self.Zcc = {};
-		self.Thab = {};
-		self.Zab = {};
-		self.Thac = {};
-		self.Zac = {};
-		self.Thbc = {};
-		self.Zbc = {};
+		self.Thaa = {}
+		self.Zaa = {}
+		self.Thbb = {}
+		self.Zbb = {}
+		self.Thcc = {}
+		self.Zcc = {}
+		self.Thab = {}
+		self.Zab = {}
+		self.Thac = {}
+		self.Zac = {}
+		self.Thbc = {}
+		self.Zbc = {}
 
 		for (i,j) in self.L:
 			self.Zaa[(i,j)] = ' '
@@ -271,9 +271,9 @@ class InputData:
 			self.Zbc[(i,j)] = sqrt(self.Rbc[(i,j)]**2 + self.Xbc[(i,j)]**2)
 
 		# Defines the angles of the phases
-		self.Tha0 = {};
-		self.Thb0 = {};
-		self.Thc0 = {};
+		self.Tha0 = {}
+		self.Thb0 = {}
+		self.Thc0 = {}
 
 		for i in self.N:
 			self.Tha0[i] = 0
@@ -281,24 +281,24 @@ class InputData:
 			self.Thc0[i] = 2.0944
 
 		# Calculation of Transformed Impedance Components
-		self.Raa_p = {};
-		self.Xaa_p = {};
-		self.Rbb_p = {};
-		self.Xbb_p = {};
-		self.Rcc_p = {};
-		self.Xcc_p = {};
-		self.Rab_p = {};
-		self.Xab_p = {};
-		self.Rac_p = {};
-		self.Xac_p = {};
-		self.Rbc_p = {};
-		self.Xbc_p = {};
-		self.Rba_p = {};
-		self.Xba_p = {};
-		self.Rca_p = {};
-		self.Xca_p = {};
-		self.Rcb_p = {};
-		self.Xcb_p = {};
+		self.Raa_p = {}
+		self.Xaa_p = {}
+		self.Rbb_p = {}
+		self.Xbb_p = {}
+		self.Rcc_p = {}
+		self.Xcc_p = {}
+		self.Rab_p = {}
+		self.Xab_p = {}
+		self.Rac_p = {}
+		self.Xac_p = {}
+		self.Rbc_p = {}
+		self.Xbc_p = {}
+		self.Rba_p = {}
+		self.Xba_p = {}
+		self.Rca_p = {}
+		self.Xca_p = {}
+		self.Rcb_p = {}
+		self.Xcb_p = {}
 		
 		for (i,j) in self.L:
 			self.Raa_p[(i,j)] = ' '
@@ -340,12 +340,12 @@ class InputData:
 			self.Rcb_p[(i,j)] = self.Zbc[(i,j)] * cos(self.Thbc[(i,j)] + self.Thb0[i] - self.Thc0[i])
 			self.Xcb_p[(i,j)] = self.Zbc[(i,j)] * sin(self.Thbc[(i,j)] + self.Thb0[i] - self.Thc0[i])		
 
-		self.List_NL = [];
+		self.List_NL = []
 		for a in self.N:
 			for (i,j) in self.L:
 				self.List_NL += [[a,i,j]]
 
-		self.df = {};
+		self.df = {}
 		for (a,i,j) in self.List_NL:
 			self.df[(a,i,j)] = ' '
 
@@ -358,7 +358,7 @@ class InputData:
 				else:
 					self.df[(a,i,j)] = 0
 
-		self.p = {};
+		self.p = {}
 		for (a,i,j) in self.List_NL:
 			self.p[(a,i,j)] = ' '
 
@@ -370,14 +370,15 @@ class InputData:
 					self.p[(i,a,j)] = 0
 
 		# Define linearization block
+		'''
 		self.PS_Dsmax = {}
 		self.QS_Dsmax = {}
 		for i in self.N:
 			self.PS_Dsmax[(i)] = ' '
 			self.QS_Dsmax[(i)] = ' '
 
-		self.PS_ms = {};
-		self.QS_ms = {};
+		self.PS_ms = {}
+		self.QS_ms = {}
 		for i in self.N:
 			for y in self.Y:
 				self.PS_ms[(i,y)] = ' '
@@ -389,95 +390,75 @@ class InputData:
 			for y in self.Y:
 				self.PS_ms[(i,y)] = ((2 * (int(y))) - 1) * self.PS_Dsmax[(i)]
 				self.QS_ms[(i,y)] = ((2 * (int(y))) - 1) * self.QS_Dsmax[(i)]
+		'''
 
-		self.S_Dsmax = {};
-		self.S_ms = {};
+		self.Spcc_Dp_max = {}
+		for i in self.N:
+			self.Spcc_Dp_max[(i)] = ' '
+
+		self.Spcc_ms = {}
+		for i in self.N:
+			for y in self.Y:
+				self.Spcc_ms[(i,y)] = ' '
+	
+		for i in self.N:
+			self.Spcc_Dp_max[(i)] = self.Smax[i]/len(self.Y)
+			for y in self.Y:
+				self.Spcc_ms[(i,y)] = ((2 * (int(y))) - 1) * self.Spcc_Dp_max[(i)]
+		
+
+
+		self.S_Dp_max = {}
+		self.S_ms = {}
 		for (i,j) in self.L:
-			self.S_Dsmax[(i,j)] = ' '
+			self.S_Dp_max[(i,j)] = ' '
 			for y in self.Y:
 				self.S_ms[(i,j,y)] = ' '
 		
 		for (i,j) in self.L:
-			self.S_Dsmax[(i,j)] = (self.Vnom * self.Imax[i,j]) / len(self.Y)
+			self.S_Dp_max[(i,j)] = (self.Vnom * self.Imax[i,j]) / len(self.Y)
 			for y in self.Y:
-				self.S_ms[(i,j,y)] = ((2 * (int(y))) - 1) * self.S_Dsmax[(i,j)]
+				self.S_ms[(i,j,y)] = ((2 * (int(y))) - 1) * self.S_Dp_max[(i,j)]
 
-		return(self.PDa, self.PDb, self.PDc, self.QDa, self.QDb, self.QDc, self.PVa, self.PVb, self.PVc, self.Raa_p, self.Rbb_p, self.Rcc_p, self.Rab_p, self.Rac_p, self.Rbc_p, self.df, self.PS_Dsmax, self.QS_Dsmax, self.PS_ms, self.QS_ms, self.S_Dsmax, self.S_ms)
+		return(self.PDa, self.PDb, self.PDc, self.QDa, self.QDb, self.QDc, self.PVa, self.PVb, self.PVc, self.Raa_p, self.Rbb_p, self.Rcc_p, self.Rab_p, self.Rac_p, self.Rbc_p, self.df, self.Spcc_Dp_max, self.Spcc_ms, self.S_Dp_max, self.S_ms)
 
-	'''
-	def ProcessingInfoTypeofSolution(self, solution_type):
-		if solution_type == 1:
-			self.S = ['1']
-			self.Prob = {'1' : 1.0}
-			self.srs = {'1' :1.0}
-			self.sd = {'1' : 1.0}
-			return ("Type_1", self.S, self.Prob, self.srs, self.sd)
-		else:
-			self.S = ['1','2','3','4','5','6','7','8','9']
-			self.Prob = {'1' : 0.02,
-				   '2' : 0.06,
-				   '3' : 0.02,
-				   '4' : 0.16,
-				   '5' : 0.48,
-				   '6' : 0.16,
-				   '7' : 0.02,
-				   '8' : 0.06,
-				   '9' : 0.02}
-			self.srs = {'1' : 1.0,
-				   '2' : 0.8,
-				   '3' : 0.6,
-				   '4' : 1.0,
-				   '5' : 0.8,
-				   '6' : 0.6,
-				   '7' : 1.0,
-				   '8' : 0.8,
-				   '9' : 0.6}
-			self.sd = {'1' : 1.0,
-				   '2' : 1.0,
-				   '3' : 1.0,
-				   '4' : 0.8,
-				   '5' : 0.8,
-				   '6' : 0.8,
-				   '7' : 0.6,
-				   '8' : 0.6,
-				   '9' : 0.6}
-			return ("Type_2", self.S, self.Prob, self.srs, self.sd)
-	'''
-	
 	def SavingApproximations(self,results):
-		
-		self.List_LTS = [];
+		''''
+		self.List_LTS = []
 		for (i,j) in self.L:
 			for t in self.T:
 				for s in self.S:
 					self.List_LTS += [[i, j, t, s]]
 		
-		self.List_NTS = [];
+		self.List_NTS = []
 		for i in self.N:
 			for t in self.T:
 				for s in self.S:
 					self.List_NTS += [[i, t, s]]
 
-		self.List_LTOS = [];
+		self.List_LTOS = []
 		for (i,j) in self.L:
 			for t in self.T:
 				for c in self.O:
 					for s in self.S:
 						self.List_LTOS += [[i, j, t, c, s]]
 
-		self.List_NTOS = [];
+		self.List_NTOS = []
 		for i in self.N:
 			for t in self.T:
 				for c in self.O:
 					for s in self.S:
 						self.List_NTOS += [[i, t, c, s]]
 
-		self.Pa_0_con = {};
-		self.Pb_0_con = {};
-		self.Pc_0_con = {};
-		self.Qa_0_con = {};
-		self.Qb_0_con = {};
-		self.Qc_0_con = {};
+		self.Pa_0 = results.Pa.get_values()
+		print("Pa_0 data:",self.Pa_0)
+
+		self.Pa_0_con = {}
+		self.Pb_0_con = {}
+		self.Pc_0_con = {}
+		self.Qa_0_con = {}
+		self.Qb_0_con = {}
+		self.Qc_0_con = {}
 		for (i,j,t,s) in self.List_LTS:
 			self.Pa_0_con[(i,j,t,s)] = ' '
 			self.Pb_0_con[(i,j,t,s)] = ' '
@@ -494,9 +475,9 @@ class InputData:
 			self.Qb_0_con[(i,j,t,s)] = results.Qb_con[i,j][t][s]
 			self.Qc_0_con[(i,j,t,s)] = results.Qc_con[i,j][t][s]
 
-		self.Va_0_con = {};	
-		self.Vb_0_con = {};
-		self.Vc_0_con = {};
+		self.Va_0_con = {}	
+		self.Vb_0_con = {}
+		self.Vc_0_con = {}
 		for (i,t,s) in self.List_NTS:
 			self.Va_0_con[(i,t,s)] = ' '
 			self.Vb_0_con[(i,t,s)] = ' '
@@ -507,12 +488,12 @@ class InputData:
 			self.Vb_0_con[(i,t,s)] = results.Vb_con[i][t][s]
 			self.Vc_0_con[(i,t,s)] = results.Vc_con[i][t][s]
 
-		self.Pa_0 = {};
-		self.Pb_0 = {};
-		self.Pc_0 = {};
-		self.Qa_0 = {};
-		self.Qb_0 = {};
-		self.Qc_0 = {};
+		self.Pa_0 = {}
+		self.Pb_0 = {}
+		self.Pc_0 = {}
+		self.Qa_0 = {}
+		self.Qb_0 = {}
+		self.Qc_0 = {}
 		for (i,j,t,c,s) in self.List_LTOS:
 			self.Pa_0[(i,j,t,c,s)] = ' '
 			self.Pb_0[(i,j,t,c,s)] = ' '
@@ -529,9 +510,9 @@ class InputData:
 			self.Qb_0[(i,j,t,c,s)] = results.Qb[i,j][t][c][s]
 			self.Qc_0[(i,j,t,c,s)] = results.Qc[i,j][t][c][s]
 
-		self.Va_0 = {};	
-		self.Vb_0 = {};	
-		self.Vc_0 = {};	
+		self.Va_0 = {}	
+		self.Vb_0 = {}
+		self.Vc_0 = {}
 		for (i,t,c,s) in self.List_NTOS:
 			self.Va_0[(i,t,c,s)] = ' '
 			self.Vb_0[(i,t,c,s)] = ' '
@@ -541,7 +522,29 @@ class InputData:
 			self.Va_0[(i,t,c,s)] = results.Va[i][t][c][s]
 			self.Vb_0[(i,t,c,s)] = results.Vb[i][t][c][s]
 			self.Vc_0[(i,t,c,s)] = results.Vc[i][t][c][s]
+		'''
 
+		self.Pa_0 = results.Pa
+		self.Pb_0 = results.Pb
+		self.Pc_0 = results.Pc
+		self.Qa_0 = results.Qa
+		self.Qb_0 = results.Qb
+		self.Qc_0 = results.Qc
+		self.Va_0 = results.Va
+		self.Vb_0 = results.Vb
+		self.Vc_0 = results.Vc
+
+		self.Pa_0_out = results.Pa_out
+		self.Pb_0_out = results.Pb_out
+		self.Pc_0_out = results.Pc_out
+		self.Qa_0_out = results.Qa_out
+		self.Qb_0_out = results.Qb_out
+		self.Qc_0_out = results.Qc_out
+		self.Va_0_out = results.Va_out
+		self.Vb_0_out = results.Vb_out
+		self.Vc_0_out = results.Vc_out
+
+	
 		return True
 		
 		

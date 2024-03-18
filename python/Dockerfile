@@ -15,7 +15,6 @@ COPY backend /backend
 WORKDIR /backend
 RUN pip install -U pip
 RUN pip install -r requirements.txt
-
-RUN pip install Mosek
+RUN apt-get install -y coinor-cbc
 
 CMD ["uwsgi", "app.ini"]
