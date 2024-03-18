@@ -4,7 +4,7 @@ import { DefaultComponent } from './layouts/default/default.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { DispatchComponent } from './modules/dispatch/dispatch.component';
 import { PostsComponent } from './modules/posts/posts.component';
-import { EVComponent } from './modules/ev/ev.component';
+
 
 const routes: Routes = [{
   path: '',
@@ -18,10 +18,7 @@ const routes: Routes = [{
   }, {
     path: 'dispatch',
     component: DispatchComponent
-  }, {
-    path: 'EV',
-    component: EVComponent
-  }]
+  }, ]
 }];
 
 @NgModule({

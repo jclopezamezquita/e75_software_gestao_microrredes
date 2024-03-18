@@ -4,7 +4,7 @@ import { Observable, throwError } from "rxjs";
 import { Milp_parameters } from "./milp_parameter.model";
 import { catchError } from "rxjs/operators";
 import { Economic_dispatch } from "./economic_dispatch.model";
-import { EV_parameters } from "./ev_parameters.model";
+
 
 export const REST_URL = new InjectionToken("rest_url");
 
@@ -28,15 +28,8 @@ export class RestDataSource {
             `${this.url}/v1/api/milp_parameters/1`, milp_parameters);
     }
 
-    getData_EV_parameters(): Observable<EV_parameters[]> {
-        return this.sendRequest<EV_parameters[]>("GET", 
-            `${this.url}/v1/api/ev_parameters`);
-    }
-
-    updateData_EV_parameters(ev_parameters: EV_parameters): Observable<EV_parameters> {
-        return this.sendRequest<EV_parameters>("PUT",
-            `${this.url}/v1/api/ev_parameters/1`, ev_parameters);
-    }
+   
+    
 
     private sendRequest<T>(verb: string, url: string, body?: any)
         : Observable<T> {

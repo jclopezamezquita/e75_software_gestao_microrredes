@@ -208,17 +208,3 @@ class milp_parameters_model(db.Model):
     genset_cost = db.Column(db.Float(precision=2), default=0.5)
     max_power_pcc_kw = db.Column(db.Float(precision=2), default=100)
     load_curt_cost = db.Column(db.Float(precision=2), default=500)
-
-class ev_parameters_model(db.Model):
-    __tablename__='ev_parameters_table'
-    id = db.Column(db.Integer, primary_key=True)
-    EV_battery_size_1 = db.Column(db.Float(precision=2), default=0.0)
-    EV_power_size_1 = db.Column(db.Float(precision=2), default=0.0)
-    EV_initial_SoC_1 = db.Column(db.Float(precision=2), default=0.0)
-    EV_arrival_time_1 = db.Column(db.Integer, default=10)
-    EV_departure_time_1 = db.Column(db.Integer, default=10)
-    EV_battery_size_2 = db.Column(db.Float(precision=2), default=0.0)
-    EV_power_size_2 = db.Column(db.Float(precision=2), default=0.0)
-    EV_initial_SoC_2 = db.Column(db.Float(precision=2), default=0.0)
-    EV_arrival_time_2 = db.Column(db.Integer, default=10)
-    EV_departure_time_2 = db.Column(db.Integer, default=10)
