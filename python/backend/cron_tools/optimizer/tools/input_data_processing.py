@@ -197,6 +197,10 @@ class InputData:
 			self.QDb[(i,t)] = self.fm_qb[i][t] * self.QDb_0[i]
 			self.QDc[(i,t)] = self.fm_qc[i][t] * self.QDc_0[i]
 
+		print("Demandas")
+		print(self.PDa)
+		print(self.PDb)
+		print(self.PDc)
 
 		self.PVa = {};
 		self.PVb = {};
@@ -213,6 +217,10 @@ class InputData:
 			self.PVb[(i,t)] = self.fpv[t] * self.PVb_0[i]
 			self.PVc[(i,t)] = self.fpv[t] * self.PVc_0[i]
 
+		print("Geração PV")
+		print(self.PVa)
+		print(self.PVb)
+		print(self.PVc)
 
 		for (i,j) in self.L:
 			self.Raa[(i,j)] = self.Raa[(i,j)]/1000
