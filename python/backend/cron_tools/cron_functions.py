@@ -24,9 +24,28 @@ def microgrid_dayahead_optimizer():
     data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
     data_milp = json.loads(data_milp.text)
 
-    #data_milp = requests.get(url=URL + "v1/api/milp_parameters", headers={"accept" : "application/json"})
-    #data_milp = json.loads(data_milp.text)
+    data_EV = requests.get(url=URL + "v1/api/ev_parameters", headers={"accept" : "application/json"})
+    data_EV = json.loads(data_milp.text)
+
+
+    for index in data_EV:
+        initial_SoC_EV_1 = index['EV_initial_SoC_1']
+        initial_SoC_EV_2 = index['EV_initial_SoC_2']
+        EV_nom_1 = index['EV_battery_size_1']
+        EV_nom_2 = index['EV_battery_size_2']
+        PEVmax_1 = index['EV_power_size_1']
+        PEVmax_2 = index['EV_power_size_2']
+        t_arrival_1 = index['EV_arrival_time_1']
+        t_arrival_2 = index['EV_arrival_time_2']
+        t_departure_1 = index['EV_departure_time_1']
+        t_departure_2 = index['EV_departure_time_2']
+
+    print(initial_SoC_EV_1)
+    print(t_departure_1)
     
+
+
+
     '''
     URL2='https://bcd89f1a2c30.ngrok.io/'
     
@@ -41,11 +60,7 @@ def microgrid_dayahead_optimizer():
         for x in measurements[index2]['node']:
             if x['der'] == 'bess':
                 initial_SOC = x['SOC']
-<<<<<<< HEAD
     '''
-=======
-    '''  
->>>>>>> 6650cee7a18285400e1e9ce757756975da389899
     initial_SOC = 20
 
 
@@ -240,6 +255,44 @@ def microgrid_dayahead_optimizer():
         for x in range(data_milp[0]['num_blocks_linearization']):
             input_data['number_discrete_blocks_piecewise_linearization'].append(str(x+1))
 
+        input_data['location_of_ev'] = {}
+        input_data['initial_energy_of_the_ev_1'] = []
+        input_data['minimum_energy_capacity_ev_1'] = []
+        input_data['maximum_energy_capacity_ev_1'] = []
+        input_data['maximum_power_ev_1'] = []
+        input_data['ev_efficiency'] = []
+        input_data['t_arrival_1'] = []
+        input_data['t_departure_1'] = []
+        input_data['initial_energy_of_the_ev_2'] = []
+        input_data['minimum_energy_capacity_ev_2'] = []
+        input_data['maximum_energy_capacity_ev_2'] = []
+        input_data['maximum_power_ev_2'] = []
+        input_data['t_arrival_2'] = []
+        input_data['t_departure_2'] = []
+        for x in range(1,len(input_data['set_of_nodes'])+1):
+            input_data['location_of_ev'][str(x)] = []
+        cont4 = 0
+        cont4_1 = 0
+        for index in data_nodes:
+            cont4_1 += 1
+            if index['der'] == 'ev':
+                cont4 += 1
+                input_data['location_of_ev'][str(cont4_1)] = [str(cont4)]
+                input_data['minimum_energy_capacity_ev_1'].append(index['soc_min_ev'] * EV_nom_1)
+                input_data['minimum_energy_capacity_ev_2'].append(index['soc_min_ev'] * EV_nom_2)
+                input_data['maximum_energy_capacity_ev_1'].append(index['soc_max_ev'] * EV_nom_1)
+                input_data['maximum_energy_capacity_ev_2'].append(index['soc_max_ev'] * EV_nom_2)
+                # input_data['maximum_power_ev_1'].append(index['max_pow_ev_1'])
+                # input_data['maximum_power_ev_2'].append(index['max_pow_ev_2'])
+                input_data['maximum_power_ev_1'].append(PEVmax_1)
+                input_data['maximum_power_ev_2'].append(PEVmax_2)
+                input_data['ev_efficiency'].append(0.95)
+        input_data['initial_energy_of_the_ev_1'].append((initial_SoC_EV_1/100) * EV_nom_1)
+        input_data['initial_energy_of_the_ev_2'].append((initial_SoC_EV_2/100) * EV_nom_2)
+        input_data['t_arrival_1'].append(t_arrival_1)
+        input_data['t_arrival_2'].append(t_arrival_2)
+        input_data['t_departure_1'].append(t_departure_1)
+        input_data['t_departure_2'].append(t_departure_2)
 
         return optimizer_milp_function(input_data)
 

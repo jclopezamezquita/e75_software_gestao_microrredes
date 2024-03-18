@@ -1295,7 +1295,7 @@ class MathematicalModel:
 				model.Ppcc_a_out[i, t, o, s] +
 				sum(model.PGa_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_a[a, t] for a in data.dict_nos_bs[i]) -
-				sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) -
+				sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) +
 				((- data.PDa[(i,t)]*data.sd[s]) + (data.PVa[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_a_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_a)
 
@@ -1306,7 +1306,7 @@ class MathematicalModel:
 				model.Ppcc_b_out[i, t, o, s] +
 				sum(model.PGb_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_b[a, t] for a in data.dict_nos_bs[i]) -
-				sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) -
+				sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) +
 				((- data.PDb[(i,t)]*data.sd[s]) + (data.PVb[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_b_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_b)
 
@@ -1317,7 +1317,7 @@ class MathematicalModel:
 				model.Ppcc_c_out[i, t, o, s] +
 				sum(model.PGc_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_c[a, t] for a in data.dict_nos_bs[i]) -
-				sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) -
+				sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) +
 				((- data.PDc[(i,t)]*data.sd[s]) + (data.PVc[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_c_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_c)
 
@@ -1819,4 +1819,6 @@ class MathematicalModel:
 		self.EB = model.EB.get_values()
 		self.PB = model.PB.get_values()
 		self.PB_ch = model.PB_ch.get_values()
-		self.PB_dis = model.PB_dis.get_values()		
+		self.PB_dis = model.PB_dis.get_values()	
+
+		print(self.xd)	
