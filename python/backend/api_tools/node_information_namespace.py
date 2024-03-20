@@ -38,10 +38,10 @@ def der_type_rule(value):
         raise ValueError('-> Invalid format!')
     # Lista os tipos de DERs
     data = json.load(open('config/der_types.json'))
-    # type_list = ["none", "load", "bess", "pv", "genset", "pcc"]
+    # type_list = ["none", "load", "bess", "pv", "genset", "pcc", "ev"]
     type_list = data['der_types']
     if value not in type_list:
-        raise ValueError('-> Invalid value! Please use: \'none\', \'load\', \'bess\', \'pv\', \'genset\', \'pcc\'')
+        raise ValueError('-> Invalid value! Please use: \'none\', \'load\', \'bess\', \'pv\', \'genset\', \'pcc\', \'ev\'')
     return value
 
 der_type_rule.__schema__ = {
@@ -109,6 +109,22 @@ bat_nom_energy_rule.__schema__ = {
     "format": "bat_nom_energy_rule",
 }
 
+def soc_min_ev_rule(value):
+    try:
+        value = float(value)
+    except:
+        raise ValueError(' Invalid format!')
+    if value > 1.0:
+        raise ValueError(' Invalid value!')
+    if value < 0.0:
+        raise ValueError(' Invalid value!')
+    return value
+
+soc_min_ev_rule.__schema__ = {
+    "type": "number",
+    "format": "soc_min_ev_rule",
+}
+
 
 # Criação do node_information_namespace e dos parsers
 node_information_namespace = Namespace('v1/api/node_information', description='API backend EMS - Node information')
@@ -125,6 +141,8 @@ node_information_parser.add_argument('power_factor', type=power_factor_rule, req
 node_information_parser.add_argument('soc_min_bat', type=soc_min_bat_rule, required=False, help='Minimum SOC of the BESS')
 node_information_parser.add_argument('soc_max_bat', type=soc_min_bat_rule, required=False, help='Maximum SOC of the BESS')
 node_information_parser.add_argument('bat_nom_energy', type=bat_nom_energy_rule, required=False, help='Nominal energy of the BESS')
+node_information_parser.add_argument('soc_min_ev', type=soc_min_ev_rule, required=False, help='Minimum SOC of the EV')
+node_information_parser.add_argument('soc_max_ev', type=soc_min_ev_rule, required=False, help='Maximum SOC of the EV')
 
 # Parser for put
 node_information_update_parser = node_information_namespace.parser()

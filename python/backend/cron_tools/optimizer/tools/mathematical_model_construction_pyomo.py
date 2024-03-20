@@ -52,17 +52,20 @@ class MathematicalModel:
 		for i in data.B:
 			for t in data.T:
 				self.List_BT += [[i, t]]
-		
-		# self.List_EVT = []
-		# for i in data.EV:
-		# 	for t in data.T:
-		# 		self.List_EVT += [[i, t]]
-		# self.List_EVTd = []
-		# for i in data.EV:
-		# 	for t in data.T:
-		# 		if int(t) >= int(data.t_arrival[i]) and int(t) <= int(data.t_departure[i]):
-		# 			self.List_EVTd.append([i, t])
-		
+		self.List_EVT = []
+		for i in data.EV:
+			for t in data.T:
+				self.List_EVT += [[i, t]]
+		self.List_EVTd_1 = []
+		for i in data.EV:
+			for t in data.T:
+				if int(t) >= int(data.t_arrival_1[i]) and int(t) <= int(data.t_departure_1[i]):
+					self.List_EVTd_1.append([i, t])
+		self.List_EVTd_2 = []
+		for i in data.EV:
+			for t in data.T:
+				if int(t) >= int(data.t_arrival_2[i]) and int(t) <= int(data.t_departure_2[i]):
+					self.List_EVTd_2.append([i, t])	
 		self.List_NTSY = []
 		for i in data.N:
 			for t in data.T:
@@ -90,20 +93,6 @@ class MathematicalModel:
 						for y in data.Y:
 							self.List_LTOSY += [[i, j, t, c, s, y]]
 		
-		# self.List_GDTSY = []
-		# for i in data.GD:
-		# 	for t in data.T:
-		# 		for s in data.S:
-		# 			for y in data.Y:
-		# 				self.List_GDTSY += [[i, t, s, y]]
-		
-		# self.List_GDTOSY = []
-		# for i in data.GD:
-		# 	for t in data.T:
-		# 		for c in data.O:
-		# 			for s in data.S:
-		# 				for y in data.Y:
-		# 					self.List_GDTOSY += [[i, t, c, s, y]]
 		
 		#return (self.List_NTS, self.List_NTOS, self.List_LTS, self.List_LTOS, self.List_SETS, self.List_SETOS, self.List_sPDTS, self.List_sQDTS, self.List_sPDTOS, self.List_sQDTOS, self.List_GDTS, self.List_GDTOS, self.List_sPVT, self.List_sPVTO, self.List_BT, self.List_LTSY, self.List_LTOSY, self.List_SETSY, self.List_SETOSY, self.List_GDTSY, self.List_GDTOSY)
 
@@ -548,11 +537,17 @@ class MathematicalModel:
 		model.PB_dis_b = Var(data.B, data.T, within = Reals)
 		model.PB_dis_c = Var(data.B, data.T, within = Reals)
 
-		#model.EEV =       Var(data.EV, data.T, within = NonNegativeReals)
-		#model.PEV_ch =    Var(data.EV, data.T, within = NonNegativeReals)
-		#model.PEV_ch_a =  Var(data.EV, data.T, within = NonNegativeReals)
-		#model.PEV_ch_b =  Var(data.EV, data.T, within = NonNegativeReals)
-		#model.PEV_ch_c =  Var(data.EV, data.T, within = NonNegativeReals)
+		model.EEV_1 =       Var(data.EV, data.T, within = NonNegativeReals)
+		model.PEV_ch_1 =    Var(data.EV, data.T, within = NonNegativeReals)
+		model.PEV_ch_a_1 =  Var(data.EV, data.T, within = NonNegativeReals)
+		model.PEV_ch_b_1 =  Var(data.EV, data.T, within = NonNegativeReals)
+		model.PEV_ch_c_1 =  Var(data.EV, data.T, within = NonNegativeReals)
+		
+		model.EEV_2 =       Var(data.EV, data.T, within = NonNegativeReals)
+		model.PEV_ch_2 =    Var(data.EV, data.T, within = NonNegativeReals)
+		model.PEV_ch_a_2 =  Var(data.EV, data.T, within = NonNegativeReals)
+		model.PEV_ch_b_2 =  Var(data.EV, data.T, within = NonNegativeReals)
+		model.PEV_ch_c_2 =  Var(data.EV, data.T, within = NonNegativeReals)
 
 		# Power flow linearization variables
 		model.Pa_sqr = Var(data.L, data.T, data.S, within = Reals)
@@ -817,7 +812,8 @@ class MathematicalModel:
 
 		model.reactive_losses_c = Constraint(self.List_LTS, rule= reactive_losses_c_rule)
 
-		# Active Power Flow ----------------------------------------------------------------
+
+		# Active Power Flow with EV -------------------------------------------------------------
 		def active_power_balance_rule_a(model, i, t, s):
 			return (
 				sum(model.Pa[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) -
@@ -826,6 +822,8 @@ class MathematicalModel:
 				sum(model.PGa[a, t, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_a[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) -
+				sum(model.PEV_ch_a_1[a, t] for a in data.dict_nos_ev[i]) -
+				sum(model.PEV_ch_a_2[a, t] for a in data.dict_nos_ev[i]) -
 				data.PDa[(i,t)]*data.sd[s] + data.PVa[(i,t)]*data.spv[s] == 0
 			)
 
@@ -839,6 +837,8 @@ class MathematicalModel:
 				sum(model.PGb[a, t, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_b[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) -
+				sum(model.PEV_ch_b_1[a, t] for a in data.dict_nos_ev[i]) -
+				sum(model.PEV_ch_b_2[a, t] for a in data.dict_nos_ev[i]) -
 				data.PDb[(i,t)]*data.sd[s] + data.PVb[(i,t)]*data.spv[s] == 0)
 
 		model.active_power_balance_b = Constraint(self.List_NTS, rule=active_power_balance_rule_b)
@@ -851,48 +851,10 @@ class MathematicalModel:
 				sum(model.PGc[a, t, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_c[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) -
+				sum(model.PEV_ch_c_1[a, t] for a in data.dict_nos_ev[i]) -
+				sum(model.PEV_ch_c_2[a, t] for a in data.dict_nos_ev[i]) -
 				data.PDc[(i,t)]*data.sd[s] + data.PVc[(i,t)]*data.spv[s] == 0)
 		model.active_power_balance_c = Constraint(self.List_NTS, rule=active_power_balance_rule_c)
-
-		# Active Power Flow with EV -------------------------------------------------------------
-		# def active_power_balance_rule_a(model, i, t, s):
-		# 	return (
-		# 		sum(model.Pa[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) -
-		# 		sum(model.Plss_a[a, j, t, s]*data.p[(i,a,j)] for (a,j) in data.L) +
-		# 		model.Ppcc_a[i, t, s] +
-		# 		sum(model.PGa[a, t, s] for a in data.dict_nos_gd[i]) +
-		# 		sum(model.PB_dis_a[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PEV_ch_a[a, t] for a in data.dict_nos_ev[i]) -
-		# 		data.PDa[(i,t)]*data.sd[s] + data.PVa[(i,t)]*data.spv[s] == 0
-		# 	)
-
-		# model.active_power_balance_a = Constraint(self.List_NTS, rule=active_power_balance_rule_a)
-
-		# def active_power_balance_rule_b(model, i, t, s):
-		# 	return (
-		# 		sum(model.Pb[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) -
-		# 		sum(model.Plss_b[a, j, t, s]*data.p[(i,a,j)] for (a,j) in data.L) +
-		# 		model.Ppcc_b[i, t, s] +
-		# 		sum(model.PGb[a, t, s] for a in data.dict_nos_gd[i]) +
-		# 		sum(model.PB_dis_b[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PEV_ch_b[a, t] for a in data.dict_nos_ev[i]) -
-		# 		data.PDb[(i,t)]*data.sd[s] + data.PVb[(i,t)]*data.spv[s] == 0)
-
-		# model.active_power_balance_b = Constraint(self.List_NTS, rule=active_power_balance_rule_b)
-
-		# def active_power_balance_rule_c(model, i, t, s):
-		# 	return (
-		# 		sum(model.Pc[a, j, t, s]*data.df[(i,a,j)] for (a,j) in data.L) -
-		# 		sum(model.Plss_c[a, j, t, s]*data.p[(i,a,j)] for (a,j) in data.L) +
-		# 		model.Ppcc_c[i, t, s] +
-		# 		sum(model.PGc[a, t, s] for a in data.dict_nos_gd[i]) +
-		# 		sum(model.PB_dis_c[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PEV_ch_c[a, t] for a in data.dict_nos_ev[i]) -
-		# 		data.PDc[(i,t)]*data.sd[s] + data.PVc[(i,t)]*data.spv[s] == 0)
-		# model.active_power_balance_c = Constraint(self.List_NTS, rule=active_power_balance_rule_c)
 
 		# Reactive Power Flow ----------------------------------------------------------------
 		def reactive_power_balance_rule_a(model, i, t, s):
@@ -1156,7 +1118,7 @@ class MathematicalModel:
 			return(model.QGc[i, t, s] == 0)
 		model.genset_operation_6_cm = Constraint(self.List_GDTS, rule=genset_operation_6_rule_cm)
 
-		# Island Operation
+		# Island Operation ----------------------------------------------------------------
 		model.islanded_operation = ConstraintList()
 		for i in data.N:
 			for t in data.T:
@@ -1171,6 +1133,7 @@ class MathematicalModel:
 							model.islanded_operation.add(expr = model.Qpcc_c_out[i, t, o, s] == 0) 
 
 		#------------- Operation with outage -------------------------------------------
+		
 		# Active losses ----------------------------------------------------------------
 		def active_losses_a_rule_out(model, i, j, t, o, s):
 			return(
@@ -1288,6 +1251,7 @@ class MathematicalModel:
 		model.reactive_losses_c_out = Constraint(self.List_LTOS, rule= reactive_losses_c_rule_out)
 
 		# Active Power Flow ----------------------------------------------------------------
+
 		def active_power_balance_rule_out_a(model, i, t, o, s):
 			return (
 				sum(model.Pa_out[a, j, t, o, s]*data.df[(i,a,j)] for (a,j) in data.L) -  
@@ -1295,7 +1259,9 @@ class MathematicalModel:
 				model.Ppcc_a_out[i, t, o, s] +
 				sum(model.PGa_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_a[a, t] for a in data.dict_nos_bs[i]) -
-				sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) +
+				sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) -
+		        sum(model.PEV_ch_a_1[a, t] for a in data.dict_nos_ev[i]) +
+		        sum(model.PEV_ch_a_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDa[(i,t)]*data.sd[s]) + (data.PVa[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_a_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_a)
 
@@ -1306,7 +1272,9 @@ class MathematicalModel:
 				model.Ppcc_b_out[i, t, o, s] +
 				sum(model.PGb_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_b[a, t] for a in data.dict_nos_bs[i]) -
-				sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) +
+				sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) -
+		        sum(model.PEV_ch_1[a, t] for a in data.dict_nos_ev[i]) +
+		        sum(model.PEV_ch_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDb[(i,t)]*data.sd[s]) + (data.PVb[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_b_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_b)
 
@@ -1317,45 +1285,11 @@ class MathematicalModel:
 				model.Ppcc_c_out[i, t, o, s] +
 				sum(model.PGc_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_c[a, t] for a in data.dict_nos_bs[i]) -
-				sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) +
+				sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) -
+		        sum(model.PEV_ch_c_1[a, t] for a in data.dict_nos_ev[i]) +
+		        sum(model.PEV_ch_c_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDc[(i,t)]*data.sd[s]) + (data.PVc[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
-		model.active_power_balance_c_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_c)
-
-		# def active_power_balance_rule_out_a(model, i, t, o, s):
-		# 	return (
-		# 		sum(model.Pa_out[a, j, t, o, s]*data.df[(i,a,j)] for (a,j) in data.L) -  
-		# 		sum(model.Plss_a_out[a, j, t, o, s]*data.p[(i,a,j)] for (a,j) in data.L) +
-		# 		model.Ppcc_a_out[i, t, o, s] +
-		# 		sum(model.PGa_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
-		# 		sum(model.PB_dis_a[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) -
-		#       sum(model.PEV_ch_a[a, t] for a in data.dict_nos_ev[i]) +
-		# 		((- data.PDa[(i,t)]*data.sd[s]) + (data.PVa[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
-		# model.active_power_balance_a_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_a)
-
-		# def active_power_balance_rule_out_b(model, i, t, o, s):
-		# 	return (
-		# 		sum(model.Pb_out[a, j, t, o, s]*data.df[(i,a,j)] for (a,j) in data.L) -
-		# 		sum(model.Plss_b_out[a, j, t, o, s]*data.p[(i,a,j)] for (a,j) in data.L) +
-		# 		model.Ppcc_b_out[i, t, o, s] +
-		# 		sum(model.PGb_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
-		# 		sum(model.PB_dis_b[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) -
-		#       sum(model.PEV_ch_b[a, t] for a in data.dict_nos_ev[i]) +
-		# 		((- data.PDb[(i,t)]*data.sd[s]) + (data.PVb[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
-		# model.active_power_balance_b_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_b)
-
-		# def active_power_balance_rule_out_c(model, i, t, o, s):
-		# 	return (
-		# 		sum(model.Pc_out[a, j, t, o, s]*data.df[(i,a,j)] for (a,j) in data.L) -
-		# 		sum(model.Plss_c_out[a, j, t, o, s]*data.p[(i,a,j)] for (a,j) in data.L) +
-		# 		model.Ppcc_c_out[i, t, o, s] +
-		# 		sum(model.PGc_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
-		# 		sum(model.PB_dis_c[a, t] for a in data.dict_nos_bs[i]) -
-		# 		sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) -
-		#       sum(model.PEV_ch_c[a, t] for a in data.dict_nos_ev[i]) +itu
-		# 		((- data.PDc[(i,t)]*data.sd[s]) + (data.PVc[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
-		# model.active_power_balance_c_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_c)  
+		model.active_power_balance_c_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_c)  
 
 		# Reactive Power Flow ----------------------------------------------------------------
 		def reactive_power_balance_out_rule_out_a(model, i, t, o, s):
@@ -1677,59 +1611,113 @@ class MathematicalModel:
 			return(model.EB[i,t] <= data.EBmax[i])
 		model.energy_bess_limits_2 = Constraint(self.List_BT, rule = energy_bess_limits_rule_2)
 
-		#----------------- EV Variables --------------------------------------------------
+		#----------------- EV_1 Variables --------------------------------------------------
 
-		# def energy_ev_rule(model,i,t):
-		# 	if int(t) == data.t_arrival[i]:
-		# 		return model.EEV[i,str(data.t_arrival[i])] - data.EEVi[i] - model.PEV_ch[i,str(data.t_arrival[i])]*data.delta_t*data.eta_ev[i] == 0
-		# 	elif int(t) > data.t_arrival[i] and int(t) <= data.t_departure[i]:
-		# 		return model.EEV[i,t] - model.EEV[i,str(int(t)-1)] - model.PEV_ch[i,t]*data.delta_t*data.eta_ev[i] == 0
-		# model.energy_soc_ev = Constraint(self.List_EVTd, rule=energy_ev_rule)
+		def energy_ev_rule_1(model,i,t):
+			if int(t) == data.t_arrival_1[i]:
+				return model.EEV_1[i,str(data.t_arrival_1[i])] - data.EEVi_1[i] - model.PEV_ch_1[i,str(data.t_arrival_1[i])]*data.delta_t*data.eta_ev[i] == 0
+			elif int(t) > data.t_arrival_1[i] and int(t) <= data.t_departure_1[i]:
+				return model.EEV_1[i,t] - model.EEV_1[i,str(int(t)-1)] - model.PEV_ch_1[i,t]*data.delta_t*data.eta_ev[i] == 0
+		model.energy_soc_ev_1 = Constraint(self.List_EVTd_1, rule=energy_ev_rule_1)
 
-		# def power_ch_total_ev_rule(model, i, t):
-		# 	return(model.PEV_ch[i,t] - model.PEV_ch_a[i,t] - model.PEV_ch_b[i,t] - model.PEV_ch_c[i,t] == 0)
-		# model.power_ch_total_ev = Constraint(self.List_EVTd, rule= power_ch_total_ev_rule)
+		def power_ch_total_ev_rule_1(model, i, t):
+			return(model.PEV_ch_1[i,t] - model.PEV_ch_a_1[i,t] - model.PEV_ch_b_1[i,t] - model.PEV_ch_c_1[i,t] == 0)
+		model.power_ch_total_ev_1 = Constraint(self.List_EVTd_1, rule= power_ch_total_ev_rule_1)
 
-		# def power_balance_charging_1_1_ev_rule(model,i,t):
-		# 	if int(t) >= data.t_arrival[i] and int(t) <= data.t_departure[i]:
-		# 		return(model.PEV_ch_a[i,t] == model.PEV_ch_b[i,t])
-		# 	else:
-		# 		return(model.PEV_ch_a[i,t] == 0)
-		# model.power_balance_charging_1_1_ev = Constraint(self.List_EVTd, rule=power_balance_charging_1_1_ev_rule)
+		def power_balance_charging_1_1_ev_rule_1(model,i,t):
+			if int(t) >= data.t_arrival_1[i] and int(t) <= data.t_departure_1[i]:
+				return(model.PEV_ch_a_1[i,t] == model.PEV_ch_b_1[i,t])
+			else:
+				return(model.PEV_ch_a_1[i,t] == 0)
+		model.power_balance_charging_1_1_ev_1 = Constraint(self.List_EVTd_1, rule=power_balance_charging_1_1_ev_rule_1)
 
-		# def power_balance_charging_2_1_ev_rule(model,i,t):
-		# 	if int(t) >= data.t_arrival[i] and int(t) <= data.t_departure[i]:
-		# 		return(model.PEV_ch_a[i,t] == model.PEV_ch_c[i,t])
-		# 	else:
-		# 		return(model.PEV_ch_b[i,t] == 0)
-		# model.power_balance_charging_2_1_ev = Constraint(self.List_EVTd, rule=power_balance_charging_2_1_ev_rule)
+		def power_balance_charging_2_1_ev_rule_1(model,i,t):
+			if int(t) >= data.t_arrival_1[i] and int(t) <= data.t_departure_1[i]:
+				return(model.PEV_ch_a_1[i,t] == model.PEV_ch_c_1[i,t])
+			else:
+				return(model.PEV_ch_b_1[i,t] == 0)
+		model.power_balance_charging_2_1_ev_1 = Constraint(self.List_EVTd_1, rule=power_balance_charging_2_1_ev_rule_1)
 
-		# def power_balance_charging_3_1_ev_rule(model,i,t):
-		# 	if int(t) >= data.t_arrival[i] and int(t) <= data.t_departure[i]:
-		# 		return(model.PEV_ch_b[i,t] == model.PEV_ch_c[i,t])
-		# 	else:
-		# 		return(model.PEV_ch_c[i,t] == 0)
-		# model.power_balance_charging_3_1_ev = Constraint(self.List_EVTd, rule=power_balance_charging_3_1_ev_rule)
+		def power_balance_charging_3_1_ev_rule_1(model,i,t):
+			if int(t) >= data.t_arrival_1[i] and int(t) <= data.t_departure_1[i]:
+				return(model.PEV_ch_b_1[i,t] == model.PEV_ch_c_1[i,t])
+			else:
+				return(model.PEV_ch_c_1[i,t] == 0)
+		model.power_balance_charging_3_1_ev_1 = Constraint(self.List_EVTd_1, rule=power_balance_charging_3_1_ev_rule_1)
 
-		# def power_limits_ev_rule_1(model,i,t):
-		# 	return(model.PEV_ch[i,t] >= 0 )
-		# model.power_limits_ev_1 = Constraint(self.List_EVTd, rule = power_limits_ev_rule_1)
+		def power_limits_ev_rule_1_1(model,i,t):
+			return(model.PEV_ch_1[i,t] >= 0 )
+		model.power_limits_ev_1_1 = Constraint(self.List_EVTd_1, rule = power_limits_ev_rule_1_1)
 
-		# def power_limits_ev_rule_2(model,i,t):
-		# 	return(model.PEV_ch[i,t] - data.PEVmax[i] <= 0)
-		# model.power_limits_ev_2 = Constraint(self.List_EVTd, rule = power_limits_ev_rule_2)
+		def power_limits_ev_rule_2_1(model,i,t):
+			return(model.PEV_ch_1[i,t] - data.PEVmax_1[i] <= 0)
+		model.power_limits_ev_2_1 = Constraint(self.List_EVTd_1, rule = power_limits_ev_rule_2_1)
 
-		# def energy_limits_ev_rule_1(model,i,t):
-		# 	return(model.EEV[i,t] >= data.EEVmin[i] )
-		# model.energy_limits_ev_1 = Constraint(self.List_EVTd, rule = energy_limits_ev_rule_1)
+		def energy_limits_ev_rule_1_1(model,i,t):
+			return(model.EEV_1[i,t] >= data.EEVmin_1[i] )
+		model.energy_limits_ev_1_1 = Constraint(self.List_EVTd_1, rule = energy_limits_ev_rule_1_1)
 
-		# def energy_limits_ev_rule_2(model,i,t):
-		# 	return(model.EEV[i,t] <= data.EEVmax[i] )
-		# model.energy_limits_ev_2 = Constraint(self.List_EVTd, rule = energy_limits_ev_rule_2)
+		def energy_limits_ev_rule_2_1(model,i,t):
+			return(model.EEV_1[i,t] <= data.EEVmax_1[i] )
+		model.energy_limits_ev_2_1 = Constraint(self.List_EVTd_1, rule = energy_limits_ev_rule_2_1)
 
-		# def energy_ev_max_rule(model,i):
-		# 	return(model.EEV[i,str(data.t_departure[i])] - data.EEVmax[i] == 0)
-		# model.energy_ev_max = Constraint(self.EV, rule = energy_ev_max_rule)
+		def energy_ev_max_rule_1(model,i):
+			return(model.EEV_1[i,str(data.t_departure_1[i])] - data.EEVmax_1[i] == 0)
+		model.energy_ev_max_1 = Constraint(self.EV, rule = energy_ev_max_rule_1)
+
+		#----------------- EV_2 Variables --------------------------------------------------
+
+		def energy_ev_rule_2(model,i,t):
+			if int(t) == data.t_arrival_2[i]:
+				return model.EEV_2[i,str(data.t_arrival_2[i])] - data.EEVi_2[i] - model.PEV_ch_2[i,str(data.t_arrival_2[i])]*data.delta_t*data.eta_ev[i] == 0
+			elif int(t) > data.t_arrival_2[i] and int(t) <= data.t_departure_2[i]:
+				return model.EEV_2[i,t] - model.EEV_2[i,str(int(t)-1)] - model.PEV_ch_2[i,t]*data.delta_t*data.eta_ev[i] == 0
+		model.energy_soc_ev_2 = Constraint(self.List_EVTd_2, rule=energy_ev_rule_2)
+
+		def power_ch_total_ev_rule_2(model, i, t):
+			return(model.PEV_ch_2[i,t] - model.PEV_ch_a_2[i,t] - model.PEV_ch_b_2[i,t] - model.PEV_ch_c_2[i,t] == 0)
+		model.power_ch_total_ev_2 = Constraint(self.List_EVTd_2, rule= power_ch_total_ev_rule_2)
+
+		def power_balance_charging_1_1_ev_rule_2(model,i,t):
+			if int(t) >= data.t_arrival_2[i] and int(t) <= data.t_departure_2[i]:
+				return(model.PEV_ch_a_2[i,t] == model.PEV_ch_b_2[i,t])
+			else:
+				return(model.PEV_ch_a_2[i,t] == 0)
+		model.power_balance_charging_1_1_ev_2 = Constraint(self.List_EVTd_2, rule=power_balance_charging_1_1_ev_rule_2)
+
+		def power_balance_charging_2_1_ev_rule_2(model,i,t):
+			if int(t) >= data.t_arrival_2[i] and int(t) <= data.t_departure_2[i]:
+				return(model.PEV_ch_a_2[i,t] == model.PEV_ch_c_2[i,t])
+			else:
+				return(model.PEV_ch_b_2[i,t] == 0)
+		model.power_balance_charging_2_1_ev_2 = Constraint(self.List_EVTd_2, rule=power_balance_charging_2_1_ev_rule_2)
+
+		def power_balance_charging_3_1_ev_rule_2(model,i,t):
+			if int(t) >= data.t_arrival_2[i] and int(t) <= data.t_departure_2[i]:
+				return(model.PEV_ch_b_2[i,t] == model.PEV_ch_c_2[i,t])
+			else:
+				return(model.PEV_ch_c_2[i,t] == 0)
+		model.power_balance_charging_3_1_ev_2 = Constraint(self.List_EVTd_2, rule=power_balance_charging_3_1_ev_rule_2)
+
+		def power_limits_ev_rule_1_2(model,i,t):
+			return(model.PEV_ch_2[i,t] >= 0 )
+		model.power_limits_ev_1_2 = Constraint(self.List_EVTd_1, rule = power_limits_ev_rule_1_2)
+
+		def power_limits_ev_rule_2_2(model,i,t):
+			return(model.PEV_ch_2[i,t] - data.PEVmax_2[i] <= 0)
+		model.power_limits_ev_2_2 = Constraint(self.List_EVTd_2, rule = power_limits_ev_rule_2_2)
+
+		def energy_limits_ev_rule_1_2(model,i,t):
+			return(model.EEV_2[i,t] >= data.EEVmin_2[i] )
+		model.energy_limits_ev_1_2 = Constraint(self.List_EVTd_2, rule = energy_limits_ev_rule_1_2)
+
+		def energy_limits_ev_rule_2_2(model,i,t):
+			return(model.EEV_2[i,t] <= data.EEVmax_2[i] )
+		model.energy_limits_ev_2_2 = Constraint(self.List_EVTd_2, rule = energy_limits_ev_rule_2_2)
+
+		def energy_ev_max_rule_2(model,i):
+			return(model.EEV_2[i,str(data.t_departure_2[i])] - data.EEVmax_2[i] == 0)
+		model.energy_ev_max_2 = Constraint(self.EV, rule = energy_ev_max_rule_2)
 
 		#----------------- FIX Variables --------------------------------------------------
 		model.fix_active_power = ConstraintList()
@@ -1820,5 +1808,7 @@ class MathematicalModel:
 		self.PB = model.PB.get_values()
 		self.PB_ch = model.PB_ch.get_values()
 		self.PB_dis = model.PB_dis.get_values()	
-
-		print(self.xd)	
+		self.PEV_ch_1 = model.PEV_ch_1.get_values()
+		self.EEV_1 = model.EEV_1.get_values()
+		self.PEV_ch_2 = model.PEV_ch_2.get_values()
+		self.EEV_2 = model.EEV_2.get_values()

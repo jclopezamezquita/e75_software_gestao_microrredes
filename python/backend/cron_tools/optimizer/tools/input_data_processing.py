@@ -12,6 +12,7 @@ class InputData:
 		self.N = data["set_of_nodes"]
 		self.L = [tuple(x) for x in data["set_of_lines"]]
 		self.B = data["set_of_energy_storage_systems"]
+		self.EV = data["set_of_electric_vehicles"]
 		self.GD = data["set_of_thermal_generator"]
 		self.O = data["set_of_outage"]
 		self.S = data["set_of_scenarios"]
@@ -161,6 +162,35 @@ class InputData:
 			self.EBmin[self.B[index]] = data["minimum_energy_capacity_ess"][index]
 			self.EBmax[self.B[index]] = data["maximum_energy_capacity_ess"][index]
 			self.eta_b[self.B[index]] = data["ess_efficiency"][index]
+		self.dict_nos_ev = data["location_of_ev"]
+		self.PEVmax_1 = {}
+		self.EEVi_1 = {}
+		self.EEVmin_1 = {}
+		self.EEVmax_1 = {}
+		self.eta_ev = {}
+		self.t_arrival_1 = {}
+		self.t_departure_1 = {}
+		for index in range(len(data["set_of_electric_vehicles"])):
+			self.PEVmax_1[self.EV[index]] = data["maximum_power_ev_1"][index]
+			self.EEVi_1[self.EV[index]] = data["initial_energy_of_the_ev_1"][index]
+			self.EEVmin_1[self.EV[index]] = data["minimum_energy_capacity_ev_1"][index]
+			self.EEVmax_1[self.EV[index]] = data["maximum_energy_capacity_ev_1"][index]
+			self.eta_ev[self.EV[index]] = data["ev_efficiency"][index]
+			self.t_arrival_1[self.EV[index]] = data["t_arrival_1"][index]
+			self.t_departure_1[self.EV[index]] = data["t_departure_1"][index]
+		self.PEVmax_2 = {}
+		self.EEVi_2 = {}
+		self.EEVmin_2 = {}
+		self.EEVmax_2 = {}
+		self.t_arrival_2 = {}
+		self.t_departure_2 = {}
+		for index in range(len(data["set_of_electric_vehicles"])):
+			self.PEVmax_2[self.EV[index]] = data["maximum_power_ev_2"][index]
+			self.EEVi_2[self.EV[index]] = data["initial_energy_of_the_ev_2"][index]
+			self.EEVmin_2[self.EV[index]] = data["minimum_energy_capacity_ev_2"][index]
+			self.EEVmax_2[self.EV[index]] = data["maximum_energy_capacity_ev_2"][index]
+			self.t_arrival_2[self.EV[index]] = data["t_arrival_2"][index]
+			self.t_departure_2[self.EV[index]] = data["t_departure_2"][index]
 		self.Y = data["number_discrete_blocks_piecewise_linearization"]
 		self.out_time = 2
 		self.Vmax = self.Vnom * 1.05 # kV

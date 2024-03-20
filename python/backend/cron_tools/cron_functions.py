@@ -25,7 +25,7 @@ def microgrid_dayahead_optimizer():
     data_milp = json.loads(data_milp.text)
 
     data_EV = requests.get(url=URL + "v1/api/ev_parameters", headers={"accept" : "application/json"})
-    data_EV = json.loads(data_milp.text)
+    data_EV = json.loads(data_EV.text)
 
 
     for index in data_EV:
@@ -43,8 +43,6 @@ def microgrid_dayahead_optimizer():
     print(initial_SoC_EV_1)
     print(t_departure_1)
     
-
-
 
     '''
     URL2='https://bcd89f1a2c30.ngrok.io/'
@@ -91,6 +89,11 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'bess':
                 cont2 += 1
                 input_data['set_of_energy_storage_systems'] = [str(cont2)]
+        cont2 = 0
+        for index in data_nodes:    
+            if index['der'] == 'ev':
+                cont2 += 1
+                input_data['set_of_electric_vehicles'] = [str(cont2)]
         cont5 = 0
         for index in data_nodes:    
             if index['der'] == 'genset':
