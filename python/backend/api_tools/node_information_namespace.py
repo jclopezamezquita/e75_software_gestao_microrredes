@@ -156,7 +156,8 @@ node_information_update_parser.add_argument('power_factor', type=power_factor_ru
 node_information_update_parser.add_argument('soc_min_bat', type=soc_min_bat_rule, required=False, help='Minimum SOC of the BESS')
 node_information_update_parser.add_argument('soc_max_bat', type=soc_min_bat_rule, required=False, help='Maximum SOC of the BESS')
 node_information_update_parser.add_argument('bat_nom_energy', type=bat_nom_energy_rule, required=False, help='Nominal energy of the BESS')
-
+node_information_update_parser.add_argument('soc_min_ev', type=soc_min_ev_rule, required=False, help='Minimum SOC of the EV')
+node_information_update_parser.add_argument('soc_max_ev', type=soc_min_ev_rule, required=False, help='Maximum SOC of the EV')
 
 model = {
     'id': fields.Integer(),
@@ -170,6 +171,8 @@ model = {
     'soc_min_bat': fields.Float(),
     'soc_max_bat': fields.Float(),
     'bat_nom_energy': fields.Float(),
+    'soc_min_ev': fields.Float(),
+    'soc_max_ev': fields.Float(),
 }
 node_model = node_information_namespace.model('node_information', model)
 
@@ -209,7 +212,9 @@ class node_information_ListCreate(Resource):
                             power_factor=args['power_factor'],
                             soc_min_bat=args['soc_min_bat'],
                             soc_max_bat=args['soc_max_bat'],
-                            bat_nom_energy=args['bat_nom_energy'])
+                            bat_nom_energy=args['bat_nom_energy'],
+                            soc_min_ev=args['soc_min_ev'],
+                            soc_max_ev=args['soc_max_ev'])
 
         if (new_node.der == 'bess') and new_node.bat_nom_energy is None:
             return abort(405, 'Input bess validation failed', errors={'der' : 'BESS has no bat_nom_energy attribute'})
@@ -281,7 +286,9 @@ class node_information_Retrieve(Resource):
             'power_factor': args['power_factor'],
             'soc_min_bat': args['soc_min_bat'],
             'soc_max_bat': args['soc_max_bat'],
-            'bat_nom_energy': args['bat_nom_energy']
+            'bat_nom_energy': args['bat_nom_energy'],
+            'soc_min_ev': args['soc_min_ev'],
+            'soc_max_ev': args['soc_max_bat']
         }
 
         query = node_information_model.query.get(node_id)

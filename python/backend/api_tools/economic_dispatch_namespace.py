@@ -139,6 +139,54 @@ economic_dispatch_parser.add_argument('pv_curt_t20', type=curt_rule, required=Tr
 economic_dispatch_parser.add_argument('pv_curt_t21', type=curt_rule, required=True, help='PV disconnect dispatch at 21h.')
 economic_dispatch_parser.add_argument('pv_curt_t22', type=curt_rule, required=True, help='PV disconnect dispatch at 22h.')
 economic_dispatch_parser.add_argument('pv_curt_t23', type=curt_rule, required=True, help='PV disconnect dispatch at 23h.')
+economic_dispatch_parser.add_argument('ev_1_power_t00', type=bat_power_rule, required=True, help='EV dispatch at 00h.')
+economic_dispatch_parser.add_argument('ev_1_power_t01', type=bat_power_rule, required=True, help='EV dispatch at 01h.')
+economic_dispatch_parser.add_argument('ev_1_power_t02', type=bat_power_rule, required=True, help='EV dispatch at 02h.')
+economic_dispatch_parser.add_argument('ev_1_power_t03', type=bat_power_rule, required=True, help='EV dispatch at 03h.')
+economic_dispatch_parser.add_argument('ev_1_power_t04', type=bat_power_rule, required=True, help='EV dispatch at 04h.')
+economic_dispatch_parser.add_argument('ev_1_power_t05', type=bat_power_rule, required=True, help='EV dispatch at 05h.')
+economic_dispatch_parser.add_argument('ev_1_power_t06', type=bat_power_rule, required=True, help='EV dispatch at 06h.')
+economic_dispatch_parser.add_argument('ev_1_power_t07', type=bat_power_rule, required=True, help='EV dispatch at 07h.')
+economic_dispatch_parser.add_argument('ev_1_power_t08', type=bat_power_rule, required=True, help='EV dispatch at 08h.')
+economic_dispatch_parser.add_argument('ev_1_power_t09', type=bat_power_rule, required=True, help='EV dispatch at 09h.')
+economic_dispatch_parser.add_argument('ev_1_power_t10', type=bat_power_rule, required=True, help='EV dispatch at 10h.')
+economic_dispatch_parser.add_argument('ev_1_power_t11', type=bat_power_rule, required=True, help='EV dispatch at 11h.')
+economic_dispatch_parser.add_argument('ev_1_power_t12', type=bat_power_rule, required=True, help='EV dispatch at 12h.')
+economic_dispatch_parser.add_argument('ev_1_power_t13', type=bat_power_rule, required=True, help='EV dispatch at 13h.')
+economic_dispatch_parser.add_argument('ev_1_power_t14', type=bat_power_rule, required=True, help='EV dispatch at 14h.')
+economic_dispatch_parser.add_argument('ev_1_power_t15', type=bat_power_rule, required=True, help='EV dispatch at 15h.')
+economic_dispatch_parser.add_argument('ev_1_power_t16', type=bat_power_rule, required=True, help='EV dispatch at 16h.')
+economic_dispatch_parser.add_argument('ev_1_power_t17', type=bat_power_rule, required=True, help='EV dispatch at 17h.')
+economic_dispatch_parser.add_argument('ev_1_power_t18', type=bat_power_rule, required=True, help='EV dispatch at 18h.')
+economic_dispatch_parser.add_argument('ev_1_power_t19', type=bat_power_rule, required=True, help='EV dispatch at 19h.')
+economic_dispatch_parser.add_argument('ev_1_power_t20', type=bat_power_rule, required=True, help='EV dispatch at 20h.')
+economic_dispatch_parser.add_argument('ev_1_power_t21', type=bat_power_rule, required=True, help='EV dispatch at 21h.')
+economic_dispatch_parser.add_argument('ev_1_power_t22', type=bat_power_rule, required=True, help='EV dispatch at 22h.')
+economic_dispatch_parser.add_argument('ev_1_power_t23', type=bat_power_rule, required=True, help='EV dispatch at 23h.')
+economic_dispatch_parser.add_argument('ev_2_power_t00', type=bat_power_rule, required=True, help='EV dispatch at 00h.')
+economic_dispatch_parser.add_argument('ev_2_power_t01', type=bat_power_rule, required=True, help='EV dispatch at 01h.')
+economic_dispatch_parser.add_argument('ev_2_power_t02', type=bat_power_rule, required=True, help='EV dispatch at 02h.')
+economic_dispatch_parser.add_argument('ev_2_power_t03', type=bat_power_rule, required=True, help='EV dispatch at 03h.')
+economic_dispatch_parser.add_argument('ev_2_power_t04', type=bat_power_rule, required=True, help='EV dispatch at 04h.')
+economic_dispatch_parser.add_argument('ev_2_power_t05', type=bat_power_rule, required=True, help='EV dispatch at 05h.')
+economic_dispatch_parser.add_argument('ev_2_power_t06', type=bat_power_rule, required=True, help='EV dispatch at 06h.')
+economic_dispatch_parser.add_argument('ev_2_power_t07', type=bat_power_rule, required=True, help='EV dispatch at 07h.')
+economic_dispatch_parser.add_argument('ev_2_power_t08', type=bat_power_rule, required=True, help='EV dispatch at 08h.')
+economic_dispatch_parser.add_argument('ev_2_power_t09', type=bat_power_rule, required=True, help='EV dispatch at 09h.')
+economic_dispatch_parser.add_argument('ev_2_power_t10', type=bat_power_rule, required=True, help='EV dispatch at 10h.')
+economic_dispatch_parser.add_argument('ev_2_power_t11', type=bat_power_rule, required=True, help='EV dispatch at 11h.')
+economic_dispatch_parser.add_argument('ev_2_power_t12', type=bat_power_rule, required=True, help='EV dispatch at 12h.')
+economic_dispatch_parser.add_argument('ev_2_power_t13', type=bat_power_rule, required=True, help='EV dispatch at 13h.')
+economic_dispatch_parser.add_argument('ev_2_power_t14', type=bat_power_rule, required=True, help='EV dispatch at 14h.')
+economic_dispatch_parser.add_argument('ev_2_power_t15', type=bat_power_rule, required=True, help='EV dispatch at 15h.')
+economic_dispatch_parser.add_argument('ev_2_power_t16', type=bat_power_rule, required=True, help='EV dispatch at 16h.')
+economic_dispatch_parser.add_argument('ev_2_power_t17', type=bat_power_rule, required=True, help='EV dispatch at 17h.')
+economic_dispatch_parser.add_argument('ev_2_power_t18', type=bat_power_rule, required=True, help='EV dispatch at 18h.')
+economic_dispatch_parser.add_argument('ev_2_power_t19', type=bat_power_rule, required=True, help='EV dispatch at 19h.')
+economic_dispatch_parser.add_argument('ev_2_power_t20', type=bat_power_rule, required=True, help='EV dispatch at 20h.')
+economic_dispatch_parser.add_argument('ev_2_power_t21', type=bat_power_rule, required=True, help='EV dispatch at 21h.')
+economic_dispatch_parser.add_argument('ev_2_power_t22', type=bat_power_rule, required=True, help='EV dispatch at 22h.')
+economic_dispatch_parser.add_argument('ev_2_power_t23', type=bat_power_rule, required=True, help='EV dispatch at 23h.')
 
 # Parser for put
 economic_dispatch_update_parser = economic_dispatch_namespace.parser()
@@ -238,6 +286,54 @@ economic_dispatch_update_parser.add_argument('pv_curt_t20', type=curt_rule, requ
 economic_dispatch_update_parser.add_argument('pv_curt_t21', type=curt_rule, required=False, help='PV disconnect dispatch at 21h.')
 economic_dispatch_update_parser.add_argument('pv_curt_t22', type=curt_rule, required=False, help='PV disconnect dispatch at 22h.')
 economic_dispatch_update_parser.add_argument('pv_curt_t23', type=curt_rule, required=False, help='PV disconnect dispatch at 23h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t00', type=bat_power_rule, required=False, help='EV dispatch at 00h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t01', type=bat_power_rule, required=False, help='EV dispatch at 01h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t02', type=bat_power_rule, required=False, help='EV dispatch at 02h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t03', type=bat_power_rule, required=False, help='EV dispatch at 03h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t04', type=bat_power_rule, required=False, help='EV dispatch at 04h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t05', type=bat_power_rule, required=False, help='EV dispatch at 05h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t06', type=bat_power_rule, required=False, help='EV dispatch at 06h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t07', type=bat_power_rule, required=False, help='EV dispatch at 07h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t08', type=bat_power_rule, required=False, help='EV dispatch at 08h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t09', type=bat_power_rule, required=False, help='EV dispatch at 09h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t10', type=bat_power_rule, required=False, help='EV dispatch at 10h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t11', type=bat_power_rule, required=False, help='EV dispatch at 11h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t12', type=bat_power_rule, required=False, help='EV dispatch at 12h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t13', type=bat_power_rule, required=False, help='EV dispatch at 13h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t14', type=bat_power_rule, required=False, help='EV dispatch at 14h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t15', type=bat_power_rule, required=False, help='EV dispatch at 15h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t16', type=bat_power_rule, required=False, help='EV dispatch at 16h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t17', type=bat_power_rule, required=False, help='EV dispatch at 17h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t18', type=bat_power_rule, required=False, help='EV dispatch at 18h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t19', type=bat_power_rule, required=False, help='EV dispatch at 19h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t20', type=bat_power_rule, required=False, help='EV dispatch at 20h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t21', type=bat_power_rule, required=False, help='EV dispatch at 21h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t22', type=bat_power_rule, required=False, help='EV dispatch at 22h.')
+economic_dispatch_update_parser.add_argument('ev_1_power_t23', type=bat_power_rule, required=False, help='EV dispatch at 23h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t00', type=bat_power_rule, required=False, help='EV dispatch at 00h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t01', type=bat_power_rule, required=False, help='EV dispatch at 01h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t02', type=bat_power_rule, required=False, help='EV dispatch at 02h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t03', type=bat_power_rule, required=False, help='EV dispatch at 03h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t04', type=bat_power_rule, required=False, help='EV dispatch at 04h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t05', type=bat_power_rule, required=False, help='EV dispatch at 05h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t06', type=bat_power_rule, required=False, help='EV dispatch at 06h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t07', type=bat_power_rule, required=False, help='EV dispatch at 07h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t08', type=bat_power_rule, required=False, help='EV dispatch at 08h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t09', type=bat_power_rule, required=False, help='EV dispatch at 09h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t10', type=bat_power_rule, required=False, help='EV dispatch at 10h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t11', type=bat_power_rule, required=False, help='EV dispatch at 11h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t12', type=bat_power_rule, required=False, help='EV dispatch at 12h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t13', type=bat_power_rule, required=False, help='EV dispatch at 13h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t14', type=bat_power_rule, required=False, help='EV dispatch at 14h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t15', type=bat_power_rule, required=False, help='EV dispatch at 15h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t16', type=bat_power_rule, required=False, help='EV dispatch at 16h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t17', type=bat_power_rule, required=False, help='EV dispatch at 17h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t18', type=bat_power_rule, required=False, help='EV dispatch at 18h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t19', type=bat_power_rule, required=False, help='EV dispatch at 19h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t20', type=bat_power_rule, required=False, help='EV dispatch at 20h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t21', type=bat_power_rule, required=False, help='EV dispatch at 21h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t22', type=bat_power_rule, required=False, help='EV dispatch at 22h.')
+economic_dispatch_update_parser.add_argument('ev_2_power_t23', type=bat_power_rule, required=False, help='EV dispatch at 23h.')
 
 
 model = {
@@ -338,6 +434,54 @@ model = {
     'pv_curt_t21': fields.Float(),
     'pv_curt_t22': fields.Float(),
     'pv_curt_t23': fields.Float(),
+    'ev_1_power_t00': fields.Float(),
+    'ev_1_power_t01': fields.Float(),
+    'ev_1_power_t02': fields.Float(),
+    'ev_1_power_t03': fields.Float(),
+    'ev_1_power_t04': fields.Float(),
+    'ev_1_power_t05': fields.Float(),
+    'ev_1_power_t06': fields.Float(),
+    'ev_1_power_t07': fields.Float(),
+    'ev_1_power_t08': fields.Float(),
+    'ev_1_power_t09': fields.Float(),
+    'ev_1_power_t10': fields.Float(),
+    'ev_1_power_t11': fields.Float(),
+    'ev_1_power_t12': fields.Float(),
+    'ev_1_power_t13': fields.Float(),
+    'ev_1_power_t14': fields.Float(),
+    'ev_1_power_t15': fields.Float(),
+    'ev_1_power_t16': fields.Float(),
+    'ev_1_power_t17': fields.Float(),
+    'ev_1_power_t18': fields.Float(),
+    'ev_1_power_t19': fields.Float(),
+    'ev_1_power_t20': fields.Float(),
+    'ev_1_power_t21': fields.Float(),
+    'ev_1_power_t22': fields.Float(),
+    'ev_1_power_t23': fields.Float(),
+    'ev_2_power_t00': fields.Float(),
+    'ev_2_power_t01': fields.Float(),
+    'ev_2_power_t02': fields.Float(),
+    'ev_2_power_t03': fields.Float(),
+    'ev_2_power_t04': fields.Float(),
+    'ev_2_power_t05': fields.Float(),
+    'ev_2_power_t06': fields.Float(),
+    'ev_2_power_t07': fields.Float(),
+    'ev_2_power_t08': fields.Float(),
+    'ev_2_power_t09': fields.Float(),
+    'ev_2_power_t10': fields.Float(),
+    'ev_2_power_t11': fields.Float(),
+    'ev_2_power_t12': fields.Float(),
+    'ev_2_power_t13': fields.Float(),
+    'ev_2_power_t14': fields.Float(),
+    'ev_2_power_t15': fields.Float(),
+    'ev_2_power_t16': fields.Float(),
+    'ev_2_power_t17': fields.Float(),
+    'ev_2_power_t18': fields.Float(),
+    'ev_2_power_t19': fields.Float(),
+    'ev_2_power_t20': fields.Float(),
+    'ev_2_power_t21': fields.Float(),
+    'ev_2_power_t22': fields.Float(),
+    'ev_2_power_t23': fields.Float(),
 }
 dispatch_model = economic_dispatch_namespace.model('economic_dispatch', model)
 
@@ -462,7 +606,53 @@ class economic_dispatch_ListCreate(Resource):
                             pv_curt_t20=args['pv_curt_t20'],
                             pv_curt_t21=args['pv_curt_t21'],
                             pv_curt_t22=args['pv_curt_t22'],
-                            pv_curt_t23=args['pv_curt_t23'])
+                            pv_curt_t23=args['pv_curt_t23'],
+                            ev_1_power_t01=args['ev_1_power_t01'],
+                            ev_1_power_t02=args['ev_1_power_t02'],
+                            ev_1_power_t03=args['ev_1_power_t03'],
+                            ev_1_power_t04=args['ev_1_power_t04'],
+                            ev_1_power_t05=args['ev_1_power_t05'],
+                            ev_1_power_t06=args['ev_1_power_t06'],
+                            ev_1_power_t07=args['ev_1_power_t07'],
+                            ev_1_power_t08=args['ev_1_power_t08'],
+                            ev_1_power_t09=args['ev_1_power_t09'],
+                            ev_1_power_t10=args['ev_1_power_t10'],
+                            ev_1_power_t11=args['ev_1_power_t11'],
+                            ev_1_power_t12=args['ev_1_power_t12'],
+                            ev_1_power_t13=args['ev_1_power_t13'],
+                            ev_1_power_t14=args['ev_1_power_t14'],
+                            ev_1_power_t15=args['ev_1_power_t15'],
+                            ev_1_power_t16=args['ev_1_power_t16'],
+                            ev_1_power_t17=args['ev_1_power_t17'],
+                            ev_1_power_t18=args['ev_1_power_t18'],
+                            ev_1_power_t19=args['ev_1_power_t19'],
+                            ev_1_power_t20=args['ev_1_power_t20'],
+                            ev_1_power_t21=args['ev_1_power_t21'],
+                            ev_1_power_t22=args['ev_1_power_t22'],
+                            ev_1_power_t23=args['ev_1_power_t23'],
+                            ev_2_power_t01=args['ev_2_power_t01'],
+                            ev_2_power_t02=args['ev_2_power_t02'],
+                            ev_2_power_t03=args['ev_2_power_t03'],
+                            ev_2_power_t04=args['ev_2_power_t04'],
+                            ev_2_power_t05=args['ev_2_power_t05'],
+                            ev_2_power_t06=args['ev_2_power_t06'],
+                            ev_2_power_t07=args['ev_2_power_t07'],
+                            ev_2_power_t08=args['ev_2_power_t08'],
+                            ev_2_power_t09=args['ev_2_power_t09'],
+                            ev_2_power_t10=args['ev_2_power_t10'],
+                            ev_2_power_t11=args['ev_2_power_t11'],
+                            ev_2_power_t12=args['ev_2_power_t12'],
+                            ev_2_power_t13=args['ev_2_power_t13'],
+                            ev_2_power_t14=args['ev_2_power_t14'],
+                            ev_2_power_t15=args['ev_2_power_t15'],
+                            ev_2_power_t16=args['ev_2_power_t16'],
+                            ev_2_power_t17=args['ev_2_power_t17'],
+                            ev_2_power_t18=args['ev_2_power_t18'],
+                            ev_2_power_t19=args['ev_2_power_t19'],
+                            ev_2_power_t20=args['ev_2_power_t20'],
+                            ev_2_power_t21=args['ev_2_power_t21'],
+                            ev_2_power_t22=args['ev_2_power_t22'],
+                            ev_2_power_t23=args['ev_2_power_t23'])
 
 
         try:
@@ -619,7 +809,55 @@ class economic_dispatch_Retrieve(Resource):
             'pv_curt_t20': args['pv_curt_t20'],
             'pv_curt_t21': args['pv_curt_t21'],
             'pv_curt_t22': args['pv_curt_t22'],
-            'pv_curt_t23': args['pv_curt_t23']
+            'pv_curt_t23': args['pv_curt_t23'],
+            'ev_1_power_t00': args['ev_1_power_t00'],
+            'ev_1_power_t01': args['ev_1_power_t01'],
+            'ev_1_power_t02': args['ev_1_power_t02'],
+            'ev_1_power_t03': args['ev_1_power_t03'],
+            'ev_1_power_t04': args['ev_1_power_t04'],
+            'ev_1_power_t05': args['ev_1_power_t05'],
+            'ev_1_power_t06': args['ev_1_power_t06'],
+            'ev_1_power_t07': args['ev_1_power_t07'],
+            'ev_1_power_t08': args['ev_1_power_t08'],
+            'ev_1_power_t09': args['ev_1_power_t09'],
+            'ev_1_power_t10': args['ev_1_power_t10'],
+            'ev_1_power_t11': args['ev_1_power_t11'],
+            'ev_1_power_t12': args['ev_1_power_t12'],
+            'ev_1_power_t13': args['ev_1_power_t13'],
+            'ev_1_power_t14': args['ev_1_power_t14'],
+            'ev_1_power_t15': args['ev_1_power_t15'],
+            'ev_1_power_t16': args['ev_1_power_t16'],
+            'ev_1_power_t17': args['ev_1_power_t17'],
+            'ev_1_power_t18': args['ev_1_power_t18'],
+            'ev_1_power_t19': args['ev_1_power_t19'],
+            'ev_1_power_t20': args['ev_1_power_t20'],
+            'ev_1_power_t21': args['ev_1_power_t21'],
+            'ev_1_power_t22': args['ev_1_power_t22'],
+            'ev_1_power_t23': args['ev_1_power_t23'],
+            'ev_2_power_t00': args['ev_2_power_t00'],
+            'ev_2_power_t01': args['ev_2_power_t01'],
+            'ev_2_power_t02': args['ev_2_power_t02'],
+            'ev_2_power_t03': args['ev_2_power_t03'],
+            'ev_2_power_t04': args['ev_2_power_t04'],
+            'ev_2_power_t05': args['ev_2_power_t05'],
+            'ev_2_power_t06': args['ev_2_power_t06'],
+            'ev_2_power_t07': args['ev_2_power_t07'],
+            'ev_2_power_t08': args['ev_2_power_t08'],
+            'ev_2_power_t09': args['ev_2_power_t09'],
+            'ev_2_power_t10': args['ev_2_power_t10'],
+            'ev_2_power_t11': args['ev_2_power_t11'],
+            'ev_2_power_t12': args['ev_2_power_t12'],
+            'ev_2_power_t13': args['ev_2_power_t13'],
+            'ev_2_power_t14': args['ev_2_power_t14'],
+            'ev_2_power_t15': args['ev_2_power_t15'],
+            'ev_2_power_t16': args['ev_2_power_t16'],
+            'ev_2_power_t17': args['ev_2_power_t17'],
+            'ev_2_power_t18': args['ev_2_power_t18'],
+            'ev_2_power_t19': args['ev_2_power_t19'],
+            'ev_2_power_t20': args['ev_2_power_t20'],
+            'ev_2_power_t21': args['ev_2_power_t21'],
+            'ev_2_power_t22': args['ev_2_power_t22'],
+            'ev_2_power_t23': args['ev_2_power_t23']
         }
         
         query = economic_dispatch_model.query.get(dispatch_id)

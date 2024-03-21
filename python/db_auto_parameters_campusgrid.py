@@ -29,6 +29,10 @@ data = requests.post(url=URL + "v1/api/node_information", data=parameters_node_5
 print(data.status_code)
 print(data.text)
 
+parameters_node_6 = {"name": "6", "type": "PQ", "der": "ev", "nominal_kva": 40, "minimum_kva": 0, "maximum_kva": 0, "power_factor": 1}
+data = requests.post(url=URL + "v1/api/node_information", data=parameters_node_6, headers={"accept" : "application/json"})
+print(data.status_code)
+print(data.text)
 
 # Dados da tabela branch_information
 parameters_branch_1_2 = {"name": "1-2", "initial_node": "1", "end_node": "2", "resistance_aa": 0.4138, "resistance_bb": 0.4138, "resistance_cc": 0.4138,
@@ -59,6 +63,12 @@ data = requests.post(url=URL + "v1/api/branch_information", data=parameters_bran
 print(data.status_code)
 print(data.text)
 
+parameters_branch_1_6 = {"name": "1-6", "initial_node": "1", "end_node": "6", "resistance_aa": 0.4138, "resistance_bb": 0.4138, "resistance_cc": 0.4138,
+"resistance_ab": 0.0523, "resistance_ac": 0.0523, "resistance_bc": 0.0523, "reactance_aa":  0.8258, "reactance_bb":  0.8258, "reactance_cc":  0.8258, 
+"reactance_ab":  0.4765, "reactance_ac":  0.4765, "reactance_bc":  0.4765, "max_current": 999}
+data = requests.post(url=URL + "v1/api/branch_information", data=parameters_branch_1_6, headers={"accept" : "application/json"})
+print(data.status_code)
+print(data.text)
 
 # Dados da tabela milp_parameters
 model_parameters = {"min_voltage_pu": 0.92, "max_voltage_pu": 1.05, "nominal_voltage_kv": 11.9, "num_blocks_linearization": 20, "pcc_cost_t01": 0.145, 
@@ -91,7 +101,13 @@ dispatch = {"bat_power_t00": 0.0, "bat_power_t01": 0.0, "bat_power_t02": 0.0, "b
 "load_curt_t17": 0.0, "load_curt_t18": 0.0, "load_curt_t19": 0.0, "load_curt_t20": 0.0, "load_curt_t21": 0.0, "load_curt_t22": 0.0, "load_curt_t23": 0.0, "pv_curt_t00": 0.0, 
 "pv_curt_t01": 0.0, "pv_curt_t02": 0.0, "pv_curt_t03": 0.0, "pv_curt_t04": 0.0, "pv_curt_t05": 0.0, "pv_curt_t06": 0.0, "pv_curt_t07": 0.0, "pv_curt_t08": 0.0, "pv_curt_t09": 0.0, 
 "pv_curt_t10": 0.0, "pv_curt_t11": 0.0, "pv_curt_t12": 0.0, "pv_curt_t13": 0.0, "pv_curt_t14": 0.0, "pv_curt_t15": 0.0, "pv_curt_t16": 0.0, "pv_curt_t17": 0.0, "pv_curt_t18": 0.0, 
-"pv_curt_t19": 0.0, "pv_curt_t20": 0.0, "pv_curt_t21": 0.0, "pv_curt_t22": 0.0, "pv_curt_t23": 0.0}
+"pv_curt_t19": 0.0, "pv_curt_t20": 0.0, "pv_curt_t21": 0.0, "pv_curt_t22": 0.0, "pv_curt_t23": 0.0, "ev_1_power_t00": 0.0, "ev_1_power_t01": 0.0, "ev_1_power_t02": 0.0, "ev_1_power_t03": 0.0, "ev_1_power_t04": 0.0, "ev_1_power_t05": 0.0, "ev_1_power_t06": 0.0,
+"ev_1_power_t07": 0.0714, "ev_1_power_t08": 0.4049, "ev_1_power_t09": 2.5961, "ev_1_power_t10": 0.0, "ev_1_power_t11": 1.0394, "ev_1_power_t12": 3.4019, "ev_1_power_t13": 0.0,
+"ev_1_power_t14": 0.4859, "ev_1_power_t15": 0.0, "ev_1_power_t16": 0.0, "ev_1_power_t17": 0.0, "ev_1_power_t18": -1.7334, "ev_1_power_t19": -3.1997, "ev_1_power_t20": -3.0668,
+"ev_1_power_t21": 0.0, "ev_1_power_t22": 0.0, "ev_1_power_t23": 0.0, "ev_2_power_t00": 0.0, "ev_2_power_t01": 0.0, "ev_2_power_t02": 0.0, "ev_2_power_t03": 0.0, "ev_2_power_t04": 0.0, "ev_2_power_t05": 0.0, "ev_2_power_t06": 0.0,
+"ev_2_power_t07": 0.0714, "ev_2_power_t08": 0.4049, "ev_2_power_t09": 2.5961, "ev_2_power_t10": 0.0, "ev_2_power_t11": 1.0394, "ev_2_power_t12": 3.4019, "ev_2_power_t13": 0.0,
+"ev_2_power_t14": 0.4859, "ev_2_power_t15": 0.0, "ev_2_power_t16": 0.0, "ev_2_power_t17": 0.0, "ev_2_power_t18": -1.7334, "ev_2_power_t19": -3.1997, "ev_2_power_t20": -3.0668,
+"ev_2_power_t21": 0.0, "ev_2_power_t22": 0.0, "ev_2_power_t23": 0.0}
 data = requests.post(url=URL + "/v1/api/economic_dispatch/", data=dispatch, headers={"accept" : "application/json"})
 print(data.status_code)
 # print(data.text)

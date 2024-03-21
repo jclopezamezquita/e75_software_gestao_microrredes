@@ -90,7 +90,10 @@ def microgrid_dayahead_optimizer():
                 cont2 += 1
                 input_data['set_of_energy_storage_systems'] = [str(cont2)]
         cont2 = 0
-        for index in data_nodes:    
+        for index in data_nodes:
+            # Tirar linha 95 e 96 após atualizar as informações de nó
+            cont2 += 1
+            input_data['set_of_electric_vehicles'] = [str(cont2)]    
             if index['der'] == 'ev':
                 cont2 += 1
                 input_data['set_of_electric_vehicles'] = [str(cont2)]

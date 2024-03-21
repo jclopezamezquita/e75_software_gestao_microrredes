@@ -67,6 +67,8 @@ node_measurement_parser.add_argument('voltage_a_kv', type=voltage_rule, required
 node_measurement_parser.add_argument('voltage_b_kv', type=voltage_rule, required=True, help='Voltage of phase b (kV).')
 node_measurement_parser.add_argument('voltage_c_kv', type=voltage_rule, required=True, help='Voltage of phase c (kV).')
 node_measurement_parser.add_argument('soc_kwh', type=soc_rule, required=False, help='State of charge of BESS (kWh).')
+node_measurement_parser.add_argument('soc_ev_1_kwh', type=soc_rule, required=False, help='State of charge of EV (kWh).')
+node_measurement_parser.add_argument('soc_ev_2_kwh', type=soc_rule, required=False, help='State of charge of EV (kWh).')
 
 
 model = {
@@ -83,6 +85,8 @@ model = {
     'voltage_b_kv' : fields.Float(),
     'voltage_c_kv' : fields.Float(),
     'soc_kwh' : fields.Float(),
+    'soc_ev_1_kwh' : fields.Float(),
+    'soc_ev_2_kwh' : fields.Float(),
 }
 measurement_model = node_measurement_namespace.model('node_measurement', model)
 
@@ -210,7 +214,107 @@ model_2 = {
     'bess_soc_t20': fields.Float(default=0.0),
     'bess_soc_t21': fields.Float(default=0.0),
     'bess_soc_t22': fields.Float(default=0.0),
-    'bess_soc_t23': fields.Float(default=0.0)
+    'bess_soc_t23': fields.Float(default=0.0),
+
+    'ev_1_t00': fields.Float(default=0.0),
+    'ev_1_t01': fields.Float(default=0.0),
+    'ev_1_t02': fields.Float(default=0.0),
+    'ev_1_t03': fields.Float(default=0.0),
+    'ev_1_t04': fields.Float(default=0.0),
+    'ev_1_t05': fields.Float(default=0.0),
+    'ev_1_t06': fields.Float(default=0.0),
+    'ev_1_t07': fields.Float(default=0.0),
+    'ev_1_t08': fields.Float(default=0.0),
+    'ev_1_t09': fields.Float(default=0.0),
+    'ev_1_t10': fields.Float(default=0.0),
+    'ev_1_t11': fields.Float(default=0.0),
+    'ev_1_t12': fields.Float(default=0.0),
+    'ev_1_t13': fields.Float(default=0.0),
+    'ev_1_t14': fields.Float(default=0.0),
+    'ev_1_t15': fields.Float(default=0.0),
+    'ev_1_t16': fields.Float(default=0.0),
+    'ev_1_t17': fields.Float(default=0.0),
+    'ev_1_t18': fields.Float(default=0.0),
+    'ev_1_t19': fields.Float(default=0.0),
+    'ev_1_t20': fields.Float(default=0.0),
+    'ev_1_t21': fields.Float(default=0.0),
+    'ev_1_t22': fields.Float(default=0.0),
+    'ev_1_t23': fields.Float(default=0.0),
+
+    'ev_1_soc_t00': fields.Float(default=0.0),
+    'ev_1_soc_t01': fields.Float(default=0.0),
+    'ev_1_soc_t02': fields.Float(default=0.0),
+    'ev_1_soc_t03': fields.Float(default=0.0),
+    'ev_1_soc_t04': fields.Float(default=0.0),
+    'ev_1_soc_t05': fields.Float(default=0.0),
+    'ev_1_soc_t06': fields.Float(default=0.0),
+    'ev_1_soc_t07': fields.Float(default=0.0),
+    'ev_1_soc_t08': fields.Float(default=0.0),
+    'ev_1_soc_t09': fields.Float(default=0.0),
+    'ev_1_soc_t10': fields.Float(default=0.0),
+    'ev_1_soc_t11': fields.Float(default=0.0),
+    'ev_1_soc_t12': fields.Float(default=0.0),
+    'ev_1_soc_t13': fields.Float(default=0.0),
+    'ev_1_soc_t14': fields.Float(default=0.0),
+    'ev_1_soc_t15': fields.Float(default=0.0),
+    'ev_1_soc_t16': fields.Float(default=0.0),
+    'ev_1_soc_t17': fields.Float(default=0.0),
+    'ev_1_soc_t18': fields.Float(default=0.0),
+    'ev_1_soc_t19': fields.Float(default=0.0),
+    'ev_1_soc_t20': fields.Float(default=0.0),
+    'ev_1_soc_t21': fields.Float(default=0.0),
+    'ev_1_soc_t22': fields.Float(default=0.0),
+    'ev_1_soc_t23': fields.Float(default=0.0),
+
+    'ev_2_t00': fields.Float(default=0.0),
+    'ev_2_t01': fields.Float(default=0.0),
+    'ev_2_t02': fields.Float(default=0.0),
+    'ev_2_t03': fields.Float(default=0.0),
+    'ev_2_t04': fields.Float(default=0.0),
+    'ev_2_t05': fields.Float(default=0.0),
+    'ev_2_t06': fields.Float(default=0.0),
+    'ev_2_t07': fields.Float(default=0.0),
+    'ev_2_t08': fields.Float(default=0.0),
+    'ev_2_t09': fields.Float(default=0.0),
+    'ev_2_t10': fields.Float(default=0.0),
+    'ev_2_t11': fields.Float(default=0.0),
+    'ev_2_t12': fields.Float(default=0.0),
+    'ev_2_t13': fields.Float(default=0.0),
+    'ev_2_t14': fields.Float(default=0.0),
+    'ev_2_t15': fields.Float(default=0.0),
+    'ev_2_t16': fields.Float(default=0.0),
+    'ev_2_t17': fields.Float(default=0.0),
+    'ev_2_t18': fields.Float(default=0.0),
+    'ev_2_t19': fields.Float(default=0.0),
+    'ev_2_t20': fields.Float(default=0.0),
+    'ev_2_t21': fields.Float(default=0.0),
+    'ev_2_t22': fields.Float(default=0.0),
+    'ev_2_t23': fields.Float(default=0.0),
+
+    'ev_2_soc_t00': fields.Float(default=0.0),
+    'ev_2_soc_t01': fields.Float(default=0.0),
+    'ev_2_soc_t02': fields.Float(default=0.0),
+    'ev_2_soc_t03': fields.Float(default=0.0),
+    'ev_2_soc_t04': fields.Float(default=0.0),
+    'ev_2_soc_t05': fields.Float(default=0.0),
+    'ev_2_soc_t06': fields.Float(default=0.0),
+    'ev_2_soc_t07': fields.Float(default=0.0),
+    'ev_2_soc_t08': fields.Float(default=0.0),
+    'ev_2_soc_t09': fields.Float(default=0.0),
+    'ev_2_soc_t10': fields.Float(default=0.0),
+    'ev_2_soc_t11': fields.Float(default=0.0),
+    'ev_2_soc_t12': fields.Float(default=0.0),
+    'ev_2_soc_t13': fields.Float(default=0.0),
+    'ev_2_soc_t14': fields.Float(default=0.0),
+    'ev_2_soc_t15': fields.Float(default=0.0),
+    'ev_2_soc_t16': fields.Float(default=0.0),
+    'ev_2_soc_t17': fields.Float(default=0.0),
+    'ev_2_soc_t18': fields.Float(default=0.0),
+    'ev_2_soc_t19': fields.Float(default=0.0),
+    'ev_2_soc_t20': fields.Float(default=0.0),
+    'ev_2_soc_t21': fields.Float(default=0.0),
+    'ev_2_soc_t22': fields.Float(default=0.0),
+    'ev_2_soc_t23': fields.Float(default=0.0)
 }
 
 measurement_model_2 = node_measurement_namespace.model('node_measurement_2', model_2)
@@ -229,7 +333,8 @@ class node_measurement_list(Resource):
         parameters = [node_measurement_model.id, node_information_model.name, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
             node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
             node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
-            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh]
+            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh, 
+            node_measurement_model.soc_ev_1_kwh, node_measurement_model.soc_ev_2_kwh]
         
         main_query = node_measurement_model.query.join(node_information_model).with_entities(*parameters)
         measurements = (main_query.all())
@@ -250,7 +355,8 @@ class node_measurement_list(Resource):
         parameters = [node_measurement_model.id, node_information_model.der, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
             node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
             node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
-            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh]
+            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh,
+            node_measurement_model.soc_ev_1_kwh, node_measurement_model.soc_ev_2_kwh]
         
         main_query = node_measurement_model.query.join(node_information_model).with_entities(*parameters)
         
@@ -374,7 +480,103 @@ class node_measurement_list(Resource):
             'bess_soc_t20': 0.0,
             'bess_soc_t21': 0.0,
             'bess_soc_t22': 0.0,
-            'bess_soc_t23': 0.0
+            'bess_soc_t23': 0.0,
+            'ev_1_t00': 0.0,
+            'ev_1_t01': 0.0,
+            'ev_1_t02': 0.0,
+            'ev_1_t03': 0.0,
+            'ev_1_t04': 0.0,
+            'ev_1_t05': 0.0,
+            'ev_1_t06': 0.0,
+            'ev_1_t07': 0.0,
+            'ev_1_t08': 0.0,
+            'ev_1_t09': 0.0,
+            'ev_1_t10': 0.0,
+            'ev_1_t11': 0.0,
+            'ev_1_t12': 0.0,
+            'ev_1_t13': 0.0,
+            'ev_1_t14': 0.0,
+            'ev_1_t15': 0.0,
+            'ev_1_t16': 0.0,
+            'ev_1_t17': 0.0,
+            'ev_1_t18': 0.0,
+            'ev_1_t19': 0.0,
+            'ev_1_t20': 0.0,
+            'ev_1_t21': 0.0,
+            'ev_1_t22': 0.0,
+            'ev_1_t23': 0.0,
+            'ev_1_soc_t00': 0.0,
+            'ev_1_soc_t01': 0.0,
+            'ev_1_soc_t02': 0.0,
+            'ev_1_soc_t03': 0.0,
+            'ev_1_soc_t04': 0.0,
+            'ev_1_soc_t05': 0.0,
+            'ev_1_soc_t06': 0.0,
+            'ev_1_soc_t07': 0.0,
+            'ev_1_soc_t08': 0.0,
+            'ev_1_soc_t09': 0.0,
+            'ev_1_soc_t10': 0.0,
+            'ev_1_soc_t11': 0.0,
+            'ev_1_soc_t12': 0.0,
+            'ev_1_soc_t13': 0.0,
+            'ev_1_soc_t14': 0.0,
+            'ev_1_soc_t15': 0.0,
+            'ev_1_soc_t16': 0.0,
+            'ev_1_soc_t17': 0.0,
+            'ev_1_soc_t18': 0.0,
+            'ev_1_soc_t19': 0.0,
+            'ev_1_soc_t20': 0.0,
+            'ev_1_soc_t21': 0.0,
+            'ev_1_soc_t22': 0.0,
+            'ev_1_soc_t23': 0.0,
+            'ev_2_t00': 0.0,
+            'ev_2_t01': 0.0,
+            'ev_2_t02': 0.0,
+            'ev_2_t03': 0.0,
+            'ev_2_t04': 0.0,
+            'ev_2_t05': 0.0,
+            'ev_2_t06': 0.0,
+            'ev_2_t07': 0.0,
+            'ev_2_t08': 0.0,
+            'ev_2_t09': 0.0,
+            'ev_2_t10': 0.0,
+            'ev_2_t11': 0.0,
+            'ev_2_t12': 0.0,
+            'ev_2_t13': 0.0,
+            'ev_2_t14': 0.0,
+            'ev_2_t15': 0.0,
+            'ev_2_t16': 0.0,
+            'ev_2_t17': 0.0,
+            'ev_2_t18': 0.0,
+            'ev_2_t19': 0.0,
+            'ev_2_t20': 0.0,
+            'ev_2_t21': 0.0,
+            'ev_2_t22': 0.0,
+            'ev_2_t23': 0.0,
+            'ev_2_soc_t00': 0.0,
+            'ev_2_soc_t01': 0.0,
+            'ev_2_soc_t02': 0.0,
+            'ev_2_soc_t03': 0.0,
+            'ev_2_soc_t04': 0.0,
+            'ev_2_soc_t05': 0.0,
+            'ev_2_soc_t06': 0.0,
+            'ev_2_soc_t07': 0.0,
+            'ev_2_soc_t08': 0.0,
+            'ev_2_soc_t09': 0.0,
+            'ev_2_soc_t10': 0.0,
+            'ev_2_soc_t11': 0.0,
+            'ev_2_soc_t12': 0.0,
+            'ev_2_soc_t13': 0.0,
+            'ev_2_soc_t14': 0.0,
+            'ev_2_soc_t15': 0.0,
+            'ev_2_soc_t16': 0.0,
+            'ev_2_soc_t17': 0.0,
+            'ev_2_soc_t18': 0.0,
+            'ev_2_soc_t19': 0.0,
+            'ev_2_soc_t20': 0.0,
+            'ev_2_soc_t21': 0.0,
+            'ev_2_soc_t22': 0.0,
+            'ev_2_soc_t23': 0.0
         }
 
         counters = {
@@ -473,7 +675,55 @@ class node_measurement_list(Resource):
             'counter_bess_t20': 0,
             'counter_bess_t21': 0,
             'counter_bess_t22': 0,
-            'counter_bess_t23': 0
+            'counter_bess_t23': 0,
+            'counter_ev_1_t00': 0,
+            'counter_ev_1_t01': 0,
+            'counter_ev_1_t02': 0,
+            'counter_ev_1_t03': 0,
+            'counter_ev_1_t04': 0,
+            'counter_ev_1_t05': 0,
+            'counter_ev_1_t06': 0,
+            'counter_ev_1_t07': 0,
+            'counter_ev_1_t08': 0,
+            'counter_ev_1_t09': 0,
+            'counter_ev_1_t10': 0,
+            'counter_ev_1_t11': 0,
+            'counter_ev_1_t12': 0,
+            'counter_ev_1_t13': 0,
+            'counter_ev_1_t14': 0,
+            'counter_ev_1_t15': 0,
+            'counter_ev_1_t16': 0,
+            'counter_ev_1_t17': 0,
+            'counter_ev_1_t18': 0,
+            'counter_ev_1_t19': 0,
+            'counter_ev_1_t20': 0,
+            'counter_ev_1_t21': 0,
+            'counter_ev_1_t22': 0,
+            'counter_ev_1_t23': 0,
+            'counter_ev_2_t00': 0,
+            'counter_ev_2_t01': 0,
+            'counter_ev_2_t02': 0,
+            'counter_ev_2_t03': 0,
+            'counter_ev_2_t04': 0,
+            'counter_ev_2_t05': 0,
+            'counter_ev_2_t06': 0,
+            'counter_ev_2_t07': 0,
+            'counter_ev_2_t08': 0,
+            'counter_ev_2_t09': 0,
+            'counter_ev_2_t10': 0,
+            'counter_ev_2_t11': 0,
+            'counter_ev_2_t12': 0,
+            'counter_ev_2_t13': 0,
+            'counter_ev_2_t14': 0,
+            'counter_ev_2_t15': 0,
+            'counter_ev_2_t16': 0,
+            'counter_ev_2_t17': 0,
+            'counter_ev_2_t18': 0,
+            'counter_ev_2_t19': 0,
+            'counter_ev_2_t20': 0,
+            'counter_ev_2_t21': 0,
+            'counter_ev_2_t22': 0,
+            'counter_ev_2_t23': 0
         }
         
         SP_timezone = 3 # Timezone at SP - Brazil (improve this code please!!!)
@@ -801,6 +1051,201 @@ class node_measurement_list(Resource):
                     if i == 0:
                         data["genset_t23"] = data["genset_t23"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
                         counters["counter_genset_t23"] = counters["counter_genset_t23"] + 1
+                if meas.der == "ev":
+                    if i == 23:
+                        data["ev_1_t00"] = data["ev_1_t00"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t00"] = data["ev_1_soc_t00"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t00"] = counters["counter_ev_1_t00"] + 1
+                    if i == 22:
+                        data["ev_1_t01"] = data["ev_1_t01"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t01"] = data["ev_1_soc_t01"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t01"] = counters["counter_ev_1_t01"] + 1
+                    if i == 21:
+                        data["ev_1_t02"] = data["ev_1_t02"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t02"] = data["ev_1_soc_t02"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t02"] = counters["counter_ev_1_t02"] + 1
+                    if i == 20:
+                        data["ev_1_t03"] = data["ev_1_t03"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t03"] = data["ev_1_soc_t03"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t03"] = counters["counter_ev_1_t03"] + 1
+                    if i == 19:
+                        data["ev_1_t04"] = data["ev_1_t04"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t04"] = data["ev_1_soc_t04"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t04"] = counters["counter_ev_1_t04"] + 1
+                    if i == 18:
+                        data["ev_1_t05"] = data["ev_1_t05"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t05"] = data["ev_1_soc_t05"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t05"] = counters["counter_ev_1_t05"] + 1
+                    if i == 17:
+                        data["ev_1_t06"] = data["ev_1_t06"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t06"] = data["ev_1_soc_t06"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t06"] = counters["counter_ev_1_t06"] + 1
+                    if i == 16:
+                        data["ev_1_t07"] = data["ev_1_t07"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t07"] = data["ev_1_soc_t07"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t07"] = counters["counter_ev_1_t07"] + 1
+                    if i == 15:
+                        data["ev_1_t08"] = data["ev_1_t08"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t08"] = data["ev_1_soc_t08"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t08"] = counters["counter_ev_1_t08"] + 1
+                    if i == 14:
+                        data["ev_1_t09"] = data["ev_1_t09"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t09"] = data["ev_1_soc_t09"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t09"] = counters["counter_ev_1_t09"] + 1
+                    if i == 13:
+                        data["ev_1_t10"] = data["ev_1_t10"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t10"] = data["ev_1_soc_t10"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t10"] = counters["counter_ev_1_t10"] + 1
+                    if i == 12:
+                        data["ev_1_t11"] = data["ev_1_t11"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t11"] = data["ev_1_soc_t11"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t11"] = counters["counter_ev_1_t11"] + 1
+                    if i == 11:
+                        data["ev_1_t12"] = data["ev_1_t12"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t12"] = data["ev_1_soc_t12"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t12"] = counters["counter_ev_1_t12"] + 1
+                    if i == 10:
+                        data["ev_1_t13"] = data["ev_1_t13"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t13"] = data["ev_1_soc_t13"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t13"] = counters["counter_ev_1_t13"] + 1
+                    if i == 9:
+                        data["ev_1_t14"] = data["ev_1_t14"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t14"] = data["ev_1_soc_t14"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t14"] = counters["counter_ev_1_t14"] + 1
+                    if i == 8:
+                        data["ev_1_t15"] = data["ev_1_t15"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t15"] = data["ev_1_soc_t15"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t15"] = counters["counter_ev_1_t15"] + 1
+                    if i == 7:
+                        data["ev_1_t16"] = data["ev_1_t16"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t16"] = data["ev_1_soc_t16"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t16"] = counters["counter_ev_1_t16"] + 1
+                    if i == 6:
+                        data["ev_1_t17"] = data["ev_1_t17"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t17"] = data["ev_1_soc_t17"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t17"] = counters["counter_ev_1_t17"] + 1
+                    if i == 5:
+                        data["ev_1_t18"] = data["ev_1_t18"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t18"] = data["ev_1_soc_t18"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t18"] = counters["counter_ev_1_t18"] + 1
+                    if i == 4:
+                        data["ev_1_t19"] = data["ev_1_t19"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t19"] = data["ev_1_soc_t19"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t19"] = counters["counter_ev_1_t19"] + 1
+                    if i == 3:
+                        data["ev_1_t20"] = data["ev_1_t20"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t20"] = data["ev_1_soc_t20"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t20"] = counters["counter_ev_1_t20"] + 1
+                    if i == 2:
+                        data["ev_1_t21"] = data["ev_1_t21"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t21"] = data["ev_1_soc_t21"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t21"] = counters["counter_ev_1_t21"] + 1
+                    if i == 1:
+                        data["ev_1_t22"] = data["ev_1_t22"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t22"] = data["ev_1_soc_t22"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t22"] = counters["counter_ev_1_t22"] + 1
+                    if i == 0:
+                        data["ev_1_t23"] = data["ev_1_t23"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_1_soc_t23"] = data["ev_1_soc_t23"] + meas.soc_ev_1_kwh
+                        counters["counter_ev_1_t23"] = counters["counter_ev_1_t23"] + 1
+                    
+                if meas.der == "ev":
+                    if i == 23:
+                        data["ev_2_t00"] = data["ev_2_t00"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t00"] = data["ev_2_soc_t00"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t00"] = counters["counter_ev_2_t00"] + 1
+                    if i == 22:
+                        data["ev_2_t01"] = data["ev_2_t01"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t01"] = data["ev_2_soc_t01"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t01"] = counters["counter_ev_2_t01"] + 1
+                    if i == 21:
+                        data["ev_2_t02"] = data["ev_2_t02"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t02"] = data["ev_2_soc_t02"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t02"] = counters["counter_ev_2_t02"] + 1
+                    if i == 20:
+                        data["ev_2_t03"] = data["ev_2_t03"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t03"] = data["ev_2_soc_t03"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t03"] = counters["counter_ev_2_t03"] + 1
+                    if i == 19:
+                        data["ev_2_t04"] = data["ev_2_t04"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t04"] = data["ev_2_soc_t04"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t04"] = counters["counter_ev_2_t04"] + 1
+                    if i == 18:
+                        data["ev_2_t05"] = data["ev_2_t05"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t05"] = data["ev_2_soc_t05"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t05"] = counters["counter_ev_2_t05"] + 1
+                    if i == 17:
+                        data["ev_2_t06"] = data["ev_2_t06"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t06"] = data["ev_2_soc_t06"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t06"] = counters["counter_ev_2_t06"] + 1
+                    if i == 16:
+                        data["ev_2_t07"] = data["ev_2_t07"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t07"] = data["ev_2_soc_t07"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t07"] = counters["counter_ev_2_t07"] + 1
+                    if i == 15:
+                        data["ev_2_t08"] = data["ev_2_t08"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t08"] = data["ev_2_soc_t08"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t08"] = counters["counter_ev_2_t08"] + 1
+                    if i == 14:
+                        data["ev_2_t09"] = data["ev_2_t09"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t09"] = data["ev_2_soc_t09"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t09"] = counters["counter_ev_2_t09"] + 1
+                    if i == 13:
+                        data["ev_2_t10"] = data["ev_2_t10"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t10"] = data["ev_2_soc_t10"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t10"] = counters["counter_ev_2_t10"] + 1
+                    if i == 12:
+                        data["ev_2_t11"] = data["ev_2_t11"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t11"] = data["ev_2_soc_t11"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t11"] = counters["counter_ev_2_t11"] + 1
+                    if i == 11:
+                        data["ev_2_t12"] = data["ev_2_t12"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t12"] = data["ev_2_soc_t12"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t12"] = counters["counter_ev_2_t12"] + 1
+                    if i == 10:
+                        data["ev_2_t13"] = data["ev_2_t13"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t13"] = data["ev_2_soc_t13"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t13"] = counters["counter_ev_2_t13"] + 1
+                    if i == 9:
+                        data["ev_2_t14"] = data["ev_2_t14"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t14"] = data["ev_2_soc_t14"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t14"] = counters["counter_ev_2_t14"] + 1
+                    if i == 8:
+                        data["ev_2_t15"] = data["ev_2_t15"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t15"] = data["ev_2_soc_t15"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t15"] = counters["counter_ev_2_t15"] + 1
+                    if i == 7:
+                        data["ev_2_t16"] = data["ev_2_t16"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t16"] = data["ev_2_soc_t16"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t16"] = counters["counter_ev_2_t16"] + 1
+                    if i == 6:
+                        data["ev_2_t17"] = data["ev_2_t17"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t17"] = data["ev_2_soc_t17"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t17"] = counters["counter_ev_2_t17"] + 1
+                    if i == 5:
+                        data["ev_2_t18"] = data["ev_2_t18"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t18"] = data["ev_2_soc_t18"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t18"] = counters["counter_ev_2_t18"] + 1
+                    if i == 4:
+                        data["ev_2_t19"] = data["ev_2_t19"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t19"] = data["ev_2_soc_t19"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t19"] = counters["counter_ev_2_t19"] + 1
+                    if i == 3:
+                        data["ev_2_t20"] = data["ev_2_t20"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t20"] = data["ev_2_soc_t20"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t20"] = counters["counter_ev_2_t20"] + 1
+                    if i == 2:
+                        data["ev_2_t21"] = data["ev_2_t21"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t21"] = data["ev_2_soc_t21"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t21"] = counters["counter_ev_2_t21"] + 1
+                    if i == 1:
+                        data["ev_2_t22"] = data["ev_2_t22"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t22"] = data["ev_2_soc_t22"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t22"] = counters["counter_ev_2_t22"] + 1
+                    if i == 0:
+                        data["ev_2_t23"] = data["ev_2_t23"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["ev_2_soc_t23"] = data["ev_2_soc_t23"] + meas.soc_ev_2_kwh
+                        counters["counter_ev_2_t23"] = counters["counter_ev_2_t23"] + 1
 
         if counters["counter_pcc_t00"] > 1:
             data["pcc_t00"] = data["pcc_t00"] / counters["counter_pcc_t00"]
@@ -1022,9 +1467,154 @@ class node_measurement_list(Resource):
         if counters["counter_genset_t23"] > 1:
             data["genset_t23"] = data["genset_t23"] / counters["counter_genset_t23"]
 
+        if counters["counter_ev_1_t00"] > 1:
+            data["ev_1_t00"] = data["ev_1_t00"] / counters["counter_ev_1_t00"]
+            data["ev_1_soc_t00"] = data["ev_1_soc_t00"] / counters["counter_ev_1_t00"]
+        if counters["counter_ev_1_t01"] > 1:
+            data["ev_1_t01"] = data["ev_1_t01"] / counters["counter_ev_1_t01"]
+            data["ev_1_soc_t01"] = data["ev_1_soc_t01"] / counters["counter_ev_1_t01"]
+        if counters["counter_ev_1_t02"] > 1:
+            data["ev_1_t02"] = data["ev_1_t02"] / counters["counter_ev_1_t02"]
+            data["ev_1_soc_t02"] = data["ev_1_soc_t02"] / counters["counter_ev_1_t02"]
+        if counters["counter_ev_1_t03"] > 1:
+            data["ev_1_t03"] = data["ev_1_t03"] / counters["counter_ev_1_t03"]
+            data["ev_1_soc_t03"] = data["ev_1_soc_t03"] / counters["counter_ev_1_t03"]
+        if counters["counter_ev_1_t04"] > 1:
+            data["ev_1_t04"] = data["ev_1_t04"] / counters["counter_ev_1_t04"]
+            data["ev_1_soc_t04"] = data["ev_1_soc_t04"] / counters["counter_ev_1_t04"]
+        if counters["counter_ev_1_t05"] > 1:
+            data["ev_1_t05"] = data["ev_1_t05"] / counters["counter_ev_1_t05"]
+            data["ev_1_soc_t05"] = data["ev_1_soc_t05"] / counters["counter_ev_1_t05"]
+        if counters["counter_ev_1_t06"] > 1:
+            data["ev_1_t06"] = data["ev_1_t06"] / counters["counter_ev_1_t06"]
+            data["ev_1_soc_t06"] = data["ev_1_soc_t06"] / counters["counter_ev_1_t06"]
+        if counters["counter_ev_1_t07"] > 1:
+            data["ev_1_t07"] = data["ev_1_t07"] / counters["counter_ev_1_t07"]
+            data["ev_1_soc_t07"] = data["ev_1_soc_t07"] / counters["counter_ev_1_t07"]
+        if counters["counter_ev_1_t08"] > 1:
+            data["ev_1_t08"] = data["ev_1_t08"] / counters["counter_ev_1_t08"]
+            data["ev_1_soc_t08"] = data["ev_1_soc_t08"] / counters["counter_ev_1_t08"]
+        if counters["counter_ev_1_t09"] > 1:
+            data["ev_1_t09"] = data["ev_1_t09"] / counters["counter_ev_1_t09"]
+            data["ev_1_soc_t09"] = data["ev_1_soc_t09"] / counters["counter_ev_1_t09"]
+        if counters["counter_ev_1_t10"] > 1:
+            data["ev_1_t10"] = data["ev_1_t10"] / counters["counter_ev_1_t10"]
+            data["ev_1_soc_t10"] = data["ev_1_soc_t10"] / counters["counter_ev_1_t10"]
+        if counters["counter_ev_1_t11"] > 1:
+            data["ev_1_t11"] = data["ev_1_t11"] / counters["counter_ev_1_t11"]
+            data["ev_1_soc_t11"] = data["ev_1_soc_t11"] / counters["counter_ev_1_t11"]
+        if counters["counter_ev_1_t12"] > 1:
+            data["ev_1_t12"] = data["ev_1_t12"] / counters["counter_ev_1_t12"]
+            data["ev_1_soc_t12"] = data["ev_1_soc_t12"] / counters["counter_ev_1_t12"]
+        if counters["counter_ev_1_t13"] > 1:
+            data["ev_1_t13"] = data["ev_1_t13"] / counters["counter_ev_1_t13"]
+            data["ev_1_soc_t13"] = data["ev_1_soc_t13"] / counters["counter_ev_1_t13"]
+        if counters["counter_ev_1_t14"] > 1:
+            data["ev_1_t14"] = data["ev_1_t14"] / counters["counter_ev_1_t14"]
+            data["ev_1_soc_t14"] = data["ev_1_soc_t14"] / counters["counter_ev_1_t14"]
+        if counters["counter_ev_1_t15"] > 1:
+            data["ev_1_t15"] = data["ev_1_t15"] / counters["counter_ev_1_t15"]
+            data["ev_1_soc_t15"] = data["ev_1_soc_t15"] / counters["counter_ev_1_t15"]
+        if counters["counter_ev_1_t16"] > 1:
+            data["ev_1_t16"] = data["ev_1_t16"] / counters["counter_ev_1_t16"]
+            data["ev_1_soc_t16"] = data["ev_1_soc_t16"] / counters["counter_ev_1_t16"]
+        if counters["counter_ev_1_t17"] > 1:
+            data["ev_1_t17"] = data["ev_1_t17"] / counters["counter_ev_1_t17"]
+            data["ev_1_soc_t17"] = data["ev_1_soc_t17"] / counters["counter_ev_1_t17"]
+        if counters["counter_ev_1_t18"] > 1:
+            data["ev_1_t18"] = data["ev_1_t18"] / counters["counter_ev_1_t18"]
+            data["ev_1_soc_t18"] = data["ev_1_soc_t18"] / counters["counter_ev_1_t18"]
+        if counters["counter_ev_1_t19"] > 1:
+            data["ev_1_t19"] = data["ev_1_t19"] / counters["counter_ev_1_t19"]
+            data["ev_1_soc_t19"] = data["ev_1_soc_t19"] / counters["counter_ev_1_t19"]
+        if counters["counter_ev_1_t20"] > 1:
+            data["ev_1_t20"] = data["ev_1_t20"] / counters["counter_ev_1_t20"]
+            data["ev_1_soc_t20"] = data["ev_1_soc_t20"] / counters["counter_ev_1_t20"]
+        if counters["counter_ev_1_t21"] > 1:
+            data["ev_1_t21"] = data["ev_1_t21"] / counters["counter_ev_1_t21"]
+            data["ev_1_soc_t21"] = data["ev_1_soc_t21"] / counters["counter_ev_1_t21"]
+        if counters["counter_ev_1_t22"] > 1:
+            data["ev_1_t22"] = data["ev_1_t22"] / counters["counter_ev_1_t22"]
+            data["ev_1_soc_t22"] = data["ev_1_soc_t22"] / counters["counter_ev_1_t22"]
+        if counters["counter_ev_1_t23"] > 1:
+            data["ev_1_t23"] = data["ev_1_t23"] / counters["counter_ev_1_t23"]
+            data["ev_1_soc_t23"] = data["ev_1_soc_t23"] / counters["counter_ev_1_t23"]
+
+        if counters["counter_ev_2_t00"] > 1:
+            data["ev_2_t00"] = data["ev_2_t00"] / counters["counter_ev_2_t00"]
+            data["ev_2_soc_t00"] = data["ev_2_soc_t00"] / counters["counter_ev_2_t00"]
+        if counters["counter_ev_2_t01"] > 1:
+            data["ev_2_t01"] = data["ev_2_t01"] / counters["counter_ev_2_t01"]
+            data["ev_2_soc_t01"] = data["ev_2_soc_t01"] / counters["counter_ev_2_t01"]
+        if counters["counter_ev_2_t02"] > 1:
+            data["ev_2_t02"] = data["ev_2_t02"] / counters["counter_ev_2_t02"]
+            data["ev_2_soc_t02"] = data["ev_2_soc_t02"] / counters["counter_ev_2_t02"]
+        if counters["counter_ev_2_t03"] > 1:
+            data["ev_2_t03"] = data["ev_2_t03"] / counters["counter_ev_2_t03"]
+            data["ev_2_soc_t03"] = data["ev_2_soc_t03"] / counters["counter_ev_2_t03"]
+        if counters["counter_ev_2_t04"] > 1:
+            data["ev_2_t04"] = data["ev_2_t04"] / counters["counter_ev_2_t04"]
+            data["ev_2_soc_t04"] = data["ev_2_soc_t04"] / counters["counter_ev_2_t04"]
+        if counters["counter_ev_2_t05"] > 1:
+            data["ev_2_t05"] = data["ev_2_t05"] / counters["counter_ev_2_t05"]
+            data["ev_2_soc_t05"] = data["ev_2_soc_t05"] / counters["counter_ev_2_t05"]
+        if counters["counter_ev_2_t06"] > 1:
+            data["ev_2_t06"] = data["ev_2_t06"] / counters["counter_ev_2_t06"]
+            data["ev_2_soc_t06"] = data["ev_2_soc_t06"] / counters["counter_ev_2_t06"]
+        if counters["counter_ev_2_t07"] > 1:
+            data["ev_2_t07"] = data["ev_2_t07"] / counters["counter_ev_2_t07"]
+            data["ev_2_soc_t07"] = data["ev_2_soc_t07"] / counters["counter_ev_2_t07"]
+        if counters["counter_ev_2_t08"] > 1:
+            data["ev_2_t08"] = data["ev_2_t08"] / counters["counter_ev_2_t08"]
+            data["ev_2_soc_t08"] = data["ev_2_soc_t08"] / counters["counter_ev_2_t08"]
+        if counters["counter_ev_2_t09"] > 1:
+            data["ev_2_t09"] = data["ev_2_t09"] / counters["counter_ev_2_t09"]
+            data["ev_2_soc_t09"] = data["ev_2_soc_t09"] / counters["counter_ev_2_t09"]
+        if counters["counter_ev_2_t10"] > 1:
+            data["ev_2_t10"] = data["ev_2_t10"] / counters["counter_ev_2_t10"]
+            data["ev_2_soc_t10"] = data["ev_2_soc_t10"] / counters["counter_ev_2_t10"]
+        if counters["counter_ev_2_t11"] > 1:
+            data["ev_2_t11"] = data["ev_2_t11"] / counters["counter_ev_2_t11"]
+            data["ev_2_soc_t11"] = data["ev_2_soc_t11"] / counters["counter_ev_2_t11"]
+        if counters["counter_ev_2_t12"] > 1:
+            data["ev_2_t12"] = data["ev_2_t12"] / counters["counter_ev_2_t12"]
+            data["ev_2_soc_t12"] = data["ev_2_soc_t12"] / counters["counter_ev_2_t12"]
+        if counters["counter_ev_2_t13"] > 1:
+            data["ev_2_t13"] = data["ev_2_t13"] / counters["counter_ev_2_t13"]
+            data["ev_2_soc_t13"] = data["ev_2_soc_t13"] / counters["counter_ev_2_t13"]
+        if counters["counter_ev_2_t14"] > 1:
+            data["ev_2_t14"] = data["ev_2_t14"] / counters["counter_ev_2_t14"]
+            data["ev_2_soc_t14"] = data["ev_2_soc_t14"] / counters["counter_ev_2_t14"]
+        if counters["counter_ev_2_t15"] > 1:
+            data["ev_2_t15"] = data["ev_2_t15"] / counters["counter_ev_2_t15"]
+            data["ev_2_soc_t15"] = data["ev_2_soc_t15"] / counters["counter_ev_2_t15"]
+        if counters["counter_ev_2_t16"] > 1:
+            data["ev_2_t16"] = data["ev_2_t16"] / counters["counter_ev_2_t16"]
+            data["ev_2_soc_t16"] = data["ev_2_soc_t16"] / counters["counter_ev_2_t16"]
+        if counters["counter_ev_2_t17"] > 1:
+            data["ev_2_t17"] = data["ev_2_t17"] / counters["counter_ev_2_t17"]
+            data["ev_2_soc_t17"] = data["ev_2_soc_t17"] / counters["counter_ev_2_t17"]
+        if counters["counter_ev_2_t18"] > 1:
+            data["ev_2_t18"] = data["ev_2_t18"] / counters["counter_ev_2_t18"]
+            data["ev_2_soc_t18"] = data["ev_2_soc_t18"] / counters["counter_ev_2_t18"]
+        if counters["counter_ev_2_t19"] > 1:
+            data["ev_2_t19"] = data["ev_2_t19"] / counters["counter_ev_2_t19"]
+            data["ev_2_soc_t19"] = data["ev_2_soc_t19"] / counters["counter_ev_2_t19"]
+        if counters["counter_ev_2_t20"] > 1:
+            data["ev_2_t20"] = data["ev_2_t20"] / counters["counter_ev_2_t20"]
+            data["ev_2_soc_t20"] = data["ev_2_soc_t20"] / counters["counter_ev_2_t20"]
+        if counters["counter_ev_2_t21"] > 1:
+            data["ev_2_t21"] = data["ev_2_t21"] / counters["counter_ev_2_t21"]
+            data["ev_2_soc_t21"] = data["ev_2_soc_t21"] / counters["counter_ev_2_t21"]
+        if counters["counter_ev_2_t22"] > 1:
+            data["ev_2_t22"] = data["ev_2_t22"] / counters["counter_ev_2_t22"]
+            data["ev_2_soc_t22"] = data["ev_2_soc_t22"] / counters["counter_ev_2_t22"]
+        if counters["counter_ev_2_t23"] > 1:
+            data["ev_2_t23"] = data["ev_2_t23"] / counters["counter_ev_2_t23"]
+            data["ev_2_soc_t23"] = data["ev_2_soc_t23"] / counters["counter_ev_2_t23"]
+
         # print(data)
         # print(counters)
-
         return data
 
 
@@ -1042,7 +1632,8 @@ class node_measurement_ListCreateFromParent(Resource):
         parameters = [node_measurement_model.id, node_information_model.name, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
             node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
             node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
-            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh]
+            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh,
+            node_measurement_model.soc_ev_1_kwh, node_measurement_model.soc_ev_2_kwh]
 
         main_query = node_measurement_model.query.join(node_information_model).with_entities(*parameters)
         measurements = (main_query.all())
@@ -1070,7 +1661,6 @@ class node_measurement_ListCreateFromParent(Resource):
 
         args = node_measurement_parser.parse_args()
 
-
         new_measurement = node_measurement_model(time_iso=args['time_iso'],
                             active_power_a_kw=args['active_power_a_kw'],
                             active_power_b_kw=args['active_power_b_kw'],
@@ -1081,11 +1671,13 @@ class node_measurement_ListCreateFromParent(Resource):
                             voltage_a_kv=args['voltage_a_kv'],
                             voltage_b_kv=args['voltage_b_kv'],
                             voltage_c_kv=args['voltage_c_kv'],
-                            soc_kwh=args['soc_kwh'],                        
+                            soc_kwh=args['soc_kwh'], 
+                            soc_ev_1_kwh=args['soc_ev_1_kwh'],
+                            soc_ev_2_kwh=args['soc_ev_2_kwh'],                       
                             id_info_no=id_info_no)
 
         if (node.der == 'bess') and new_measurement.soc_kwh is None:
-            return abort(405, 'Input bess validation failed', errors={'soc_kwh' : 'BESS measurement has no soc_kwh attribute'})
+            return abort(405, 'Input bess validation failed', errors={'soc_kwh' : 'BESS measurement has no soc_bess_kwh attribute'})
         
         try:
             db.session.add(new_measurement)
@@ -1100,7 +1692,8 @@ class node_measurement_ListCreateFromParent(Resource):
         parameters = [node_measurement_model.id, node_information_model.name, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
             node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
             node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
-            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh]
+            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh,
+            node_measurement_model.soc_ev_1_kwh, node_measurement_model.soc_ev_2_kwh]
         main_query = node_measurement_model.query.join(node_information_model).with_entities(*parameters)
 
         measurements = (main_query.order_by(node_measurement_model.id.desc()).first())
@@ -1119,7 +1712,8 @@ class node_measurement_ListCreateFromParent(Resource):
         parameters = [node_measurement_model.id, node_information_model.name, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
             node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
             node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
-            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh]
+            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh,
+            node_measurement_model.soc_ev_1_kwh, node_measurement_model.soc_ev_2_kwh]
         main_query = node_measurement_model.query.join(node_information_model).with_entities(*parameters)
         measurements = (main_query.all())
         measurements = (main_query.filter(node_measurement_model.id_info_no == id_info_no).all())
@@ -1151,7 +1745,8 @@ class node_measurement_DeleteFromDateTime(Resource):
         parameters = [node_measurement_model.id, node_information_model.name, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
             node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
             node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
-            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh]
+            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh,
+            node_measurement_model.soc_ev_1_kwh, node_measurement_model.soc_ev_2_kwh]
         main_query = node_measurement_model.query.join(node_information_model).with_entities(*parameters)
         measurements = (main_query.all())
         measurements = (main_query.filter(node_measurement_model.time_iso <= datetime_max_trans).all())

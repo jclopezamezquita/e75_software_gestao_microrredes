@@ -812,6 +812,7 @@ class MathematicalModel:
 
 		model.reactive_losses_c = Constraint(self.List_LTS, rule= reactive_losses_c_rule)
 
+		print(data.dict_nos_ev)
 
 		# Active Power Flow with EV -------------------------------------------------------------
 		def active_power_balance_rule_a(model, i, t, s):
