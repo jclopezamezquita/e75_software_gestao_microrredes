@@ -39,9 +39,18 @@ def microgrid_dayahead_optimizer():
         t_arrival_2 = index['EV_arrival_time_2']
         t_departure_1 = index['EV_departure_time_1']
         t_departure_2 = index['EV_departure_time_2']
-
+        print(t_departure_2)
+        if t_arrival_1 ==0:
+            t_arrival_1 = 24
+        if t_arrival_2 == 0:
+            t_arrival_2 =24
+        if t_departure_1 ==0:
+            t_departure_1 = 24
+        if t_departure_2 == 0:
+            t_departure_2 =24
     print(initial_SoC_EV_1)
     print(t_departure_1)
+    print(t_departure_2)
     
 
     '''
@@ -90,10 +99,7 @@ def microgrid_dayahead_optimizer():
                 cont2 += 1
                 input_data['set_of_energy_storage_systems'] = [str(cont2)]
         cont2 = 0
-        for index in data_nodes:
-            # Tirar linha 95 e 96 após atualizar as informações de nó
-            cont2 += 1
-            input_data['set_of_electric_vehicles'] = [str(cont2)]    
+        for index in data_nodes:   
             if index['der'] == 'ev':
                 cont2 += 1
                 input_data['set_of_electric_vehicles'] = [str(cont2)]
@@ -102,7 +108,7 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'genset':
                 cont5 += 1
                 input_data['set_of_thermal_generator'] = [str(cont5)]
-        input_data['set_of_outage'] = ['18']
+        input_data['set_of_outage'] = []
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
         input_data['coefficient_demand_scen'] = [1.0]

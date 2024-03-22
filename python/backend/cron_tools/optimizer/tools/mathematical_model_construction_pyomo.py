@@ -1664,7 +1664,7 @@ class MathematicalModel:
 
 		def energy_ev_max_rule_1(model,i):
 			return(model.EEV_1[i,str(data.t_departure_1[i])] - data.EEVmax_1[i] == 0)
-		model.energy_ev_max_1 = Constraint(self.EV, rule = energy_ev_max_rule_1)
+		model.energy_ev_max_1 = Constraint(data.EV, rule = energy_ev_max_rule_1)
 
 		#----------------- EV_2 Variables --------------------------------------------------
 
@@ -1718,7 +1718,7 @@ class MathematicalModel:
 
 		def energy_ev_max_rule_2(model,i):
 			return(model.EEV_2[i,str(data.t_departure_2[i])] - data.EEVmax_2[i] == 0)
-		model.energy_ev_max_2 = Constraint(self.EV, rule = energy_ev_max_rule_2)
+		model.energy_ev_max_2 = Constraint(data.EV, rule = energy_ev_max_rule_2)
 
 		#----------------- FIX Variables --------------------------------------------------
 		model.fix_active_power = ConstraintList()
@@ -1813,3 +1813,7 @@ class MathematicalModel:
 		self.EEV_1 = model.EEV_1.get_values()
 		self.PEV_ch_2 = model.PEV_ch_2.get_values()
 		self.EEV_2 = model.EEV_2.get_values()
+
+		print(self.PEV_ch_1)
+		print(self.PEV_ch_2)
+		
