@@ -37,24 +37,22 @@ def leitura_medidas_laboratoriais(num):
 
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(-5, 0, -1, -1, -1)
+@cron(-5, 14, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the end of the day - dispatch defined for the next day
     '''
     start = time.time()
-
     resultado = cron_functions.microgrid_dayahead_optimizer()
     if resultado:
         cron_functions.write_results_database(resultado)
-    print(resultado)
     end = time.time()
 
     print("The time of execution of EDO is: ", (end-start), "s")
 
     resultado2 = cron_functions.delete_old_measurements(timezone_SP=3)
 
-
+'''
 @app.route('/random')
 def random_plot():
     return jsonify({ "data": math.floor(random.random() * (1000 - 1) + 1), "code": 200, "error": False })
@@ -69,7 +67,7 @@ def random_data():
     data.append({"name" : "America", "data" : [random.random() * 10 for i in range(10)]})
     data.append({"name" : "Oceania", "data" : [random.random() * 10 for i in range(10)]})
     return jsonify(data)
-
+'''
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)

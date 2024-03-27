@@ -812,8 +812,6 @@ class MathematicalModel:
 
 		model.reactive_losses_c = Constraint(self.List_LTS, rule= reactive_losses_c_rule)
 
-		print(data.dict_nos_ev)
-
 		# Active Power Flow with EV -------------------------------------------------------------
 		def active_power_balance_rule_a(model, i, t, s):
 			return (
@@ -1261,7 +1259,7 @@ class MathematicalModel:
 				sum(model.PGa_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_a[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) -
-		        sum(model.PEV_ch_a_1[a, t] for a in data.dict_nos_ev[i]) +
+		        sum(model.PEV_ch_a_1[a, t] for a in data.dict_nos_ev[i]) -
 		        sum(model.PEV_ch_a_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDa[(i,t)]*data.sd[s]) + (data.PVa[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_a_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_a)
@@ -1274,7 +1272,7 @@ class MathematicalModel:
 				sum(model.PGb_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_b[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) -
-		        sum(model.PEV_ch_1[a, t] for a in data.dict_nos_ev[i]) +
+		        sum(model.PEV_ch_1[a, t] for a in data.dict_nos_ev[i]) -
 		        sum(model.PEV_ch_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDb[(i,t)]*data.sd[s]) + (data.PVb[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_b_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_b)
@@ -1287,7 +1285,7 @@ class MathematicalModel:
 				sum(model.PGc_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_c[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) -
-		        sum(model.PEV_ch_c_1[a, t] for a in data.dict_nos_ev[i]) +
+		        sum(model.PEV_ch_c_1[a, t] for a in data.dict_nos_ev[i]) -
 		        sum(model.PEV_ch_c_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDc[(i,t)]*data.sd[s]) + (data.PVc[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_c_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_c)  
@@ -1796,7 +1794,7 @@ class MathematicalModel:
 			results = solver.solve(model)
 		
 		except Exception as e:
-			print("Error al resolver el modelo:", e)
+			print("Error with solver the model: ", e)
 
 		self.Status = results.solver.termination_condition
 		self.ObjectiveFunctionValue = results.problem.lower_bound
@@ -1814,14 +1812,10 @@ class MathematicalModel:
 		self.PEV_ch_2 = model.PEV_ch_2.get_values()
 		self.EEV_2 = model.EEV_2.get_values()
 
-		for x in range(len(data.T)):
-			if self.PEV_ch_1[x] is None:
-				self.PEV_ch_1[x] = 0
-			if self.PEV_ch_2[x] is None:
-				self.PEV_ch_2[x] = 0
+		for key, value in self.PEV_ch_1.items():
+			if value is None:
+				self.PEV_ch_1[key] = 0.0
 
-		print(self.Status)
-		print(self.ObjectiveFunctionValue)
-		print("PEV_ch_1: ", self.PEV_ch_1)
-		print("PEV_ch_2: ",self.PEV_ch_2)
-		
+		for key, value in self.PEV_ch_2.items():
+			if value is None:
+				self.PEV_ch_2[key] = 0.0
