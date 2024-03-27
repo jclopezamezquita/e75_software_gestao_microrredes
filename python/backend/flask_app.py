@@ -37,7 +37,7 @@ def leitura_medidas_laboratoriais(num):
 
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(-5, 19, -1, -1, -1)
+@cron(-5, 0, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the end of the day - dispatch defined for the next day
@@ -53,7 +53,6 @@ def cron_everyday(num):
     print("The time of execution of EDO is: ", (end-start), "s")
 
     resultado2 = cron_functions.delete_old_measurements(timezone_SP=3)
-    print(resultado2)
 
 
 @app.route('/random')

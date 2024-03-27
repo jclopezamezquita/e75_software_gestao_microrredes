@@ -63,10 +63,12 @@ class SummaryResults:
 		output_file["power_of_the_ess"] = []
 		for t in data.T:
 			output_file["power_of_the_ess"].append(results.PB['1',t])
-		output_file["power_of_the_ev_1)"] = []
+		
+		output_file["power_of_the_ev_1"] = []
 		for t in data.T:
 			output_file["power_of_the_ev_1"].append(results.PEV_ch_1['1',t])
-		output_file["power_of_the_ev_2)"] = []
+		
+		output_file["power_of_the_ev_2"] = []
 		for t in data.T:
 			output_file["power_of_the_ev_2"].append(results.PEV_ch_2['1',t])
 

@@ -48,9 +48,6 @@ def microgrid_dayahead_optimizer():
             t_departure_1 = 24
         if t_departure_2 == 0:
             t_departure_2 =24
-    print(initial_SoC_EV_1)
-    print(t_departure_1)
-    print(t_departure_2)
     
 
     '''
@@ -317,7 +314,6 @@ def write_results_database(resultado):
 
 
     dispatch = requests.get(url=URL + "v1/api/economic_dispatch", headers={"accept" : "application/json"})
-    print("get request")
     dispatch = json.loads(dispatch.text)
     
     if not dispatch:
@@ -352,7 +348,23 @@ def write_results_database(resultado):
         "pv_curt_t12": resultado['total_pv_curtailment']['scen_1'][11], "pv_curt_t13": resultado['total_pv_curtailment']['scen_1'][12], "pv_curt_t14": resultado['total_pv_curtailment']['scen_1'][13],
         "pv_curt_t15": resultado['total_pv_curtailment']['scen_1'][14], "pv_curt_t16": resultado['total_pv_curtailment']['scen_1'][15], "pv_curt_t17": resultado['total_pv_curtailment']['scen_1'][16],
         "pv_curt_t18": resultado['total_pv_curtailment']['scen_1'][17], "pv_curt_t19": resultado['total_pv_curtailment']['scen_1'][18], "pv_curt_t20": resultado['total_pv_curtailment']['scen_1'][19],
-        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][22]}
+        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][22],
+        "ev_1_power_t00": resultado['power_of_the_ev_1'][23], "ev_1_power_t01": resultado['power_of_the_ev_1'][0], "ev_1_power_t02": resultado['power_of_the_ev_1'][1], 
+        "ev_1_power_t03": resultado['power_of_the_ev_1'][2], "ev_1_power_t04": resultado['power_of_the_ev_1'][3], "ev_1_power_t05": resultado['power_of_the_ev_1'][4],
+        "ev_1_power_t06": resultado['power_of_the_ev_1'][5], "ev_1_power_t07": resultado['power_of_the_ev_1'][6], "ev_1_power_t08": resultado['power_of_the_ev_1'][7],
+        "ev_1_power_t09": resultado['power_of_the_ev_1'][8], "ev_1_power_t10": resultado['power_of_the_ev_1'][9], "ev_1_power_t11": resultado['power_of_the_ev_1'][10], 
+        "ev_1_power_t12": resultado['power_of_the_ev_1'][11], "ev_1_power_t13": resultado['power_of_the_ev_1'][12], "ev_1_power_t14": resultado['power_of_the_ev_1'][13],
+        "ev_1_power_t15": resultado['power_of_the_ev_1'][14], "ev_1_power_t16": resultado['power_of_the_ev_1'][15], "ev_1_power_t17": resultado['power_of_the_ev_1'][16],
+        "ev_1_power_t18": resultado['power_of_the_ev_1'][17], "ev_1_power_t19": resultado['power_of_the_ev_1'][18], "ev_1_power_t20": resultado['power_of_the_ev_1'][19],
+        "ev_1_power_t21": resultado['power_of_the_ev_1'][20], "ev_1_power_t22": resultado['power_of_the_ev_1'][21], "ev_1_power_t23": resultado['power_of_the_ev_1'][22],
+        "ev_2_power_t00": resultado['power_of_the_ev_2'][23], "ev_2_power_t01": resultado['power_of_the_ev_2'][0], "ev_2_power_t02": resultado['power_of_the_ev_2'][1], 
+        "ev_2_power_t03": resultado['power_of_the_ev_2'][2], "ev_2_power_t04": resultado['power_of_the_ev_2'][3], "ev_2_power_t05": resultado['power_of_the_ev_2'][4],
+        "ev_2_power_t06": resultado['power_of_the_ev_2'][5], "ev_2_power_t07": resultado['power_of_the_ev_2'][6], "ev_2_power_t08": resultado['power_of_the_ev_2'][7],
+        "ev_2_power_t09": resultado['power_of_the_ev_2'][8], "ev_2_power_t10": resultado['power_of_the_ev_2'][9], "ev_2_power_t11": resultado['power_of_the_ev_2'][10], 
+        "ev_2_power_t12": resultado['power_of_the_ev_2'][11], "ev_2_power_t13": resultado['power_of_the_ev_2'][12], "ev_2_power_t14": resultado['power_of_the_ev_2'][13],
+        "ev_2_power_t15": resultado['power_of_the_ev_2'][14], "ev_2_power_t16": resultado['power_of_the_ev_2'][15], "ev_2_power_t17": resultado['power_of_the_ev_2'][16],
+        "ev_2_power_t18": resultado['power_of_the_ev_2'][17], "ev_2_power_t19": resultado['power_of_the_ev_2'][18], "ev_2_power_t20": resultado['power_of_the_ev_2'][19],
+        "ev_2_power_t21": resultado['power_of_the_ev_2'][20], "ev_2_power_t22": resultado['power_of_the_ev_2'][21], "ev_2_power_t23": resultado['power_of_the_ev_2'][22]}
         
         data = requests.post(url=URL + "/v1/api/economic_dispatch/", data=dispatch, headers={"accept" : "application/json"})
         print("post request")
@@ -391,12 +403,29 @@ def write_results_database(resultado):
         "pv_curt_t12": resultado['total_pv_curtailment']['scen_1'][11], "pv_curt_t13": resultado['total_pv_curtailment']['scen_1'][12], "pv_curt_t14": resultado['total_pv_curtailment']['scen_1'][13],
         "pv_curt_t15": resultado['total_pv_curtailment']['scen_1'][14], "pv_curt_t16": resultado['total_pv_curtailment']['scen_1'][15], "pv_curt_t17": resultado['total_pv_curtailment']['scen_1'][16],
         "pv_curt_t18": resultado['total_pv_curtailment']['scen_1'][17], "pv_curt_t19": resultado['total_pv_curtailment']['scen_1'][18], "pv_curt_t20": resultado['total_pv_curtailment']['scen_1'][19],
-        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][22]}
+        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][22],
+        "ev_1_power_t00": resultado['power_of_the_ev_1'][23], "ev_1_power_t01": resultado['power_of_the_ev_1'][0], "ev_1_power_t02": resultado['power_of_the_ev_1'][1], 
+        "ev_1_power_t03": resultado['power_of_the_ev_1'][2], "ev_1_power_t04": resultado['power_of_the_ev_1'][3], "ev_1_power_t05": resultado['power_of_the_ev_1'][4],
+        "ev_1_power_t06": resultado['power_of_the_ev_1'][5], "ev_1_power_t07": resultado['power_of_the_ev_1'][6], "ev_1_power_t08": resultado['power_of_the_ev_1'][7],
+        "ev_1_power_t09": resultado['power_of_the_ev_1'][8], "ev_1_power_t10": resultado['power_of_the_ev_1'][9], "ev_1_power_t11": resultado['power_of_the_ev_1'][10], 
+        "ev_1_power_t12": resultado['power_of_the_ev_1'][11], "ev_1_power_t13": resultado['power_of_the_ev_1'][12], "ev_1_power_t14": resultado['power_of_the_ev_1'][13],
+        "ev_1_power_t15": resultado['power_of_the_ev_1'][14], "ev_1_power_t16": resultado['power_of_the_ev_1'][15], "ev_1_power_t17": resultado['power_of_the_ev_1'][16],
+        "ev_1_power_t18": resultado['power_of_the_ev_1'][17], "ev_1_power_t19": resultado['power_of_the_ev_1'][18], "ev_1_power_t20": resultado['power_of_the_ev_1'][19],
+        "ev_1_power_t21": resultado['power_of_the_ev_1'][20], "ev_1_power_t22": resultado['power_of_the_ev_1'][21], "ev_1_power_t23": resultado['power_of_the_ev_1'][22],
+        "ev_2_power_t00": resultado['power_of_the_ev_2'][23], "ev_2_power_t01": resultado['power_of_the_ev_2'][0], "ev_2_power_t02": resultado['power_of_the_ev_2'][1], 
+        "ev_2_power_t03": resultado['power_of_the_ev_2'][2], "ev_2_power_t04": resultado['power_of_the_ev_2'][3], "ev_2_power_t05": resultado['power_of_the_ev_2'][4],
+        "ev_2_power_t06": resultado['power_of_the_ev_2'][5], "ev_2_power_t07": resultado['power_of_the_ev_2'][6], "ev_2_power_t08": resultado['power_of_the_ev_2'][7],
+        "ev_2_power_t09": resultado['power_of_the_ev_2'][8], "ev_2_power_t10": resultado['power_of_the_ev_2'][9], "ev_2_power_t11": resultado['power_of_the_ev_2'][10], 
+        "ev_2_power_t12": resultado['power_of_the_ev_2'][11], "ev_2_power_t13": resultado['power_of_the_ev_2'][12], "ev_2_power_t14": resultado['power_of_the_ev_2'][13],
+        "ev_2_power_t15": resultado['power_of_the_ev_2'][14], "ev_2_power_t16": resultado['power_of_the_ev_2'][15], "ev_2_power_t17": resultado['power_of_the_ev_2'][16],
+        "ev_2_power_t18": resultado['power_of_the_ev_2'][17], "ev_2_power_t19": resultado['power_of_the_ev_2'][18], "ev_2_power_t20": resultado['power_of_the_ev_2'][19],
+        "ev_2_power_t21": resultado['power_of_the_ev_2'][20], "ev_2_power_t22": resultado['power_of_the_ev_2'][21], "ev_2_power_t23": resultado['power_of_the_ev_2'][22]}
 
         data = requests.put(url=URL + "/v1/api/economic_dispatch/1/", data=dispatch, headers={"accept" : "application/json"})
         print(data.status_code)
         print(data.text)
-        print(resultado)
+        print("Resultado do despacho: ",resultado)
+        print("Despacho atualizado com sucesso: ", dispatch)
 
 
 def microgrid_measurements(URL):

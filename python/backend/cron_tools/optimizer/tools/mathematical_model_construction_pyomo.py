@@ -1814,6 +1814,14 @@ class MathematicalModel:
 		self.PEV_ch_2 = model.PEV_ch_2.get_values()
 		self.EEV_2 = model.EEV_2.get_values()
 
-		print(self.PEV_ch_1)
-		print(self.PEV_ch_2)
+		for x in range(len(data.T)):
+			if self.PEV_ch_1[x] is None:
+				self.PEV_ch_1[x] = 0
+			if self.PEV_ch_2[x] is None:
+				self.PEV_ch_2[x] = 0
+
+		print(self.Status)
+		print(self.ObjectiveFunctionValue)
+		print("PEV_ch_1: ", self.PEV_ch_1)
+		print("PEV_ch_2: ",self.PEV_ch_2)
 		
