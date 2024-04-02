@@ -15,6 +15,8 @@ export class DispatchComponent implements OnInit {
   public dispatchData_load = new Array();
   public dispatchData_PV = new Array();
   public dispatchData_genset = new Array();
+  public dispatchData_ev_1 = new Array();
+  public dispatchData_ev_2 = new Array();
 
   constructor(private http: HttpClient) {
 
@@ -130,6 +132,60 @@ export class DispatchComponent implements OnInit {
           this.dispatchData_genset.push(Number(data2.genset_power_t21));
           this.dispatchData_genset.push(Number(data2.genset_power_t22));
           this.dispatchData_genset.push(Number(data2.genset_power_t23));
+
+          this.dispatchData_ev_1 = [];
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t00));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t01));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t02));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t03));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t04));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t05));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t06));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t07));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t08));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t09));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t10));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t11));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t12));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t13));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t14));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t15));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t16));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t17));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t18));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t19));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t20));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t21));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t22));
+          this.dispatchData_ev_1.push(Number(data2.ev_1_power_t23));
+
+          this.dispatchData_ev_2 = [];
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t00));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t01));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t02));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t03));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t04));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t05));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t06));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t07));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t08));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t09));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t10));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t11));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t12));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t13));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t14));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t15));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t16));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t17));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t18));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t19));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t20));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t21));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t22));
+          this.dispatchData_ev_2.push(Number(data2.ev_2_power_t23));
+
+
 
     });
 
