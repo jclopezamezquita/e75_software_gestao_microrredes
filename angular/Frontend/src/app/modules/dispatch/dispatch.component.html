@@ -3,8 +3,24 @@
         <app-widget-bars label="BESS DISPATCH" [data]="dispatchData_BESS"></app-widget-bars>
     </div>
     <div fxFlex="50">
-        <app-widget-bars label="LOAD CURTAILMENT" [data]="dispatchData_load"></app-widget-bars>
+        <app-widget-bars label="GENSET DISPATCH" [data]="dispatchData_genset"></app-widget-bars>
     </div>
+</div>
+
+<br>
+
+<mat-divider></mat-divider>
+
+<br>
+
+<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+    <div fxFlex="50">
+        <app-widget-bars label="EV 1" [data]="dispatchData_ev_1"></app-widget-bars>
+    </div>
+    <div fxFlex="50">
+        <app-widget-bars label="EV 2" [data]="dispatchData_ev_2"></app-widget-bars>
+    </div>
+
 </div>
 
 <br>
@@ -18,22 +34,6 @@
         <app-widget-bars label="PV CURTAILMENT" [data]="dispatchData_PV"></app-widget-bars>
     </div>
     <div fxFlex="50">
-        <app-widget-bars label="GENSET DISPATCH" [data]="dispatchData_genset"></app-widget-bars>
-    </div>
-</div>
-
-<br>
-
-<mat-divider></mat-divider>
-
-<br>
-
-<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
-    <div fxFlex="50">
-        <app-widget-bars label="EV_1" [data]="dispatchData_ev_1"></app-widget-bars>
-    </div>
-    <div fxFlex="50">
-        <app-widget-bars label="EV_2" [data]="dispatchData_ev_2"></app-widget-bars>
-    </div>
-
+        <app-widget-bars label="LOAD CURTAILMENT" [data]="dispatchData_load"></app-widget-bars>
+        </div>
 </div>

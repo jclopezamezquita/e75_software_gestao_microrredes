@@ -83,16 +83,20 @@ export class PieComponent {
         colorByPoint: true,
         data: [{
             name: 'PV',
-            y: Math.abs(this.meas_pv_23)
+            y: Math.abs(this.meas_pv_23),
+            color: '#000000'
         }, {
             name: 'PCC',
-            y: Math.max(0,this.meas_pcc_23)
+            y: Math.max(0,this.meas_pcc_23),
+            color: '#168ede'
         }, {
             name: 'GENSET',
-            y: Math.abs(this.meas_genset_23)
+            y: Math.abs(this.meas_genset_23),
+            color: '000000'
         }, {
             name: 'BESS',
-            y: Math.abs(Math.min(0,this.meas_bess_23))
+            y: Math.abs(Math.min(0,this.meas_bess_23)),
+            color: '#000000'
         }]
       }
     ]

@@ -17,6 +17,8 @@ export class DashboardComponent implements OnInit {
   public measurements_pv = new Array();
   public measurements_genset = new Array();
   public measurements_bess = new Array();
+  public measurements_ev_1 = new Array();
+  public measurements_ev_2 = new Array();
   public measurements_bess_soc = new Array();
   public costsChart = new Array();
   public total_daily_generation: number;
@@ -174,6 +176,58 @@ export class DashboardComponent implements OnInit {
         this.measurements_bess_soc.push(Number(data2.bess_soc_t22));
         this.measurements_bess_soc.push(Number(data2.bess_soc_t23));
 
+        this.measurements_ev_1 = [];
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t00));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t01));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t02));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t03));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t04));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t05));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t06));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t07));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t08));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t09));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t10));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t11));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t12));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t13));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t14));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t15));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t16));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t17));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t18));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t19));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t20));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t21));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t22));
+        this.measurements_ev_1.push(Number(data2.ev_1_power_t23));
+
+        this.measurements_ev_2 = [];
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t00));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t01));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t02));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t03));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t04));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t05));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t06));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t07));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t08));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t09));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t10));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t11));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t12));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t13));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t14));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t15));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t16));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t17));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t18));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t19));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t20));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t21));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t22));
+        this.measurements_ev_2.push(Number(data2.ev_2_power_t23));
+
         this.total_daily_generation = 0.0;
         this.total_daily_consumption = 0.0;
 
@@ -193,6 +247,19 @@ export class DashboardComponent implements OnInit {
         }
         for (let i = 0; i < this.measurements_pcc.length; i++) {
           this.total_daily_consumption = this.total_daily_consumption + this.measurements_pcc[i];
+        }
+        for (let i = 0; i < this.measurements_ev_1.length; i++) {
+          if (this.measurements_ev_1[i] > 0.0) {
+            let meas_ev_1_index = this.measurements_ev_1[i];
+            this.total_daily_consumption = this.total_daily_consumption + Math.abs(meas_ev_1_index);
+          }
+        }
+
+        for (let i = 0; i < this.measurements_ev_2.length; i++) {
+          if (this.measurements_ev_2[i] > 0.0) {
+          let meas_ev_2_index = this.measurements_ev_2[i];
+          this.total_daily_consumption = this.total_daily_consumption + Math.abs(meas_ev_2_index);
+          }
         }
 
         this.total_daily_generation = Math.round(100 * this.total_daily_generation)/100;

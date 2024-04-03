@@ -27,13 +27,20 @@ export class BarsComponent {
         text: 'Active Power [kW]'
       }
     }, 
+    legend: {
+      enabled: false
+    },
+    credits: {
+      enabled: false
+    },
     series: [
       {
         type: 'bar',
         data: this.data
       }
     ]
-  }
+    }
+  
   
   constructor() {  }
 
@@ -48,16 +55,14 @@ export class BarsComponent {
     this.chartOptions.series[0] = {
       type: 'column',
       data: this.data
-    }
+    };
 
     this.updateFlag = true;
     if(this.data.length) {
       this.updateData = true;
-    }
+    };
     console.log("********* ngOnChanges ********")
     console.log(this.chartOptions.series[0].data)
 
   }
 }
-
-

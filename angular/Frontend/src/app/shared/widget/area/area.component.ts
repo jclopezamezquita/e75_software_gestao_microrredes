@@ -21,6 +21,8 @@ export class AreaComponent {
   @Input() meas_pv = [];
   @Input() meas_genset = [];
   @Input() meas_bess = [];
+  @Input() meas_ev_1 = [];
+  @Input() meas_ev_2 = [];
   @Input() label: string;
 
   chartOptions: Highcharts.Options = {
@@ -84,6 +86,14 @@ export class AreaComponent {
         type: 'area',
         name: 'GENSET',
         data: this.meas_genset
+      },{
+        type: 'area',
+        name: 'EV_1',
+        data: this.meas_ev_1
+      },{
+        type: 'area',
+        name: 'EV_2',
+        data: this.meas_ev_2
       }
     ]
     
