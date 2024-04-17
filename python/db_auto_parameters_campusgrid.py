@@ -29,8 +29,13 @@ data = requests.post(url=URL + "v1/api/node_information", data=parameters_node_5
 print(data.status_code)
 print(data.text)
 
-parameters_node_6 = {"name": "6", "type": "PQ", "der": "ev", "nominal_kva": 40, "minimum_kva": 0, "maximum_kva": 0, "power_factor": 1}
+parameters_node_6 = {"name": "6", "type": "PQ", "der": "ev1", "nominal_kva": 40, "minimum_kva": 0, "maximum_kva": 0, "power_factor": 1}
 data = requests.post(url=URL + "v1/api/node_information", data=parameters_node_6, headers={"accept" : "application/json"})
+print(data.status_code)
+print(data.text)
+
+parameters_node_7 = {"name": "7", "type": "PQ", "der": "ev2", "nominal_kva": 40, "minimum_kva": 0, "maximum_kva": 0, "power_factor": 1}
+data = requests.post(url=URL + "v1/api/node_information", data=parameters_node_7, headers={"accept" : "application/json"})
 print(data.status_code)
 print(data.text)
 
@@ -67,6 +72,13 @@ parameters_branch_1_6 = {"name": "1-6", "initial_node": "1", "end_node": "6", "r
 "resistance_ab": 0.0523, "resistance_ac": 0.0523, "resistance_bc": 0.0523, "reactance_aa":  0.8258, "reactance_bb":  0.8258, "reactance_cc":  0.8258, 
 "reactance_ab":  0.4765, "reactance_ac":  0.4765, "reactance_bc":  0.4765, "max_current": 999}
 data = requests.post(url=URL + "v1/api/branch_information", data=parameters_branch_1_6, headers={"accept" : "application/json"})
+print(data.status_code)
+print(data.text)
+
+parameters_branch_1_7 = {"name": "1-7", "initial_node": "1", "end_node": "7", "resistance_aa": 0.4138, "resistance_bb": 0.4138, "resistance_cc": 0.4138,
+"resistance_ab": 0.0523, "resistance_ac": 0.0523, "resistance_bc": 0.0523, "reactance_aa":  0.8258, "reactance_bb":  0.8258, "reactance_cc":  0.8258, 
+"reactance_ab":  0.4765, "reactance_ac":  0.4765, "reactance_bc":  0.4765, "max_current": 999}
+data = requests.post(url=URL + "v1/api/branch_information", data=parameters_branch_1_7, headers={"accept" : "application/json"})
 print(data.status_code)
 print(data.text)
 

@@ -35,8 +35,8 @@ class node_measurement_model(db.Model):
     voltage_b_kv = db.Column(db.Float(precision=2), default=0.0)
     voltage_c_kv = db.Column(db.Float(precision=2), default=0.0)
     soc_kwh = db.Column(db.Float(precision=2), default=0.0)
-    soc_ev_1_kwh = db.Column(db.Float(precision=2), default=0.0)
-    soc_ev_2_kwh = db.Column(db.Float(precision=2), default=0.0)
+    # soc_ev_1_kwh = db.Column(db.Float(precision=2), default=0.0)
+    # soc_ev_2_kwh = db.Column(db.Float(precision=2), default=0.0)
     id_info_no = db.Column(db.Integer, db.ForeignKey('node_information_table.id'))
 
 class branch_information_model(db.Model):

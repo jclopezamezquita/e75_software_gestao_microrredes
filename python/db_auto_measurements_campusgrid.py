@@ -42,6 +42,12 @@ data = requests.post(url=URL + "v1/api/node_measurement/no/6", data=measurement_
 print(data.status_code)
 print(data.text)
 
+measurement_node_7 = {"time_iso": iso_format, "active_power_a_kw": 10, "active_power_b_kw": 10, "active_power_c_kw": 10, "reactive_power_a_kvar": 10,
+"reactive_power_b_kvar": 10, "reactive_power_c_kvar": 10, "voltage_a_kv": 0.22, "voltage_b_kv": 0.22, "voltage_c_kv": 0.22}
+data = requests.post(url=URL + "v1/api/node_measurement/no/7", data=measurement_node_7, headers={"accept" : "application/json"})
+print(data.status_code)
+print(data.text)
+
 
 # Dados da tabela branch_measurement
 measurements_branch_1_2 = {"time_iso": iso_format, "active_power_flow_a_kw": 10, "active_power_flow_b_kw": 10, "active_power_flow_c_kw": 10, 
@@ -71,5 +77,11 @@ print(data.text)
 measurements_branch_1_6 = {"time_iso": iso_format, "active_power_flow_a_kw": 10, "active_power_flow_b_kw": 10, "active_power_flow_c_kw": 10, 
 "reactive_power_flow_a_kvar": 8, "reactive_power_flow_b_kvar": 8, "reactive_power_flow_c_kvar": 8, "current_a_A": 1.5, "current_b_A": 1.5, "current_c_A": 1.5}
 data = requests.post(url=URL + "v1/api/branch_measurement/branch/5", data=measurements_branch_1_6, headers={"accept" : "application/json"})
+print(data.status_code)
+print(data.text)
+
+measurements_branch_1_7 = {"time_iso": iso_format, "active_power_flow_a_kw": 10, "active_power_flow_b_kw": 10, "active_power_flow_c_kw": 10, 
+"reactive_power_flow_a_kvar": 8, "reactive_power_flow_b_kvar": 8, "reactive_power_flow_c_kvar": 8, "current_a_A": 1.5, "current_b_A": 1.5, "current_c_A": 1.5}
+data = requests.post(url=URL + "v1/api/branch_measurement/branch/6", data=measurements_branch_1_7, headers={"accept" : "application/json"})
 print(data.status_code)
 print(data.text)

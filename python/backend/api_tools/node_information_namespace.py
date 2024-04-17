@@ -41,7 +41,7 @@ def der_type_rule(value):
     # type_list = ["none", "load", "bess", "pv", "genset", "pcc", "ev"]
     type_list = data['der_types']
     if value not in type_list:
-        raise ValueError('-> Invalid value! Please use: \'none\', \'load\', \'bess\', \'pv\', \'genset\', \'pcc\', \'ev\'')
+        raise ValueError('-> Invalid value! Please use: \'none\', \'load\', \'bess\', \'pv\', \'genset\', \'pcc\', \'ev1\', \'ev2\'')
     return value
 
 der_type_rule.__schema__ = {

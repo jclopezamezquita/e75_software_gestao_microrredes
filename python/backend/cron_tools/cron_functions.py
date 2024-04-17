@@ -17,6 +17,7 @@ def microgrid_dayahead_optimizer():
     
     data_nodes = requests.get(url=URL + "v1/api/node_information", headers={"accept" : "application/json"})
     data_nodes = json.loads(data_nodes.text)
+    print(data_nodes)
 
     data_branches = requests.get(url=URL + "v1/api/branch_information", headers={"accept" : "application/json"})
     data_branches = json.loads(data_branches.text)
@@ -39,7 +40,6 @@ def microgrid_dayahead_optimizer():
         t_arrival_2 = index['EV_arrival_time_2']
         t_departure_1 = index['EV_departure_time_1']
         t_departure_2 = index['EV_departure_time_2']
-        print(t_departure_2)
         if t_arrival_1 ==0:
             t_arrival_1 = 24
         if t_arrival_2 == 0:
@@ -97,7 +97,7 @@ def microgrid_dayahead_optimizer():
                 input_data['set_of_energy_storage_systems'] = [str(cont2)]
         cont2 = 0
         for index in data_nodes:   
-            if index['der'] == 'ev':
+            if index['der'] == 'ev1':
                 cont2 += 1
                 input_data['set_of_electric_vehicles'] = [str(cont2)]
         cont5 = 0
@@ -108,7 +108,7 @@ def microgrid_dayahead_optimizer():
         input_data['set_of_outage'] = ['20']
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
-        input_data['coefficient_demand_scen'] = [1.2]
+        input_data['coefficient_demand_scen'] = [1.0]
         input_data['coefficient_pv_scen'] = [0.5]
         input_data['type_of_bus'] = []
         for index in data_nodes:
@@ -284,7 +284,7 @@ def microgrid_dayahead_optimizer():
         cont4_1 = 0
         for index in data_nodes:
             cont4_1 += 1
-            if index['der'] == 'ev':
+            if index['der'] == 'ev1':
                 cont4 += 1
                 input_data['location_of_ev'][str(cont4_1)] = [str(cont4)]
                 input_data['minimum_energy_capacity_ev_1'].append(index['soc_min_ev'] * EV_nom_1)
@@ -303,6 +303,7 @@ def microgrid_dayahead_optimizer():
         input_data['t_departure_1'].append(t_departure_1)
         input_data['t_departure_2'].append(t_departure_2)
 
+        print(input_data)
         return optimizer_milp_function(input_data)
 
 
