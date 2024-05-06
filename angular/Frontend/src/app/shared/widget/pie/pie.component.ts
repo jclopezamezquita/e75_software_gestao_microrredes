@@ -62,7 +62,8 @@ export class PieComponent {
             format: '<b>{point.name}</b>: {point.percentage:.1f} %'
         }
       }
-    }
+    },
+    colors:['#4B4B4D', '#9DC8F0', '#F9B985', '#9AEE88'] // Negro para PV, Azul para PCC, Naranja para GENSET, verde para BESS
   }
   
   constructor() {  }

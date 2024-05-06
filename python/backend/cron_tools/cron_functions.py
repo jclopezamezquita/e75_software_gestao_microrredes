@@ -50,12 +50,8 @@ def microgrid_dayahead_optimizer():
             t_departure_2 =24
     
 
-    '''
-    URL2='https://bcd89f1a2c30.ngrok.io/'
     
-    #URL2='http://hil.sa.ngrok.io/'
-    
-    
+    URL2='http://100.112.150.188:5000/'
     measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
     measurements = json.loads(measurements.text)
     #print(measurements)
@@ -64,8 +60,8 @@ def microgrid_dayahead_optimizer():
         for x in measurements[index2]['node']:
             if x['der'] == 'bess':
                 initial_SOC = x['SOC']
-    '''
-    initial_SOC = 20
+    
+    # initial_SOC = 20
 
 
     if not data_nodes:
@@ -105,11 +101,11 @@ def microgrid_dayahead_optimizer():
             if index['der'] == 'genset':
                 cont5 += 1
                 input_data['set_of_thermal_generator'] = [str(cont5)]
-        input_data['set_of_outage'] = ['20']
+        input_data['set_of_outage'] = ['16']
         input_data['set_of_scenarios'] = ['1']
         input_data['probability_of_scen'] = [1.0]
         input_data['coefficient_demand_scen'] = [1.0]
-        input_data['coefficient_pv_scen'] = [0.5]
+        input_data['coefficient_pv_scen'] = [1.0]
         input_data['type_of_bus'] = []
         for index in data_nodes:
             if index['type'] == 'PCC':
@@ -434,13 +430,13 @@ def microgrid_measurements(URL):
     try:
         measurements = requests.get(url=URL + "last_item", headers={"accept" : "application/json"})
         measurements = json.loads(measurements.text)
-        #print(measurements)
+        print("Measurements: ", measurements)
 
         URL2 = "http://nginx:80/"
 
         node_information = requests.get(url=URL2 + "v1/api/node_information", headers={"accept" : "application/json"})
         node_information = json.loads(node_information.text)
-        #print(node_information)
+        print("Node information: ", node_information)
 
 
         for index2 in measurements:

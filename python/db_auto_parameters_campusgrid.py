@@ -19,7 +19,7 @@ data = requests.post(url=URL + "v1/api/node_information", data=parameters_node_3
 print(data.status_code)
 print(data.text)
 
-parameters_node_4 = {"name": "4", "type": "Ref", "der": "bess", "nominal_kva": 810, "minimum_kva": 0, "maximum_kva": 810, "power_factor": 0.707, "soc_min_bat": 0.15, "soc_max_bat": 1, "bat_nom_energy": 810}
+parameters_node_4 = {"name": "4", "type": "Ref", "der": "bess", "nominal_kva": 810, "minimum_kva": 0, "maximum_kva": 810, "power_factor": 0.707, "soc_min_bat": 0.15, "soc_max_bat": 0.9, "bat_nom_energy": 810}
 data = requests.post(url=URL + "v1/api/node_information", data=parameters_node_4, headers={"accept" : "application/json"})
 print(data.status_code)
 print(data.text)

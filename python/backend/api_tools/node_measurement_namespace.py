@@ -638,7 +638,7 @@ class node_measurement_list(Resource):
                         data["pcc_t00"] = data["pcc_t00"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
                         counters["counter_pcc_t00"] = counters["counter_pcc_t00"] + 1
                     if i == 22:
-                        data["pcc_t01"] = data["pcc_t01"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["pcc_t01"] = ["pcc_t01"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
                         counters["counter_pcc_t01"] = counters["counter_pcc_t01"] + 1
                     if i == 21:
                         data["pcc_t02"] = data["pcc_t02"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
@@ -1491,8 +1491,7 @@ class node_measurement_ListCreateFromParent(Resource):
         parameters = [node_measurement_model.id, node_information_model.name, node_measurement_model.time_iso, node_measurement_model.active_power_a_kw, 
             node_measurement_model.active_power_b_kw, node_measurement_model.active_power_c_kw, node_measurement_model.reactive_power_a_kvar,
             node_measurement_model.reactive_power_b_kvar, node_measurement_model.reactive_power_c_kvar, node_measurement_model.voltage_a_kv,
-            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh,
-            node_measurement_model.soc_ev_1_kwh, node_measurement_model.soc_ev_2_kwh]
+            node_measurement_model.voltage_b_kv, node_measurement_model.voltage_c_kv, node_measurement_model.soc_kwh]
         main_query = node_measurement_model.query.join(node_information_model).with_entities(*parameters)
 
         measurements = (main_query.order_by(node_measurement_model.id.desc()).first())
