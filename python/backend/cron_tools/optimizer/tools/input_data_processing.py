@@ -453,106 +453,6 @@ class InputData:
 		return(self.PDa, self.PDb, self.PDc, self.QDa, self.QDb, self.QDc, self.PVa, self.PVb, self.PVc, self.Raa_p, self.Rbb_p, self.Rcc_p, self.Rab_p, self.Rac_p, self.Rbc_p, self.df, self.Spcc_Dp_max, self.Spcc_ms, self.S_Dp_max, self.S_ms)
 
 	def SavingApproximations(self,results):
-		''''
-		self.List_LTS = []
-		for (i,j) in self.L:
-			for t in self.T:
-				for s in self.S:
-					self.List_LTS += [[i, j, t, s]]
-		
-		self.List_NTS = []
-		for i in self.N:
-			for t in self.T:
-				for s in self.S:
-					self.List_NTS += [[i, t, s]]
-
-		self.List_LTOS = []
-		for (i,j) in self.L:
-			for t in self.T:
-				for c in self.O:
-					for s in self.S:
-						self.List_LTOS += [[i, j, t, c, s]]
-
-		self.List_NTOS = []
-		for i in self.N:
-			for t in self.T:
-				for c in self.O:
-					for s in self.S:
-						self.List_NTOS += [[i, t, c, s]]
-
-		self.Pa_0 = results.Pa.get_values()
-		print("Pa_0 data:",self.Pa_0)
-
-		self.Pa_0_con = {}
-		self.Pb_0_con = {}
-		self.Pc_0_con = {}
-		self.Qa_0_con = {}
-		self.Qb_0_con = {}
-		self.Qc_0_con = {}
-		for (i,j,t,s) in self.List_LTS:
-			self.Pa_0_con[(i,j,t,s)] = ' '
-			self.Pb_0_con[(i,j,t,s)] = ' '
-			self.Pc_0_con[(i,j,t,s)] = ' '
-			self.Qa_0_con[(i,j,t,s)] = ' '
-			self.Qb_0_con[(i,j,t,s)] = ' '
-			self.Qc_0_con[(i,j,t,s)] = ' '
-
-		for (i,j,t,s) in self.List_LTS:
-			self.Pa_0_con[(i,j,t,s)] = results.Pa_con[i,j][t][s]
-			self.Pb_0_con[(i,j,t,s)] = results.Pb_con[i,j][t][s]
-			self.Pc_0_con[(i,j,t,s)] = results.Pc_con[i,j][t][s]
-			self.Qa_0_con[(i,j,t,s)] = results.Qa_con[i,j][t][s]
-			self.Qb_0_con[(i,j,t,s)] = results.Qb_con[i,j][t][s]
-			self.Qc_0_con[(i,j,t,s)] = results.Qc_con[i,j][t][s]
-
-		self.Va_0_con = {}	
-		self.Vb_0_con = {}
-		self.Vc_0_con = {}
-		for (i,t,s) in self.List_NTS:
-			self.Va_0_con[(i,t,s)] = ' '
-			self.Vb_0_con[(i,t,s)] = ' '
-			self.Vc_0_con[(i,t,s)] = ' '
-
-		for (i,t,s) in self.List_NTS:
-			self.Va_0_con[(i,t,s)] = results.Va_con[i][t][s]
-			self.Vb_0_con[(i,t,s)] = results.Vb_con[i][t][s]
-			self.Vc_0_con[(i,t,s)] = results.Vc_con[i][t][s]
-
-		self.Pa_0 = {}
-		self.Pb_0 = {}
-		self.Pc_0 = {}
-		self.Qa_0 = {}
-		self.Qb_0 = {}
-		self.Qc_0 = {}
-		for (i,j,t,c,s) in self.List_LTOS:
-			self.Pa_0[(i,j,t,c,s)] = ' '
-			self.Pb_0[(i,j,t,c,s)] = ' '
-			self.Pc_0[(i,j,t,c,s)] = ' '
-			self.Qa_0[(i,j,t,c,s)] = ' '
-			self.Qb_0[(i,j,t,c,s)] = ' '
-			self.Qc_0[(i,j,t,c,s)] = ' '
-
-		for (i,j,t,c,s) in self.List_LTOS:
-			self.Pa_0[(i,j,t,c,s)] = results.Pa[i,j][t][c][s]
-			self.Pb_0[(i,j,t,c,s)] = results.Pb[i,j][t][c][s]
-			self.Pc_0[(i,j,t,c,s)] = results.Pc[i,j][t][c][s]
-			self.Qa_0[(i,j,t,c,s)] = results.Qa[i,j][t][c][s]
-			self.Qb_0[(i,j,t,c,s)] = results.Qb[i,j][t][c][s]
-			self.Qc_0[(i,j,t,c,s)] = results.Qc[i,j][t][c][s]
-
-		self.Va_0 = {}	
-		self.Vb_0 = {}
-		self.Vc_0 = {}
-		for (i,t,c,s) in self.List_NTOS:
-			self.Va_0[(i,t,c,s)] = ' '
-			self.Vb_0[(i,t,c,s)] = ' '
-			self.Vc_0[(i,t,c,s)] = ' '
-
-		for (i,t,c,s) in self.List_NTOS:
-			self.Va_0[(i,t,c,s)] = results.Va[i][t][c][s]
-			self.Vb_0[(i,t,c,s)] = results.Vb[i][t][c][s]
-			self.Vc_0[(i,t,c,s)] = results.Vc[i][t][c][s]
-		'''
 
 		self.Pa_0 = results.Pa
 		self.Pb_0 = results.Pb
@@ -573,7 +473,7 @@ class InputData:
 		self.Va_0_out = results.Va_out
 		self.Vb_0_out = results.Vb_out
 		self.Vc_0_out = results.Vc_out
-
+  
 	
 		return True
 		

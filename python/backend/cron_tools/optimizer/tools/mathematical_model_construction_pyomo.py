@@ -482,6 +482,7 @@ class MathematicalModel:
 		self.Va_out = model_cs.Va_out.get_values()
 		self.Vb_out = model_cs.Vb_out.get_values()
 		self.Vc_out = model_cs.Vc_out.get_values()
+  
 		
 	def ProblemFormulation(self):
 		data = self.data
@@ -676,60 +677,61 @@ class MathematicalModel:
 		model.Vc_sqr_out = Var(data.N, data.T, data.O, data.S, within = NonNegativeReals, bounds = (data.Vmin**2, data.Vmax**2))
 
 		model.xd =  Var(data.N, data.T, data.O, data.S, domain = Binary)
+		
+		# Modelo Multi-objective e-constraint
 
-		# Objective function
 		if len(data.O) >= 1 :
-			cost_operation_contingency = (sum(data.Prob[s]*(0.01/len(data.O) * (sum(data.cEDS[t] * data.delta_t * (model.Ppcc_a_out[i, t, o, s] + model.Ppcc_b_out[i, t, o, s] + model.Ppcc_c_out[i, t, o, s]) for (i, t, o, s) in self.List_NTOS) + 
+			FO1 = (sum(data.Prob[s]*(0.01/len(data.O) * (sum(data.cEDS[t] * data.delta_t * (model.Ppcc_a_out[i, t, o, s] + model.Ppcc_b_out[i, t, o, s] + model.Ppcc_c_out[i, t, o, s]) for (i, t, o, s) in self.List_NTOS) + 
 											sum([data.cost_PG[i] * data.delta_t * model.PG_out[i,t,o, s] for (i,t,o,s) in self.List_GDTOS]) + 
 											sum([data.delta_t * data.alpha_c[i] * data.sd[s] * (data.PDa[('3',t)]+data.PDb[('3',t)]+data.PDc[('3',t)]) * (1-model.xd['3',t,o,s]) for (i,t,o,s) in self.List_NTOS]))) + 
 											(0.99 * sum(data.cEDS[t] * data.delta_t * (model.Ppcc_a[i, t,s] + model.Ppcc_b[i, t,s] + model.Ppcc_c[i, t,s]) for (i, t,s) in self.List_NTS) + 
 											sum(data.cost_PG[i] * data.delta_t * model.PG[i, t,s] for (i, t,s) in self.List_GDTS)) for s in data.S))
 		else :
-			cost_operation_contingency = (sum(data.Prob[s]*(0.01/1000000 * (sum(data.cEDS[t] * data.delta_t * (model.Ppcc_a_out[i, t, o, s] + model.Ppcc_b_out[i, t, o, s] + model.Ppcc_c_out[i, t, o, s]) for (i, t, o, s) in self.List_NTOS) + 
+			FO1 = (sum(data.Prob[s]*(0.01/1000000 * (sum(data.cEDS[t] * data.delta_t * (model.Ppcc_a_out[i, t, o, s] + model.Ppcc_b_out[i, t, o, s] + model.Ppcc_c_out[i, t, o, s]) for (i, t, o, s) in self.List_NTOS) + 
 											sum([data.delta_t * data.alpha_c[i] * data.sd[s] * (data.PDa[(i,t)]+data.PDb[(i,t)]+data.PDc[(i,t)]) * (1-model.xd[i,t,o,s]) for (i,t,o,s) in self.List_NTOS]))) +
 											(0.99 * sum(data.cEDS[t] * data.delta_t * (model.Ppcc_a[i, t,s] + model.Ppcc_b[i, t,s] + model.Ppcc_c[i, t,s]) for (i, t,s) in self.List_NTS)) for s in data.S))
-
-		model.objective_function = Objective(expr=cost_operation_contingency)
+		model.objective_1 = Objective(expr=FO1)
 
 		# --------------------- Constraints --------------------------------------------
 		# --------------------- Without Contingences------------------------------------
-		# Active losses ----------------------------------------------------------------
+		# ---------------------- Active losses -----------------------------------------
 		def active_losses_a_rule(model, i, j, t, s):
 			return (
 				(1 / (data.Va_0[i, t, s] * data.Va_0[i, t, s])) * 
-		        (data.Raa_p[i, j] * model.Pa_sqr[i, j, t, s] + 
-		         data.Raa_p[i, j] * model.Qa_sqr[i, j, t, s] - 
-		         data.Xaa_p[i, j] * data.Pa_0[i, j, t, s] * model.Qa[i, j, t, s] + 
-		         data.Xaa_p[i, j] * data.Qa_0[i, j, t, s] * model.Pa[i, j, t, s]) +
-		        (1 / (data.Va_0[i, t, s] * data.Vb_0[i, t, s])) * 
-		        (data.Rab_p[i, j] * data.Pb_0[i, j, t, s] * model.Pa[i, j, t, s] + 
-		         data.Rab_p[i, j] * data.Qb_0[i, j, t, s] * model.Qa[i, j, t, s] - 
-		         data.Xab_p[i, j] * data.Pb_0[i, j, t, s] * model.Qa[i, j, t, s] + 
-		         data.Xab_p[i, j] * data.Qb_0[i, j, t, s] * model.Pa[i, j, t, s]) +
-		        (1 / (data.Va_0[i, t, s] * data.Vc_0[i, t, s])) * 
-		        (data.Rac_p[i, j] * data.Pc_0[i, j, t, s] * model.Pa[i, j, t, s] + 
-		         data.Rac_p[i, j] * data.Qc_0[i, j, t, s] * model.Qa[i, j, t, s] - 
-		         data.Xac_p[i, j] * data.Pc_0[i, j, t, s] * model.Qa[i, j, t, s] + 
-		         data.Xac_p[i, j] * data.Qc_0[i, j, t, s] * model.Pa[i, j, t, s]) == model.Plss_a[i, j, t, s])
+				(data.Raa_p[i, j] * model.Pa_sqr[i, j, t, s] + 
+				data.Raa_p[i, j] * model.Qa_sqr[i, j, t, s] - 
+				data.Xaa_p[i, j] * data.Pa_0[i, j, t, s] * model.Qa[i, j, t, s] + 
+				data.Xaa_p[i, j] * data.Qa_0[i, j, t, s] * model.Pa[i, j, t, s]) +
+				(1 / (data.Va_0[i, t, s] * data.Vb_0[i, t, s])) * 
+				(data.Rab_p[i, j] * data.Pb_0[i, j, t, s] * model.Pa[i, j, t, s] + 
+				data.Rab_p[i, j] * data.Qb_0[i, j, t, s] * model.Qa[i, j, t, s] - 
+				data.Xab_p[i, j] * data.Pb_0[i, j, t, s] * model.Qa[i, j, t, s] + 
+				data.Xab_p[i, j] * data.Qb_0[i, j, t, s] * model.Pa[i, j, t, s]) +
+				(1 / (data.Va_0[i, t, s] * data.Vc_0[i, t, s])) * 
+				(data.Rac_p[i, j] * data.Pc_0[i, j, t, s] * model.Pa[i, j, t, s] + 
+				data.Rac_p[i, j] * data.Qc_0[i, j, t, s] * model.Qa[i, j, t, s] - 
+				data.Xac_p[i, j] * data.Pc_0[i, j, t, s] * model.Qa[i, j, t, s] + 
+				data.Xac_p[i, j] * data.Qc_0[i, j, t, s] * model.Pa[i, j, t, s]) == model.Plss_a[i, j, t, s]
+    			)
 		model.active_losses_a = Constraint(self.List_LTS, rule=active_losses_a_rule)
 		
 		def active_losses_b_rule(model, i, j, t, s):
 			return (
 				(1 / (data.Vb_0[i, t, s] * data.Va_0[i, t, s])) * 
 				(data.Rba_p[i, j] * data.Pa_0[i, j, t, s] * model.Pb[i, j, t, s] + 
-				 data.Rba_p[i, j] * data.Qa_0[i, j, t, s] * model.Qb[i, j, t, s] - 
-				 data.Xba_p[i, j] * data.Pa_0[i, j, t, s] * model.Qb[i, j, t, s] + 
-				 data.Xba_p[i, j] * data.Qa_0[i, j, t, s] * model.Pb[i, j, t, s]) +
+				data.Rba_p[i, j] * data.Qa_0[i, j, t, s] * model.Qb[i, j, t, s] - 
+				data.Xba_p[i, j] * data.Pa_0[i, j, t, s] * model.Qb[i, j, t, s] + 
+				data.Xba_p[i, j] * data.Qa_0[i, j, t, s] * model.Pb[i, j, t, s]) +
 				(1 / (data.Vb_0[i, t, s] * data.Vb_0[i, t, s])) * 
 				(data.Rbb_p[i, j] * model.Pb_sqr[i, j, t, s]  + 
-				 data.Rbb_p[i, j] * model.Qb_sqr[i, j, t, s]  - 
-				 data.Xbb_p[i, j] * data.Pb_0[i, j, t, s] * model.Qb[i, j, t, s] + 
-				 data.Xbb_p[i, j] * data.Qb_0[i, j, t, s] * model.Pb[i, j, t, s]) +
+				data.Rbb_p[i, j] * model.Qb_sqr[i, j, t, s]  - 
+				data.Xbb_p[i, j] * data.Pb_0[i, j, t, s] * model.Qb[i, j, t, s] + 
+				data.Xbb_p[i, j] * data.Qb_0[i, j, t, s] * model.Pb[i, j, t, s]) +
 				(1 / (data.Vb_0[i, t, s] * data.Vc_0[i, t, s])) * 
 				(data.Rbc_p[i, j] * data.Pc_0[i, j, t, s] * model.Pb[i, j, t, s] + 
-				 data.Rbc_p[i, j] * data.Qc_0[i, j, t, s] * model.Qb[i, j, t, s] - 
-				 data.Xbc_p[i, j] * data.Pc_0[i, j, t, s] * model.Qb[i, j, t, s] + 
-				 data.Xbc_p[i, j] * data.Qc_0[i, j, t, s] * model.Pb[i, j, t, s]) == model.Plss_b[i, j, t, s])
+				data.Rbc_p[i, j] * data.Qc_0[i, j, t, s] * model.Qb[i, j, t, s] - 
+				data.Xbc_p[i, j] * data.Pc_0[i, j, t, s] * model.Qb[i, j, t, s] + 
+				data.Xbc_p[i, j] * data.Qc_0[i, j, t, s] * model.Pb[i, j, t, s]) == model.Plss_b[i, j, t, s])
 		model.active_losses_b = Constraint(self.List_LTS, rule=active_losses_b_rule)
 
 
@@ -737,19 +739,19 @@ class MathematicalModel:
 			return (
 				(1 / (data.Vc_0[i, t, s] * data.Va_0[i, t, s])) * 
 				(data.Rca_p[i, j] * data.Pa_0[i, j, t, s] * model.Pc[i, j, t, s] + 
-				 data.Rca_p[i, j] * data.Qa_0[i, j, t, s] * model.Qc[i, j, t, s] - 
-				 data.Xca_p[i, j] * data.Pa_0[i, j, t, s] * model.Qc[i, j, t, s] + 
-				 data.Xca_p[i, j] * data.Qa_0[i, j, t, s] * model.Pc[i, j, t, s]) +
+				data.Rca_p[i, j] * data.Qa_0[i, j, t, s] * model.Qc[i, j, t, s] - 
+				data.Xca_p[i, j] * data.Pa_0[i, j, t, s] * model.Qc[i, j, t, s] + 
+				data.Xca_p[i, j] * data.Qa_0[i, j, t, s] * model.Pc[i, j, t, s]) +
 				(1 / (data.Vc_0[i, t, s] * data.Vb_0[i, t, s])) * 
 				(data.Rcb_p[i, j] * data.Pb_0[i, j, t, s] * model.Pc[i, j, t, s] + 
-				 data.Rcb_p[i, j] * data.Qb_0[i, j, t, s] * model.Qc[i, j, t, s] - 
-				 data.Xcb_p[i, j] * data.Pb_0[i, j, t, s] * model.Qc[i, j, t, s] + 
-				 data.Xcb_p[i, j] * data.Qb_0[i, j, t, s] * model.Pc[i, j, t, s]) +
+				data.Rcb_p[i, j] * data.Qb_0[i, j, t, s] * model.Qc[i, j, t, s] - 
+				data.Xcb_p[i, j] * data.Pb_0[i, j, t, s] * model.Qc[i, j, t, s] + 
+				data.Xcb_p[i, j] * data.Qb_0[i, j, t, s] * model.Pc[i, j, t, s]) +
 				(1 / (data.Vc_0[i, t, s] * data.Vc_0[i, t, s])) * 
 				(data.Rcc_p[i, j] * model.Pc_sqr[i, j, t, s]  + 
-				 data.Rcc_p[i, j] * model.Qc_sqr[i, j, t, s]  - 
-				 data.Xcc_p[i, j] * data.Pc_0[i, j, t, s] * model.Qc[i, j, t, s] + 
-				 data.Xcc_p[i, j] * data.Qc_0[i, j, t, s] * model.Pc[i, j, t, s]) == model.Plss_c[i, j, t, s])
+				data.Rcc_p[i, j] * model.Qc_sqr[i, j, t, s]  - 
+				data.Xcc_p[i, j] * data.Pc_0[i, j, t, s] * model.Qc[i, j, t, s] + 
+				data.Xcc_p[i, j] * data.Qc_0[i, j, t, s] * model.Pc[i, j, t, s]) == model.Plss_c[i, j, t, s])
 		model.active_losses_c = Constraint(self.List_LTS, rule=active_losses_c_rule)    
 
 		# Reactive losses ----------------------------------------------------------------
@@ -757,38 +759,38 @@ class MathematicalModel:
 			return (
 				(1 / (data.Va_0[i, t, s] * data.Va_0[i, t, s])) * 
 				(data.Raa_p[i, j] * data.Pa_0[i, j, t, s] * model.Qa[i, j, t, s] - 
-				 data.Raa_p[i, j] * data.Qa_0[i, j, t, s] * model.Pa[i, j, t, s] + 
-				 data.Xaa_p[i, j] * model.Pa_sqr[i, j, t, s]  + 
-				 data.Xaa_p[i, j] * model.Qa_sqr[i, j, t, s] ) +
+				data.Raa_p[i, j] * data.Qa_0[i, j, t, s] * model.Pa[i, j, t, s] + 
+				data.Xaa_p[i, j] * model.Pa_sqr[i, j, t, s]  + 
+				data.Xaa_p[i, j] * model.Qa_sqr[i, j, t, s] ) +
 				(1 / (data.Va_0[i, t, s] * data.Vb_0[i, t, s])) * 
 				(data.Rab_p[i, j] * data.Pb_0[i, j, t, s] * model.Qa[i, j, t, s] - 
-				 data.Rab_p[i, j] * data.Qb_0[i, j, t, s] * model.Pa[i, j, t, s] + 
-				 data.Xab_p[i, j] * data.Pb_0[i, j, t, s] * model.Pa[i, j, t, s] + 
-				 data.Xab_p[i, j] * data.Qb_0[i, j, t, s] * model.Qa[i, j, t, s]) +
+				data.Rab_p[i, j] * data.Qb_0[i, j, t, s] * model.Pa[i, j, t, s] + 
+				data.Xab_p[i, j] * data.Pb_0[i, j, t, s] * model.Pa[i, j, t, s] + 
+				data.Xab_p[i, j] * data.Qb_0[i, j, t, s] * model.Qa[i, j, t, s]) +
 				(1 / (data.Va_0[i, t, s] * data.Vc_0[i, t, s])) * 
 				(data.Rac_p[i, j] * data.Pc_0[i, j, t, s] * model.Qa[i, j, t, s] - 
-				 data.Rac_p[i, j] * data.Qc_0[i, j, t, s] * model.Pa[i, j, t, s] + 
-				 data.Xac_p[i, j] * data.Pc_0[i, j, t, s] * model.Pa[i, j, t, s] + 
-				 data.Xac_p[i, j] * data.Qc_0[i, j, t, s] * model.Qa[i, j, t, s]) == model.Qlss_a[i, j, t, s])
+				data.Rac_p[i, j] * data.Qc_0[i, j, t, s] * model.Pa[i, j, t, s] + 
+				data.Xac_p[i, j] * data.Pc_0[i, j, t, s] * model.Pa[i, j, t, s] + 
+				data.Xac_p[i, j] * data.Qc_0[i, j, t, s] * model.Qa[i, j, t, s]) == model.Qlss_a[i, j, t, s])
 		model.reactive_losses_a = Constraint(self.List_LTS, rule=reactive_losses_a_rule)
 
 		def reactive_losses_b_rule(model, i, j, t, s):
 			return (
 				(1 / (data.Vb_0[i, t, s] * data.Va_0[i, t, s])) * 
 				(data.Rba_p[i, j] * data.Pa_0[i, j, t, s] * model.Qb[i, j, t, s] - 
-				 data.Rba_p[i, j] * data.Qa_0[i, j, t, s] * model.Pb[i, j, t, s] + 
-				 data.Xba_p[i, j] * data.Pa_0[i, j, t, s] * model.Pb[i, j, t, s] + 
-				 data.Xba_p[i, j] * data.Qa_0[i, j, t, s] * model.Qb[i, j, t, s]) +
+				data.Rba_p[i, j] * data.Qa_0[i, j, t, s] * model.Pb[i, j, t, s] + 
+				data.Xba_p[i, j] * data.Pa_0[i, j, t, s] * model.Pb[i, j, t, s] + 
+				data.Xba_p[i, j] * data.Qa_0[i, j, t, s] * model.Qb[i, j, t, s]) +
 				(1 / (data.Vb_0[i, t, s] * data.Vb_0[i, t, s])) * 
 				(data.Rbb_p[i, j] * data.Pb_0[i, j, t, s] * model.Qb[i, j, t, s] - 
-				 data.Rbb_p[i, j] * data.Qb_0[i, j, t, s] * model.Pb[i, j, t, s] + 
-				 data.Xbb_p[i, j] * model.Pb_sqr[i, j, t, s]  + 
-				 data.Xbb_p[i, j] * model.Qb_sqr[i, j, t, s] ) +
+				data.Rbb_p[i, j] * data.Qb_0[i, j, t, s] * model.Pb[i, j, t, s] + 
+				data.Xbb_p[i, j] * model.Pb_sqr[i, j, t, s]  + 
+				data.Xbb_p[i, j] * model.Qb_sqr[i, j, t, s] ) +
 				(1 / (data.Vb_0[i, t, s] * data.Vc_0[i, t, s])) * 
 				(data.Rbc_p[i, j] * data.Pc_0[i, j, t, s] * model.Qb[i, j, t, s] - 
-				 data.Rbc_p[i, j] * data.Qc_0[i, j, t, s] * model.Pb[i, j, t, s] + 
-				 data.Xbc_p[i, j] * data.Pc_0[i, j, t, s] * model.Pb[i, j, t, s] + 
-				 data.Xbc_p[i, j] * data.Qc_0[i, j, t, s] * model.Qb[i, j, t, s]) == model.Qlss_b[i, j, t, s])
+				data.Rbc_p[i, j] * data.Qc_0[i, j, t, s] * model.Pb[i, j, t, s] + 
+				data.Xbc_p[i, j] * data.Pc_0[i, j, t, s] * model.Pb[i, j, t, s] + 
+				data.Xbc_p[i, j] * data.Qc_0[i, j, t, s] * model.Qb[i, j, t, s]) == model.Qlss_b[i, j, t, s])
 
 		model.reactive_losses_b = Constraint(self.List_LTS, rule= reactive_losses_b_rule)
 
@@ -796,19 +798,19 @@ class MathematicalModel:
 			return (
 				(1 / (data.Vc_0[i, t, s] * data.Va_0[i, t, s])) * 
 				(data.Rca_p[i, j] * data.Pa_0[i, j, t, s] * model.Qc[i, j, t, s] - 
-				 data.Rca_p[i, j] * data.Qa_0[i, j, t, s] * model.Pc[i, j, t, s] + 
-				 data.Xca_p[i, j] * data.Pa_0[i, j, t, s] * model.Pc[i, j, t, s] + 
-				 data.Xca_p[i, j] * data.Qa_0[i, j, t, s] * model.Qc[i, j, t, s]) +
+				data.Rca_p[i, j] * data.Qa_0[i, j, t, s] * model.Pc[i, j, t, s] + 
+				data.Xca_p[i, j] * data.Pa_0[i, j, t, s] * model.Pc[i, j, t, s] + 
+				data.Xca_p[i, j] * data.Qa_0[i, j, t, s] * model.Qc[i, j, t, s]) +
 				(1 / (data.Vc_0[i, t, s] * data.Vb_0[i, t, s])) * 
 				(data.Rcb_p[i, j] * data.Pb_0[i, j, t, s] * model.Qc[i, j, t, s] - 
-				 data.Rcb_p[i, j] * data.Qb_0[i, j, t, s] * model.Pc[i, j, t, s] + 
-				 data.Xcb_p[i, j] * data.Pb_0[i, j, t, s] * model.Pc[i, j, t, s] + 
-				 data.Xcb_p[i, j] * data.Qb_0[i, j, t, s] * model.Qc[i, j, t, s]) +
+				data.Rcb_p[i, j] * data.Qb_0[i, j, t, s] * model.Pc[i, j, t, s] + 
+				data.Xcb_p[i, j] * data.Pb_0[i, j, t, s] * model.Pc[i, j, t, s] + 
+				data.Xcb_p[i, j] * data.Qb_0[i, j, t, s] * model.Qc[i, j, t, s]) +
 				(1 / (data.Vc_0[i, t, s] * data.Vc_0[i, t, s])) * 
 				(data.Rcc_p[i, j] * data.Pc_0[i, j, t, s] * model.Qc[i, j, t, s] - 
-				 data.Rcc_p[i, j] * data.Qc_0[i, j, t, s] * model.Pc[i, j, t, s] + 
-				 data.Xcc_p[i, j] * model.Pc_sqr[i, j, t, s]  + 
-				 data.Xcc_p[i, j] * model.Qc_sqr[i, j, t, s] ) == model.Qlss_c[i, j, t, s])
+				data.Rcc_p[i, j] * data.Qc_0[i, j, t, s] * model.Pc[i, j, t, s] + 
+				data.Xcc_p[i, j] * model.Pc_sqr[i, j, t, s]  + 
+				data.Xcc_p[i, j] * model.Qc_sqr[i, j, t, s] ) == model.Qlss_c[i, j, t, s])
 
 		model.reactive_losses_c = Constraint(self.List_LTS, rule= reactive_losses_c_rule)
 
@@ -1138,57 +1140,57 @@ class MathematicalModel:
 			return(
 				(1 / (data.Va_0_out[i, t, o, s] * data.Va_0_out[i, t, o, s])) * 
 				(data.Raa_p[i, j] * model.Pa_sqr_out[i, j, t, o, s] + 
-				 data.Raa_p[i, j] * model.Qa_sqr_out[i, j, t, o, s] - 
-				 data.Xaa_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] + 
-				 data.Xaa_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s]) +
+				data.Raa_p[i, j] * model.Qa_sqr_out[i, j, t, o, s] - 
+				data.Xaa_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] + 
+				data.Xaa_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s]) +
 				(1 / (data.Va_0_out[i, t, o, s] * data.Vb_0_out[i, t, o, s])) * 
 				(data.Rab_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
-				 data.Rab_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
-				 data.Xab_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] + 
-				 data.Xab_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s]) +
+				data.Rab_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
+				data.Xab_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] + 
+				data.Xab_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s]) +
 				(1 / (data.Va_0_out[i, t, o, s] * data.Vc_0_out[i, t, o, s])) * 
 				(data.Rac_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
-				 data.Rac_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
-				 data.Xac_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] + 
-				 data.Xac_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s]) == model.Plss_a_out[i, j, t, o, s])
+				data.Rac_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
+				data.Xac_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] + 
+				data.Xac_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s]) == model.Plss_a_out[i, j, t, o, s])
 		model.active_losses_a_out = Constraint(self.List_LTOS, rule=active_losses_a_rule_out)
 
 		def active_losses_b_rule_out(model, i, j, t, o, s):
 			return (
 				(1 / (data.Vb_0_out[i, t, o, s] * data.Va_0_out[i, t, o, s])) * 
 				(data.Rba_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
-				 data.Rba_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] - 
-				 data.Xba_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] + 
-				 data.Xba_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s]) +
+				data.Rba_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] - 
+				data.Xba_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] + 
+				data.Xba_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s]) +
 				(1 / (data.Vb_0_out[i, t, o, s] * data.Vb_0_out[i, t, o, s])) * 
 				(data.Rbb_p[i, j] * model.Pb_sqr_out[i, j, t, o, s]  + 
-				 data.Rbb_p[i, j] * model.Qb_sqr_out[i, j, t, o, s]  - 
-				 data.Xbb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] + 
-				 data.Xbb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s]) +
+				data.Rbb_p[i, j] * model.Qb_sqr_out[i, j, t, o, s]  - 
+				data.Xbb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] + 
+				data.Xbb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s]) +
 				(1 / (data.Vb_0_out[i, t, o, s] * data.Vc_0_out[i, t, o, s])) * 
 				(data.Rbc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
-				 data.Rbc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] - 
-				 data.Xbc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] + 
-				 data.Xbc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s]) == model.Plss_b_out[i, j, t, o, s])
+				data.Rbc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] - 
+				data.Xbc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] + 
+				data.Xbc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s]) == model.Plss_b_out[i, j, t, o, s])
 		model.active_losses_b_out = Constraint(self.List_LTOS, rule=active_losses_b_rule_out)
 
 		def active_losses_c_rule_out(model, i, j, t, o, s):
 			return (
 				(1 / (data.Vc_0_out[i, t, o, s] * data.Va_0_out[i, t, o, s])) * 
 				(data.Rca_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
-				 data.Rca_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] - 
-				 data.Xca_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] + 
-				 data.Xca_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s]) +
+				data.Rca_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] - 
+				data.Xca_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] + 
+				data.Xca_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s]) +
 				(1 / (data.Vc_0_out[i, t, o, s] * data.Vb_0_out[i, t, o, s])) * 
 				(data.Rcb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
-				 data.Rcb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] - 
-				 data.Xcb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] + 
-				 data.Xcb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s]) +
+				data.Rcb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] - 
+				data.Xcb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] + 
+				data.Xcb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s]) +
 				(1 / (data.Vc_0_out[i, t, o, s] * data.Vc_0_out[i, t, o, s])) * 
 				(data.Rcc_p[i, j] * model.Pc_sqr_out[i, j, t, o, s]  + 
-				 data.Rcc_p[i, j] * model.Qc_sqr_out[i, j, t, o, s]  - 
-				 data.Xcc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] + 
-				 data.Xcc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s]) == model.Plss_c_out[i, j, t, o, s])
+				data.Rcc_p[i, j] * model.Qc_sqr_out[i, j, t, o, s]  - 
+				data.Xcc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] + 
+				data.Xcc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s]) == model.Plss_c_out[i, j, t, o, s])
 		model.active_losses_c_out = Constraint(self.List_LTOS, rule=active_losses_c_rule_out)
 
 		# Reactive losses ----------------------------------------------------------------
@@ -1196,57 +1198,57 @@ class MathematicalModel:
 			return (
 				(1 / (data.Va_0_out[i, t, o, s] * data.Va_0_out[i, t, o, s])) * 
 				(data.Raa_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
-				 data.Raa_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
-				 data.Xaa_p[i, j] * model.Pa_sqr_out[i, j, t, o, s]  + 
-				 data.Xaa_p[i, j] * model.Qa_sqr_out[i, j, t, o, s] ) +
+				data.Raa_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
+				data.Xaa_p[i, j] * model.Pa_sqr_out[i, j, t, o, s]  + 
+				data.Xaa_p[i, j] * model.Qa_sqr_out[i, j, t, o, s] ) +
 				(1 / (data.Va_0_out[i, t, o, s] * data.Vb_0_out[i, t, o, s])) * 
-		        (data.Rab_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
-		         data.Rab_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
-		         data.Xab_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
-		         data.Xab_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s]) +
-		        (1 / (data.Va_0_out[i, t, o, s] * data.Vc_0_out[i, t, o, s])) * 
-		        (data.Rac_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
-		         data.Rac_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
-		         data.Xac_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
-		         data.Xac_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s]) == model.Qlss_a_out[i, j, t, o, s])
+				(data.Rab_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
+				data.Rab_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
+				data.Xab_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
+				data.Xab_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s]) +
+				(1 / (data.Va_0_out[i, t, o, s] * data.Vc_0_out[i, t, o, s])) * 
+				(data.Rac_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s] - 
+				data.Rac_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
+				data.Xac_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Pa_out[i, j, t, o, s] + 
+				data.Xac_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Qa_out[i, j, t, o, s]) == model.Qlss_a_out[i, j, t, o, s])
 		model.reactive_losses_a_out = Constraint(self.List_LTOS, rule=reactive_losses_a_rule_out)
 
 		def reactive_losses_b_rule_out(model, i, j, t, o, s):
 			return (
 				(1 / (data.Vb_0_out[i, t, o, s] * data.Va_0_out[i, t, o, s])) * 
 				(data.Rba_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] - 
-				 data.Rba_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
-				 data.Xba_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
-				 data.Xba_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s]) +
+				data.Rba_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
+				data.Xba_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
+				data.Xba_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s]) +
 				(1 / (data.Vb_0_out[i, t, o, s] * data.Vb_0_out[i, t, o, s])) * 
 				(data.Rbb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] - 
-				 data.Rbb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
-				 data.Xbb_p[i, j] * model.Pb_sqr_out[i, j, t, o, s]  + 
-				 data.Xbb_p[i, j] * model.Qb_sqr_out[i, j, t, o, s] ) +
+				data.Rbb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
+				data.Xbb_p[i, j] * model.Pb_sqr_out[i, j, t, o, s]  + 
+				data.Xbb_p[i, j] * model.Qb_sqr_out[i, j, t, o, s] ) +
 				(1 / (data.Vb_0_out[i, t, o, s] * data.Vc_0_out[i, t, o, s])) * 
 				(data.Rbc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s] - 
-				 data.Rbc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
-				 data.Xbc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
-				 data.Xbc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s]) == model.Qlss_b_out[i, j, t, o, s])
+				data.Rbc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
+				data.Xbc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Pb_out[i, j, t, o, s] + 
+				data.Xbc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Qb_out[i, j, t, o, s]) == model.Qlss_b_out[i, j, t, o, s])
 		model.reactive_losses_b_out = Constraint(self.List_LTOS, rule= reactive_losses_b_rule_out)
 
 		def reactive_losses_c_rule_out(model, i, j, t, o, s):
 			return (
 				(1 / (data.Vc_0_out[i, t, o, s] * data.Va_0_out[i, t, o, s])) * 
 				(data.Rca_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] - 
-				 data.Rca_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
-				 data.Xca_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
-				 data.Xca_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s]) +
+				data.Rca_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
+				data.Xca_p[i, j] * data.Pa_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
+				data.Xca_p[i, j] * data.Qa_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s]) +
 				(1 / (data.Vc_0_out[i, t, o, s] * data.Vb_0_out[i, t, o, s])) * 
 				(data.Rcb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] - 
-				 data.Rcb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
-				 data.Xcb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
-				 data.Xcb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s]) +
+				data.Rcb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
+				data.Xcb_p[i, j] * data.Pb_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
+				data.Xcb_p[i, j] * data.Qb_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s]) +
 				(1 / (data.Vc_0_out[i, t, o, s] * data.Vc_0_out[i, t, o, s])) * 
 				(data.Rcc_p[i, j] * data.Pc_0_out[i, j, t, o, s] * model.Qc_out[i, j, t, o, s] - 
-				 data.Rcc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
-				 data.Xcc_p[i, j] * model.Pc_sqr_out[i, j, t, o, s]  + 
-				 data.Xcc_p[i, j] * model.Qc_sqr_out[i, j, t, o, s] ) == model.Qlss_c_out[i, j, t, o, s])
+				data.Rcc_p[i, j] * data.Qc_0_out[i, j, t, o, s] * model.Pc_out[i, j, t, o, s] + 
+				data.Xcc_p[i, j] * model.Pc_sqr_out[i, j, t, o, s]  + 
+				data.Xcc_p[i, j] * model.Qc_sqr_out[i, j, t, o, s] ) == model.Qlss_c_out[i, j, t, o, s])
 		model.reactive_losses_c_out = Constraint(self.List_LTOS, rule= reactive_losses_c_rule_out)
 
 		# Active Power Flow ----------------------------------------------------------------
@@ -1259,8 +1261,8 @@ class MathematicalModel:
 				sum(model.PGa_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_a[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_a[a, t] for a in data.dict_nos_bs[i]) -
-		        sum(model.PEV_ch_a_1[a, t] for a in data.dict_nos_ev[i]) -
-		        sum(model.PEV_ch_a_2[a, t] for a in data.dict_nos_ev[i]) +
+				sum(model.PEV_ch_a_1[a, t] for a in data.dict_nos_ev[i]) -
+				sum(model.PEV_ch_a_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDa[(i,t)]*data.sd[s]) + (data.PVa[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_a_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_a)
 
@@ -1272,8 +1274,8 @@ class MathematicalModel:
 				sum(model.PGb_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_b[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_b[a, t] for a in data.dict_nos_bs[i]) -
-		        sum(model.PEV_ch_1[a, t] for a in data.dict_nos_ev[i]) -
-		        sum(model.PEV_ch_2[a, t] for a in data.dict_nos_ev[i]) +
+				sum(model.PEV_ch_1[a, t] for a in data.dict_nos_ev[i]) -
+				sum(model.PEV_ch_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDb[(i,t)]*data.sd[s]) + (data.PVb[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_b_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_b)
 
@@ -1285,8 +1287,8 @@ class MathematicalModel:
 				sum(model.PGc_out[a, t, o, s] for a in data.dict_nos_gd[i]) +
 				sum(model.PB_dis_c[a, t] for a in data.dict_nos_bs[i]) -
 				sum(model.PB_ch_c[a, t] for a in data.dict_nos_bs[i]) -
-		        sum(model.PEV_ch_c_1[a, t] for a in data.dict_nos_ev[i]) -
-		        sum(model.PEV_ch_c_2[a, t] for a in data.dict_nos_ev[i]) +
+				sum(model.PEV_ch_c_1[a, t] for a in data.dict_nos_ev[i]) -
+				sum(model.PEV_ch_c_2[a, t] for a in data.dict_nos_ev[i]) +
 				((- data.PDc[(i,t)]*data.sd[s]) + (data.PVc[(i,t)]*data.spv[s])) * model.xd[i, t, o, s] == 0)
 		model.active_power_balance_c_out = Constraint(self.List_NTOS, rule=active_power_balance_rule_out_c)  
 
@@ -1315,7 +1317,7 @@ class MathematicalModel:
 				sum(model.Qlss_c_out[a, j, t, o, s]*data.p[(i,a,j)] for (a,j) in data.L) +
 				model.Qpcc_c_out[i, t, o, s] +
 				sum(model.QGc_out[a, t, o, s] for a in data.dict_nos_gd[i]) -
-		        (data.QDc[(i,t)]*data.sd[s]) * model.xd[i, t, o, s] == 0)
+				(data.QDc[(i,t)]*data.sd[s]) * model.xd[i, t, o, s] == 0)
 		model.reactive_power_balance_out_c = Constraint(self.List_NTOS, rule=reactive_power_balance_out_rule_out_c)
 
 		# Voltage Droop in the Lines ----------------------------------------------------------------
@@ -1660,10 +1662,6 @@ class MathematicalModel:
 			return(model.EEV_1[i,t] <= data.EEVmax_1[i] )
 		model.energy_limits_ev_2_1 = Constraint(self.List_EVTd_1, rule = energy_limits_ev_rule_2_1)
 
-		def energy_ev_max_rule_1(model,i):
-			return(model.EEV_1[i,str(data.t_departure_1[i])] - data.EEVmax_1[i] == 0)
-		model.energy_ev_max_1 = Constraint(data.EV, rule = energy_ev_max_rule_1)
-
 		#----------------- EV_2 Variables --------------------------------------------------
 
 		def energy_ev_rule_2(model,i,t):
@@ -1714,9 +1712,6 @@ class MathematicalModel:
 			return(model.EEV_2[i,t] <= data.EEVmax_2[i] )
 		model.energy_limits_ev_2_2 = Constraint(self.List_EVTd_2, rule = energy_limits_ev_rule_2_2)
 
-		def energy_ev_max_rule_2(model,i):
-			return(model.EEV_2[i,str(data.t_departure_2[i])] - data.EEVmax_2[i] == 0)
-		model.energy_ev_max_2 = Constraint(data.EV, rule = energy_ev_max_rule_2)
 
 		#----------------- FIX Variables --------------------------------------------------
 		model.fix_active_power = ConstraintList()
@@ -1783,21 +1778,40 @@ class MathematicalModel:
 							model.fix_reactive_power_out.add(expr = model.Qpcc_a_out[i, t, o, s] == 0)
 							model.fix_reactive_power_out.add(expr = model.Qpcc_b_out[i, t, o, s] == 0)
 							model.fix_reactive_power_out.add(expr = model.Qpcc_c_out[i, t, o, s] == 0)
+		
+		#----------------- e-constraint --------------------------------------------------
+
+		# costs = []
+		# ens = []
+		# for e in range(0,800,200):
+		def e_constraint(model,i):
+			return ((data.EEVmax_1[i] - model.EEV_1[i,str(data.t_departure_1[i])]) + (data.EEVmax_2[i] - model.EEV_2[i,str(data.t_departure_2[i])])) <= 0
+		model.e_constraint = Constraint(data.EV, rule = e_constraint)
+
+		# 	resultado = SolverFactory('cbc').solve(model)
+		# 	costs.append(value(model.objective_1()))
+		# 	ens.append(e)
+		# print(f"Final costs values for e-constraint: {costs}")
+		# print(f"Final e values for e-constraint: {ens}")
+
 		return model
 
-	# Function to solve the model and obtain the results
+
+# Function to solve the model and obtain the results
 	def Solving_Model(self,model):
 		data = self.data
 
 		try:
 			solver = SolverFactory('cbc')
 			results = solver.solve(model)
-		
-		except Exception as e:
-			print("Error with solver the model: ", e)
+
+		except Exception as ex:
+			print("Error with solver the model: ", ex)
+
 
 		self.Status = results.solver.termination_condition
 		self.ObjectiveFunctionValue = results.problem.lower_bound
+		print(f"Final Objective Function: {model.objective_1()}")
 
 		# Saving variables of the problem
 		self.xd = model.xd.get_values()

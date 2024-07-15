@@ -49,19 +49,17 @@ def microgrid_dayahead_optimizer():
         if t_departure_2 == 0:
             t_departure_2 =24
     
+    # URL2='http://100.112.230.15:5000/'
+    # measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
+    # measurements = json.loads(measurements.text)
+    # #print(measurements)
 
+    # for index2 in measurements:
+    #     for x in measurements[index2]['node']:
+    #         if x['der'] == 'bess':
+    #             initial_SOC = x['SOC']
     
-    URL2='http://100.112.150.188:5000/'
-    measurements = requests.get(url=URL2 + "last_item", headers={"accept" : "application/json"})
-    measurements = json.loads(measurements.text)
-    #print(measurements)
-
-    for index2 in measurements:
-        for x in measurements[index2]['node']:
-            if x['der'] == 'bess':
-                initial_SOC = x['SOC']
-    
-    # initial_SOC = 20
+    initial_SOC = 20
 
 
     if not data_nodes:
@@ -102,10 +100,10 @@ def microgrid_dayahead_optimizer():
                 cont5 += 1
                 input_data['set_of_thermal_generator'] = [str(cont5)]
         input_data['set_of_outage'] = ['16']
-        input_data['set_of_scenarios'] = ['1']
-        input_data['probability_of_scen'] = [1.0]
-        input_data['coefficient_demand_scen'] = [1.0]
-        input_data['coefficient_pv_scen'] = [1.0]
+        input_data['set_of_scenarios'] = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+        input_data['probability_of_scen'] = [1/9, 1/9,1/9,1/9,1/9,1/9,1/9,1/9,1/9]
+        input_data['coefficient_demand_scen'] = [1.0,1.0,1.0,0.8,0.8,0.8,0.6,0.6,0.6]
+        input_data['coefficient_pv_scen'] = [1.0,0.8,0.6,1.0,0.8,0.6,1.0,0.8,0.6]
         input_data['type_of_bus'] = []
         for index in data_nodes:
             if index['type'] == 'PCC':
@@ -377,30 +375,30 @@ def write_results_database(resultado):
         "bat_power_t15": resultado['power_of_the_ess'][14], "bat_power_t16": resultado['power_of_the_ess'][15], "bat_power_t17": resultado['power_of_the_ess'][16],
         "bat_power_t18": resultado['power_of_the_ess'][17], "bat_power_t19": resultado['power_of_the_ess'][18], "bat_power_t20": resultado['power_of_the_ess'][19],
         "bat_power_t21": resultado['power_of_the_ess'][20], "bat_power_t22": resultado['power_of_the_ess'][21], "bat_power_t23": resultado['power_of_the_ess'][22],
-        "genset_power_t00": resultado['active_power_genset']['scen_1'][23], "genset_power_t01": resultado['active_power_genset']['scen_1'][0], "genset_power_t02": resultado['active_power_genset']['scen_1'][1], 
-        "genset_power_t03": resultado['active_power_genset']['scen_1'][2], "genset_power_t04": resultado['active_power_genset']['scen_1'][3], "genset_power_t05": resultado['active_power_genset']['scen_1'][4],
-        "genset_power_t06": resultado['active_power_genset']['scen_1'][5], "genset_power_t07": resultado['active_power_genset']['scen_1'][6], "genset_power_t08": resultado['active_power_genset']['scen_1'][7],
-        "genset_power_t09": resultado['active_power_genset']['scen_1'][8], "genset_power_t10": resultado['active_power_genset']['scen_1'][9], "genset_power_t11": resultado['active_power_genset']['scen_1'][10], 
-        "genset_power_t12": resultado['active_power_genset']['scen_1'][11], "genset_power_t13": resultado['active_power_genset']['scen_1'][12], "genset_power_t14": resultado['active_power_genset']['scen_1'][13],
-        "genset_power_t15": resultado['active_power_genset']['scen_1'][14], "genset_power_t16": resultado['active_power_genset']['scen_1'][15], "genset_power_t17": resultado['active_power_genset']['scen_1'][16],
-        "genset_power_t18": resultado['active_power_genset']['scen_1'][17], "genset_power_t19": resultado['active_power_genset']['scen_1'][18], "genset_power_t20": resultado['active_power_genset']['scen_1'][19],
-        "genset_power_t21": resultado['active_power_genset']['scen_1'][20], "genset_power_t22": resultado['active_power_genset']['scen_1'][21], "genset_power_t23": resultado['active_power_genset']['scen_1'][22],
-        "load_curt_t00": resultado['total_load_curtailment']['scen_1'][23], "load_curt_t01": resultado['total_load_curtailment']['scen_1'][0], "load_curt_t02": resultado['total_load_curtailment']['scen_1'][1],
-        "load_curt_t03": resultado['total_load_curtailment']['scen_1'][2], "load_curt_t04": resultado['total_load_curtailment']['scen_1'][3], "load_curt_t05": resultado['total_load_curtailment']['scen_1'][4],
-        "load_curt_t06": resultado['total_load_curtailment']['scen_1'][5], "load_curt_t07": resultado['total_load_curtailment']['scen_1'][6], "load_curt_t08": resultado['total_load_curtailment']['scen_1'][7],
-        "load_curt_t09": resultado['total_load_curtailment']['scen_1'][8], "load_curt_t10": resultado['total_load_curtailment']['scen_1'][9], "load_curt_t11": resultado['total_load_curtailment']['scen_1'][10],
-        "load_curt_t12": resultado['total_load_curtailment']['scen_1'][11], "load_curt_t13": resultado['total_load_curtailment']['scen_1'][12], "load_curt_t14": resultado['total_load_curtailment']['scen_1'][13],
-        "load_curt_t15": resultado['total_load_curtailment']['scen_1'][14], "load_curt_t16": resultado['total_load_curtailment']['scen_1'][15], "load_curt_t17": resultado['total_load_curtailment']['scen_1'][16],
-        "load_curt_t18": resultado['total_load_curtailment']['scen_1'][17], "load_curt_t19": resultado['total_load_curtailment']['scen_1'][18], "load_curt_t20": resultado['total_load_curtailment']['scen_1'][19],
-        "load_curt_t21": resultado['total_load_curtailment']['scen_1'][20], "load_curt_t22": resultado['total_load_curtailment']['scen_1'][21], "load_curt_t23": resultado['total_load_curtailment']['scen_1'][22],
-        "pv_curt_t00": resultado['total_pv_curtailment']['scen_1'][23], "pv_curt_t01": resultado['total_pv_curtailment']['scen_1'][0], "pv_curt_t02": resultado['total_pv_curtailment']['scen_1'][1],
-        "pv_curt_t03": resultado['total_pv_curtailment']['scen_1'][2], "pv_curt_t04": resultado['total_pv_curtailment']['scen_1'][3], "pv_curt_t05": resultado['total_pv_curtailment']['scen_1'][4],
-        "pv_curt_t06": resultado['total_pv_curtailment']['scen_1'][5], "pv_curt_t07": resultado['total_pv_curtailment']['scen_1'][6], "pv_curt_t08": resultado['total_pv_curtailment']['scen_1'][7],
-        "pv_curt_t09": resultado['total_pv_curtailment']['scen_1'][8], "pv_curt_t10": resultado['total_pv_curtailment']['scen_1'][9], "pv_curt_t11": resultado['total_pv_curtailment']['scen_1'][10],
-        "pv_curt_t12": resultado['total_pv_curtailment']['scen_1'][11], "pv_curt_t13": resultado['total_pv_curtailment']['scen_1'][12], "pv_curt_t14": resultado['total_pv_curtailment']['scen_1'][13],
-        "pv_curt_t15": resultado['total_pv_curtailment']['scen_1'][14], "pv_curt_t16": resultado['total_pv_curtailment']['scen_1'][15], "pv_curt_t17": resultado['total_pv_curtailment']['scen_1'][16],
-        "pv_curt_t18": resultado['total_pv_curtailment']['scen_1'][17], "pv_curt_t19": resultado['total_pv_curtailment']['scen_1'][18], "pv_curt_t20": resultado['total_pv_curtailment']['scen_1'][19],
-        "pv_curt_t21": resultado['total_pv_curtailment']['scen_1'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_1'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_1'][22],
+        "genset_power_t00": resultado['active_power_genset']['scen_5'][23], "genset_power_t01": resultado['active_power_genset']['scen_5'][0], "genset_power_t02": resultado['active_power_genset']['scen_5'][1], 
+        "genset_power_t03": resultado['active_power_genset']['scen_5'][2], "genset_power_t04": resultado['active_power_genset']['scen_5'][3], "genset_power_t05": resultado['active_power_genset']['scen_5'][4],
+        "genset_power_t06": resultado['active_power_genset']['scen_5'][5], "genset_power_t07": resultado['active_power_genset']['scen_5'][6], "genset_power_t08": resultado['active_power_genset']['scen_5'][7],
+        "genset_power_t09": resultado['active_power_genset']['scen_5'][8], "genset_power_t10": resultado['active_power_genset']['scen_5'][9], "genset_power_t11": resultado['active_power_genset']['scen_5'][10], 
+        "genset_power_t12": resultado['active_power_genset']['scen_5'][11], "genset_power_t13": resultado['active_power_genset']['scen_5'][12], "genset_power_t14": resultado['active_power_genset']['scen_5'][13],
+        "genset_power_t15": resultado['active_power_genset']['scen_5'][14], "genset_power_t16": resultado['active_power_genset']['scen_5'][15], "genset_power_t17": resultado['active_power_genset']['scen_5'][16],
+        "genset_power_t18": resultado['active_power_genset']['scen_5'][17], "genset_power_t19": resultado['active_power_genset']['scen_5'][18], "genset_power_t20": resultado['active_power_genset']['scen_5'][19],
+        "genset_power_t21": resultado['active_power_genset']['scen_5'][20], "genset_power_t22": resultado['active_power_genset']['scen_5'][21], "genset_power_t23": resultado['active_power_genset']['scen_5'][22],
+        "load_curt_t00": resultado['total_load_curtailment']['scen_5'][23], "load_curt_t01": resultado['total_load_curtailment']['scen_5'][0], "load_curt_t02": resultado['total_load_curtailment']['scen_5'][1],
+        "load_curt_t03": resultado['total_load_curtailment']['scen_5'][2], "load_curt_t04": resultado['total_load_curtailment']['scen_5'][3], "load_curt_t05": resultado['total_load_curtailment']['scen_5'][4],
+        "load_curt_t06": resultado['total_load_curtailment']['scen_5'][5], "load_curt_t07": resultado['total_load_curtailment']['scen_5'][6], "load_curt_t08": resultado['total_load_curtailment']['scen_5'][7],
+        "load_curt_t09": resultado['total_load_curtailment']['scen_5'][8], "load_curt_t10": resultado['total_load_curtailment']['scen_5'][9], "load_curt_t11": resultado['total_load_curtailment']['scen_5'][10],
+        "load_curt_t12": resultado['total_load_curtailment']['scen_5'][11], "load_curt_t13": resultado['total_load_curtailment']['scen_5'][12], "load_curt_t14": resultado['total_load_curtailment']['scen_5'][13],
+        "load_curt_t15": resultado['total_load_curtailment']['scen_5'][14], "load_curt_t16": resultado['total_load_curtailment']['scen_5'][15], "load_curt_t17": resultado['total_load_curtailment']['scen_5'][16],
+        "load_curt_t18": resultado['total_load_curtailment']['scen_5'][17], "load_curt_t19": resultado['total_load_curtailment']['scen_5'][18], "load_curt_t20": resultado['total_load_curtailment']['scen_5'][19],
+        "load_curt_t21": resultado['total_load_curtailment']['scen_5'][20], "load_curt_t22": resultado['total_load_curtailment']['scen_5'][21], "load_curt_t23": resultado['total_load_curtailment']['scen_5'][22],
+        "pv_curt_t00": resultado['total_pv_curtailment']['scen_5'][23], "pv_curt_t01": resultado['total_pv_curtailment']['scen_5'][0], "pv_curt_t02": resultado['total_pv_curtailment']['scen_5'][1],
+        "pv_curt_t03": resultado['total_pv_curtailment']['scen_5'][2], "pv_curt_t04": resultado['total_pv_curtailment']['scen_5'][3], "pv_curt_t05": resultado['total_pv_curtailment']['scen_5'][4],
+        "pv_curt_t06": resultado['total_pv_curtailment']['scen_5'][5], "pv_curt_t07": resultado['total_pv_curtailment']['scen_5'][6], "pv_curt_t08": resultado['total_pv_curtailment']['scen_5'][7],
+        "pv_curt_t09": resultado['total_pv_curtailment']['scen_5'][8], "pv_curt_t10": resultado['total_pv_curtailment']['scen_5'][9], "pv_curt_t11": resultado['total_pv_curtailment']['scen_5'][10],
+        "pv_curt_t12": resultado['total_pv_curtailment']['scen_5'][11], "pv_curt_t13": resultado['total_pv_curtailment']['scen_5'][12], "pv_curt_t14": resultado['total_pv_curtailment']['scen_5'][13],
+        "pv_curt_t15": resultado['total_pv_curtailment']['scen_5'][14], "pv_curt_t16": resultado['total_pv_curtailment']['scen_5'][15], "pv_curt_t17": resultado['total_pv_curtailment']['scen_5'][16],
+        "pv_curt_t18": resultado['total_pv_curtailment']['scen_5'][17], "pv_curt_t19": resultado['total_pv_curtailment']['scen_5'][18], "pv_curt_t20": resultado['total_pv_curtailment']['scen_5'][19],
+        "pv_curt_t21": resultado['total_pv_curtailment']['scen_5'][20], "pv_curt_t22": resultado['total_pv_curtailment']['scen_5'][21], "pv_curt_t23": resultado['total_pv_curtailment']['scen_5'][22],
         "ev_1_power_t00": resultado['power_of_the_ev_1'][23], "ev_1_power_t01": resultado['power_of_the_ev_1'][0], "ev_1_power_t02": resultado['power_of_the_ev_1'][1], 
         "ev_1_power_t03": resultado['power_of_the_ev_1'][2], "ev_1_power_t04": resultado['power_of_the_ev_1'][3], "ev_1_power_t05": resultado['power_of_the_ev_1'][4],
         "ev_1_power_t06": resultado['power_of_the_ev_1'][5], "ev_1_power_t07": resultado['power_of_the_ev_1'][6], "ev_1_power_t08": resultado['power_of_the_ev_1'][7],

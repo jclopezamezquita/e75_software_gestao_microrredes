@@ -638,7 +638,7 @@ class node_measurement_list(Resource):
                         data["pcc_t00"] = data["pcc_t00"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
                         counters["counter_pcc_t00"] = counters["counter_pcc_t00"] + 1
                     if i == 22:
-                        data["pcc_t01"] = ["pcc_t01"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
+                        data["pcc_t01"] = data["pcc_t01"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw
                         counters["counter_pcc_t01"] = counters["counter_pcc_t01"] + 1
                     if i == 21:
                         data["pcc_t02"] = data["pcc_t02"] + meas.active_power_a_kw + meas.active_power_b_kw + meas.active_power_c_kw

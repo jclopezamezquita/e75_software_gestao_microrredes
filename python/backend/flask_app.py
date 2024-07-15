@@ -34,11 +34,11 @@ def leitura_medidas_laboratoriais(num):
     print ("%s/%s/%s %s:%s:%s" % (now.month,now.day,now.year,now.hour,now.minute,now.second))
     
     #resultado = cron_functions.microgrid_measurements(URL=os.getenv('HIL_API_URL', 'https://ems-api.ngrok.io/'))
-    resultado = cron_functions.microgrid_measurements(URL='http://100.112.150.188:5000/')
+    resultado = cron_functions.microgrid_measurements(URL='http://100.112.230.15:5000/')
 
 
 # uwsgidecorators.cron(min, hour, day, mon, wday, func) -> BST: UTC-3
-@cron(54, 2, -1, -1, -1)
+@cron(2, 20, -1, -1, -1)
 def cron_everyday(num):
     '''
     This cron is executed every day at the end of the day - dispatch defined for the next day
