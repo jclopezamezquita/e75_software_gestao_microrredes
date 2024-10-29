@@ -13,7 +13,7 @@ EMS will provide the following services:
     
 ## Architecture
 
-![alt text](https://labrei.dsce.fee.unicamp.br:6498/merge/e75_software_gestao_microrredes/-/raw/master/arquitetura.PNG)
+![alt text](arquitetura.PNG)
 
 ## Installation
 
